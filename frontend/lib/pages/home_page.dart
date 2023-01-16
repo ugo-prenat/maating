@@ -29,9 +29,83 @@ class _HomePageState extends State<HomePage> {
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: const [
-              Padding(padding: EdgeInsets.only(top: 50)),
-              Text("Wesh")
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 10, bottom: 10),
+                child: Image.asset(
+                  'lib/assets/logo_maating.png',
+                  fit: BoxFit.contain,
+                  width: 150,
+                  height: 150,
+                ),
+              ),
+              const Text(
+                  'Bienvenue sur \n Maating',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.white,
+                  ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 40, bottom: 50),
+                child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/register');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: const Size(300, 50), backgroundColor: Colors.white,
+                    ),
+                    child: const Text(
+                        'Inscription',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 22,
+                      ),
+                    )
+                ),
+              ),
+                const Text(
+                  'Déjà un compte ?',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 20,
+                  ),
+                ),
+              Padding(
+                padding: const EdgeInsets.only(top: 20, bottom: 20),
+                child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/login');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: const Size(300, 50), backgroundColor: Colors.white,
+                    ),
+                    child: const Text(
+                      'Connexion',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 22,
+                      ),
+                    ),
+                ),
+              ),
+              ElevatedButton.icon(
+                icon: Icon(Icons.google),
+                onPressed: () {
+                  Navigator.pushNamed(context, '');
+                },
+                style: ElevatedButton.styleFrom(
+                  fixedSize: const Size(300, 50), backgroundColor: Colors.black.withOpacity(0.05),
+                ),
+                child: const Text(
+                  'Se connecter avec Google',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.blue
+                  ),
+                ),
+              ),
             ],
           ),
         ),
