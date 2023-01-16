@@ -23,11 +23,12 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
         '/map': (context) => const MapPage(),
+        '/register_sports': (context) => const RegisterSportPage(),
       },
       theme: ThemeData(
           textTheme: GoogleFonts.poppinsTextTheme().copyWith(
               bodyText1: GoogleFonts.poppins(textStyle: textTheme.bodyText1))),
-      home: const HomePage(),
+      home: const RegisterSportPage(),
     );
   }
 }
