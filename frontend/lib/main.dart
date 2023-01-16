@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:maating/pages/home_page.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,30 +11,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final textTheme = Theme.of(context).textTheme;
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      routes: {},
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+          textTheme: GoogleFonts.poppinsTextTheme().copyWith(
+            bodyText1: GoogleFonts.poppins(textStyle: textTheme.bodyText1))
       ),
-      home: const RootPage(),
-    );
-  }
-}
-
-class RootPage extends StatefulWidget {
-  const RootPage({super.key});
-
-  @override
-  State<RootPage> createState() => _RootPageState();
-}
-
-class _RootPageState extends State<RootPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Maating'),
-      ),
+      home: const HomePage(),
     );
   }
 }
