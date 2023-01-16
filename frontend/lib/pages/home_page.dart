@@ -90,21 +90,35 @@ class _HomePageState extends State<HomePage> {
                     ),
                 ),
               ),
-              ElevatedButton.icon(
-                icon: Icon(Icons.google),
-                onPressed: () {
-                  Navigator.pushNamed(context, '');
-                },
-                style: ElevatedButton.styleFrom(
-                  fixedSize: const Size(300, 50), backgroundColor: Colors.black.withOpacity(0.05),
-                ),
-                child: const Text(
-                  'Se connecter avec Google',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.blue
+              ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(300, 50),
+                    backgroundColor: Colors.transparent.withOpacity(0.01),
+                    side: const BorderSide(
+                      width: 2,
+                      color: Colors.blue
+                    )
                   ),
-                ),
+                  child: Row(
+                    children: [
+                      const Text(
+                        'Se connecter avec Google',
+                        style: TextStyle(
+                            fontSize: 17,
+                            color: Colors.blue
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Image.asset(
+                            'lib/assets/google.png',
+                            width: 30,
+                            height: 30,
+                        ),
+                      ),
+                    ],
+                  )
               ),
             ],
           ),
@@ -113,3 +127,24 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
+/*
+ElevatedButton.icon(
+                label: const Text(
+                'Se connecter avec Google',
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.blue
+                ),
+              ),
+                icon: Image.asset(
+                    'lib/assets/google.png',
+                ),
+                onPressed: () {
+                  Navigator.pushNamed(context, '');
+                },
+                style: ElevatedButton.styleFrom(
+                  fixedSize: const Size(300, 50), backgroundColor: Colors.black.withOpacity(0.05),
+                ),
+              ),
+ */
