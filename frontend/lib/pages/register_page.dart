@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:maating/extension/checkInput.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -80,6 +81,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                         borderSide: BorderSide(color: Colors.blue),
                                       )
                                     ),
+                                validator: (input) {
+                                        if(input == '') return 'Veuillez renseignez ce champ.';
+                                        else if(input!.length < 2) return 'Votre prénom doit comporter au moins 3 caractères';
+                                      },
                                   ),
                             ),
                           ),
@@ -107,6 +112,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                       borderSide: BorderSide(color: Colors.blue),
                                     )
                                 ),
+                                validator: (input) {
+                                  if (input == '') return 'Ce champs est obligatoire';
+                                  else if (!input!.isValidEmail()) return 'Mauvais format d\'email';
+                                },
                               ),
                             ),
                           ),
@@ -144,14 +153,24 @@ class _RegisterPageState extends State<RegisterPage> {
                                       borderSide: BorderSide(color: Colors.blue),
                                     )
                                 ),
+                                validator: (input) {
+                                  if (input == '') return 'Ce champs est obligatoire';
+                                  else if (input!.length < 6) return "Le mot de passe doit contenir plus de 5 charactères";
+                                },
                               ),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 140),
                             child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(context, '');
+                                onPressed: () async {
+                                  var firstName = firstNameController.text;
+                                  var email = emailController.text;
+                                  var password = passwordController.text;
+
+                                  if(_formKey.currentState!.validate()) {
+                                    Navigator.pushNamed(context, '/register2');
+                                  }
                                 },
                                 style: ElevatedButton.styleFrom(
                                   padding: const EdgeInsets.only(left: 25),
