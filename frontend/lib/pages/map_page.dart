@@ -44,7 +44,7 @@ class _MapPageState extends State<MapPage> {
             })
           },
         ),
-        Positioned(
+        /* Positioned(
             right: 20,
             bottom: fabHeight,
             child: FloatingActionButton(
@@ -55,7 +55,7 @@ class _MapPageState extends State<MapPage> {
                 Icons.my_location,
                 color: Color(0xFF0085FF),
               ),
-            ))
+            )) */
       ],
     ));
   }
