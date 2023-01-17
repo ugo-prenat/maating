@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 10),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Image.asset(
                   'lib/assets/logo_maating.png',
                   fit: BoxFit.contain,
@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               Padding(
-                padding: const EdgeInsets.only(top: 20, bottom: 20),
+                padding: const EdgeInsets.symmetric(vertical: 20),
                 child: ElevatedButton(
                     onPressed: () {
                       Navigator.pushNamed(context, '/login');
@@ -127,24 +127,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-/*
-ElevatedButton.icon(
-                label: const Text(
-                'Se connecter avec Google',
-                style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.blue
-                ),
-              ),
-                icon: Image.asset(
-                    'lib/assets/google.png',
-                ),
-                onPressed: () {
-                  Navigator.pushNamed(context, '');
-                },
-                style: ElevatedButton.styleFrom(
-                  fixedSize: const Size(300, 50), backgroundColor: Colors.black.withOpacity(0.05),
-                ),
-              ),
- */

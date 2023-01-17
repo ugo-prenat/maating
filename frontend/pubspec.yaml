@@ -57,6 +57,7 @@ flutter:
   assets:
     - lib/assets/logo_maating.png
     - lib/assets/google.png
+    - lib/assets/arrow_right.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
