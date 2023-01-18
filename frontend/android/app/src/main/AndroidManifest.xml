@@ -33,5 +33,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDNjD98HYd-8HcEBc872D6_7S6ZlPVe2TM" />
+        <uses-permission android:name="android.permission.INTERNET" />
     </application>
 </manifest>

@@ -1,10 +1,29 @@
 const Events = require('../models/events.models');
-const {
-  tempFunc,
-  isParticipantAlreadyInEvent
-} = require('../utils/events.utils');
+const { isParticipantAlreadyInEvent } = require('../utils/events.utils');
 
 const getEvents = (req, res) => {
+  const { lat, lng, maxDistance } = req.query;
+
+  if (lat && lng && maxDistance) {
+    return Events.find()
+      .populate('location', null, {
+        loc: {
+          $near: {
+            $geometry: {
+              type: 'Point',
+              coordinates: [parseFloat(lng), parseFloat(lat)]
+            },
+            $maxDistance: parseInt(maxDistance)
+          }
+        }
+      })
+      .populate('sport')
+      .populate('organizer')
+      .populate('participants')
+      .then((events) => res.status(200).json(events.filter((e) => e.location)))
+      .catch((error) => res.status(500).json({ error }));
+  }
+
   return Events.find()
     .populate('sport')
     .populate('organizer')

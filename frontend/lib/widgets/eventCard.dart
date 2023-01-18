@@ -255,7 +255,7 @@ class _EventCardState extends State<EventCard> {
                 image: DecorationImage(
                   fit: BoxFit.cover,
                   image: NetworkImage(
-                    "http://10.0.2.2:4000${widget.event['organizer']['avatar_url']}",
+                    "https://maating-api.onrender.com${widget.event['organizer']['avatar_url']}",
                   ),
                 ),
               ),

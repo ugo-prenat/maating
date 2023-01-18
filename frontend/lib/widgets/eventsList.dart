@@ -17,26 +17,50 @@ class EventsList extends StatefulWidget {
 class _EventsListState extends State<EventsList> {
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> events =
-        getEventsByLocation(widget.eventsLocation);
-
     return SizedBox(
       width: double.infinity,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Center(
-          child: ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) => EventCard(event: events[index]),
-            itemCount: events.length,
+          child: FutureBuilder(
+            future: getEventsByLocation(widget.eventsLocation),
+            builder: (
+              BuildContext context,
+              AsyncSnapshot snapshot,
+            ) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
+                );
+              }
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasError) {
+                  print('Snapshot error : ${snapshot.error}');
+                  return const Text('Une erreur est survenue');
+                }
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) =>
+                        EventCard(event: snapshot.data[index]),
+                    itemCount: snapshot.data.length,
+                  );
+                } else {
+                  return const Text('Aucun évènement trouvé');
+                }
+              } else {
+                return Text('Etat: ${snapshot.connectionState}');
+              }
+            },
           ),
         ),
       ),
     );
   }
 
-  getEventsByLocation(LatLng location) {
+  Future<List<Map<String, dynamic>>> getEventsByLocation(
+      LatLng location) async {
     // call API to get events by location
 
     List<Map<String, dynamic>> fakeEvents = [
@@ -570,6 +594,8 @@ class _EventsListState extends State<EventsList> {
         }
       },
     ];
+
+    await Future.delayed(const Duration(seconds: 5));
     return fakeEvents;
   }
 }
