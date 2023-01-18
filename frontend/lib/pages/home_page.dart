@@ -87,8 +87,44 @@ class _HomePageState extends State<HomePage> {
                       color: Colors.black,
                       fontSize: 22,
                     ),
-                  ),
+                    child: const Text(
+                      'Connexion',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 22,
+                      ),
+                    ),
                 ),
+              ),
+              ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(300, 50),
+                    backgroundColor: Colors.transparent.withOpacity(0.01),
+                    side: const BorderSide(
+                      width: 2,
+                      color: Colors.blue
+                    )
+                  ),
+                  child: Row(
+                    children: [
+                      const Text(
+                        'Se connecter avec Google',
+                        style: TextStyle(
+                            fontSize: 17,
+                            color: Colors.blue
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Image.asset(
+                            'lib/assets/google.png',
+                            width: 30,
+                            height: 30,
+                        ),
+                      ),
+                    ],
+                  )
               ),
               // ElevatedButton.icon(
               //   icon: Icon(Icons.google),
@@ -113,3 +149,24 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
+/*
+ElevatedButton.icon(
+                label: const Text(
+                'Se connecter avec Google',
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.blue
+                ),
+              ),
+                icon: Image.asset(
+                    'lib/assets/google.png',
+                ),
+                onPressed: () {
+                  Navigator.pushNamed(context, '');
+                },
+                style: ElevatedButton.styleFrom(
+                  fixedSize: const Size(300, 50), backgroundColor: Colors.black.withOpacity(0.05),
+                ),
+              ),
+ */
