@@ -20,22 +20,25 @@ class EventsListPanel extends StatelessWidget {
         children: <Widget>[
           GestureDetector(
             onTap: togglePanel,
-            child: Column(children: [
-              dragHandle(),
-              const SizedBox(height: 18),
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 25),
-                  child: Text(
-                    'Liste des évènements',
-                    style: TextStyle(
+            child: Column(
+              children: [
+                dragHandle(),
+                const SizedBox(height: 10),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 25),
+                    child: Text(
+                      'Liste des évènements',
+                      style: TextStyle(
                         fontSize: 18,
                         color: Colors.grey[500],
-                        fontWeight: FontWeight.w500),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ),
-                ),
-              )
-            ]),
+                )
+              ],
+            ),
           ),
           const EventsList(eventsLocation: currentLocation)
         ],
