@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:maating/models/user.dart';
 import 'package:maating/pages/register_sports_page.dart';
 
 List<LevelSchema> levels = <LevelSchema>[
@@ -41,7 +42,7 @@ class _CustomListViewSportsRegister
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "${widget.list[index].sport} - ${levels.firstWhere((level) => level.level == widget.list[index].level).name}",
+                    "${widget.list[index].sportId} - ${levels.firstWhere((level) => level.level == widget.list[index].level).name}",
                     style: const TextStyle(color: Colors.white, fontSize: 18),
                   ),
                   SizedBox(

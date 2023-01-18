@@ -1,21 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:maating/main.dart';
+import 'package:maating/models/user.dart';
 import 'package:maating/pages/sports_selection_register_page.dart';
 import 'package:maating/widgets/register_sports_list.dart';
-
-class SportSchema {
-  String sport;
-  int level;
-
-  SportSchema(this.sport, this.level);
-}
-
-class LevelSchema {
-  String name;
-  int level;
-
-  LevelSchema(this.name, this.level);
-}
 
 class RegisterSportPage extends StatefulWidget {
   const RegisterSportPage({super.key, required this.sports});

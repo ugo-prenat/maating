@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:maating/main.dart';
+import 'package:maating/models/user.dart';
 import 'package:maating/pages/register_sports_page.dart';
 
 const List<String> sports = <String>["Football", "Handball", "Volleyball"];
@@ -29,9 +30,9 @@ class _SportSelectionRegisterPage extends State<SportSelectionRegisterPage> {
     List<String> dropdownValueList = [];
     sports.map((String value) {
       var sportSchema = widget.sports.firstWhere(
-          (sportSchema) => sportSchema.sport == value,
+          (sportSchema) => sportSchema.sportId == value,
           orElse: () => SportSchema("", 0));
-      if (sportSchema.sport == "") {
+      if (sportSchema.sportId == "") {
         dropdownValueList = [...dropdownValueList, value];
       }
     }).toList();
