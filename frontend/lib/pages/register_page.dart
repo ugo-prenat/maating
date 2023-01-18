@@ -46,7 +46,7 @@ class _RegisterPageState extends State<RegisterPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 40),
+                padding: const EdgeInsets.only(bottom: 15),
                 child: Image.asset(
                   'lib/assets/logo_maating.png',
                   fit: BoxFit.contain,
@@ -57,75 +57,103 @@ class _RegisterPageState extends State<RegisterPage> {
                 Form(
                     key: _formKey,
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 50),
-                            child: SizedBox(
-                              width: 300,
-                              child: TextFormField(
-                                    controller: firstNameController,
-                                    decoration: InputDecoration(
-                                      contentPadding: const EdgeInsets.symmetric(horizontal: 15.0),
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      labelText: 'Prénom',
-                                      labelStyle: const TextStyle(
-                                        fontSize: 25,
-                                        color: Colors.blue,
+                                  const Text(
+                                      'Prénom',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: Colors.white,
                                       ),
-                                      border: OutlineInputBorder(
-                                        borderSide: const BorderSide(color: Colors.white),
-                                        borderRadius: BorderRadius.circular(10)
-                                      ),
-                                      focusedBorder: const OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.blue),
-                                      )
-                                    ),
-                                validator: (input) {
-                                        if(input == '') return 'Veuillez renseignez ce champ.';
-                                        else if(input!.length < 2) return 'Votre prénom doit comporter au moins 3 caractères';
-                                      },
                                   ),
+                                  SizedBox(
+                                    width: 300,
+                                    height: 100,
+                                    child: TextFormField(
+                                      controller: firstNameController,
+                                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                                      maxLength: 25,
+                                      decoration: InputDecoration(
+                                        contentPadding: const EdgeInsets.symmetric(horizontal: 15.0),
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        counterText: '',
+                                        border: OutlineInputBorder(
+                                            borderSide: const BorderSide(color: Colors.white),
+                                            borderRadius: BorderRadius.circular(10)
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(color: Colors.blue),
+                                            borderRadius: BorderRadius.circular(10)
+                                        ),
+                                        errorStyle: const TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      validator: (input) {
+                                        if(input == '') {
+                                          return 'Veuillez renseignez ce champ.';
+                                        } else if(input!.length < 3) {
+                                          return 'Votre prénom doit comporter \n au moins 3 caractères.';
+                                        }
+                                      },
+                                    ),
+                                  ),
+                          const Text(
+                            'Email',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 50),
-                            child: SizedBox(
+                          SizedBox(
                               width: 300,
+                              height: 100,
                               child: TextFormField(
                                 controller: emailController,
+                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                maxLength: 40,
                                 decoration: InputDecoration(
                                     contentPadding: const EdgeInsets.symmetric(horizontal: 15.0),
                                     filled: true,
                                     fillColor: Colors.white,
-                                    labelText: 'Email',
                                     hintText: 'john.doe@mail.com',
-                                    labelStyle: const TextStyle(
-                                      fontSize: 25,
-                                      color: Colors.blue,
-                                    ),
+                                    counterText: '',
                                     border: OutlineInputBorder(
                                         borderSide: const BorderSide(color: Colors.white),
                                         borderRadius: BorderRadius.circular(10)
                                     ),
                                     focusedBorder: const OutlineInputBorder(
                                       borderSide: BorderSide(color: Colors.blue),
-                                    )
+                                    ),
+                                  errorStyle: const TextStyle(
+                                    fontSize: 16,
+                                  ),
                                 ),
                                 validator: (input) {
-                                  if (input == '') return 'Ce champs est obligatoire';
-                                  else if (!input!.isValidEmail()) return 'Mauvais format d\'email';
+                                  if (input == '') {
+                                    return 'Veuillez renseignez ce champ.';
+                                  } else if (!input!.isValidEmail()) {
+                                    return 'Mauvais format d\'email.';
+                                  }
                                 },
                               ),
                             ),
+                          const Text(
+                            'Mot de passe',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                            ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 70),
-                            child: SizedBox(
+                          SizedBox(
                               width: 300,
+                              height: 120,
                               child: TextFormField(
                                 controller: passwordController,
                                 obscureText: isPasswordVisible,
+                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                maxLength: 25,
                                 decoration: InputDecoration(
                                     suffixIcon:
                                     Padding(
@@ -140,26 +168,27 @@ class _RegisterPageState extends State<RegisterPage> {
                                     contentPadding: const EdgeInsets.symmetric(horizontal: 15.0),
                                     filled: true,
                                     fillColor: Colors.white,
-                                    labelText: 'Mot de Passe',
-                                    labelStyle: const TextStyle(
-                                      fontSize: 25,
-                                      color: Colors.blue,
-                                    ),
+                                    counterText: '',
                                     border: OutlineInputBorder(
                                         borderSide: const BorderSide(color: Colors.white),
                                         borderRadius: BorderRadius.circular(10)
                                     ),
                                     focusedBorder: const OutlineInputBorder(
                                       borderSide: BorderSide(color: Colors.blue),
-                                    )
+                                    ),
+                                  errorStyle: const TextStyle(
+                                    fontSize: 16,
+                                  ),
                                 ),
                                 validator: (input) {
-                                  if (input == '') return 'Ce champs est obligatoire';
-                                  else if (input!.length < 6) return "Le mot de passe doit contenir plus de 5 charactères";
+                                  if (input == '') {
+                                    return 'Veuillez renseignez ce champ.';
+                                  } else if (input!.length < 6) {
+                                    return "Le mot de passe doit contenir \n plus de 5 caractères";
+                                  }
                                 },
                               ),
                             ),
-                          ),
                           Padding(
                             padding: const EdgeInsets.only(left: 140),
                             child: ElevatedButton(
