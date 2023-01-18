@@ -21,7 +21,7 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     final panelHeightOpen = MediaQuery.of(context).size.height * 0.8;
-    final panelHeightClosed = MediaQuery.of(context).size.height * 0.13;
+    final panelHeightClosed = MediaQuery.of(context).size.height * 0.11;
 
     return Scaffold(
         body: Stack(

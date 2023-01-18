@@ -17,7 +17,7 @@ const schema = new mongoose.Schema(
     sports: [sportSchema],
     email: { type: String, required: true },
     password: { type: String, required: true },
-    age: { type: Number, required: true },
+    birth_date: { type: String, required: true },
     location: { type: String, required: true },
     mobility_range: { type: Number, required: true },
     avatar_url: { type: String, required: true },

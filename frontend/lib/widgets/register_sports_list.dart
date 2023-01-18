@@ -42,7 +42,7 @@ class _CustomListViewSportsRegister
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "${widget.list[index].sportId} - ${levels.firstWhere((level) => level.level == widget.list[index].level).name}",
+                    "${widget.list[index].sport.name} - ${levels.firstWhere((level) => level.level == widget.list[index].level).name}",
                     style: const TextStyle(color: Colors.white, fontSize: 18),
                   ),
                   SizedBox(
