@@ -1,9 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:maating/main.dart';
+import 'package:maating/pages/sports_selection_register_page.dart';
+import 'package:maating/widgets/register_sports_list.dart';
+
+class SportSchema {
+  String sport;
+  int level;
+
+  SportSchema(this.sport, this.level);
+}
+
+class LevelSchema {
+  String name;
+  int level;
+
+  LevelSchema(this.name, this.level);
+}
 
 class RegisterSportPage extends StatefulWidget {
-  const RegisterSportPage({super.key});
+  const RegisterSportPage({super.key, required this.sports});
 
+  final List<SportSchema> sports;
   @override
   State<RegisterSportPage> createState() => _RegisterSportPage();
 }
@@ -11,6 +28,7 @@ class RegisterSportPage extends StatefulWidget {
 class _RegisterSportPage extends State<RegisterSportPage> {
   @override
   Widget build(BuildContext context) {
+    List<SportSchema> sportsToAdd = widget.sports;
     return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color(0xFF2196F3),
@@ -27,9 +45,19 @@ class _RegisterSportPage extends State<RegisterSportPage> {
             ),
             child: Center(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 10),
+                    child: Image.asset(
+                      'lib/assets/logo_maating.png',
+                      fit: BoxFit.contain,
+                      width: 150,
+                      height: 150,
+                    ),
+                  ),
                   const Padding(
-                    padding: EdgeInsets.only(top: 60, right: 80, left: 80),
+                    padding: EdgeInsets.only(top: 50, right: 80, left: 80),
                     child: Text(
                       "Renseigne les sports que tu pratiques",
                       style: TextStyle(fontSize: 24, color: Colors.white),
@@ -43,8 +71,15 @@ class _RegisterSportPage extends State<RegisterSportPage> {
                         height: 45,
                         child: ElevatedButton(
                           onPressed: () {
-                            displaySnackBar("ajout d'un sport");
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        SportSelectionRegisterPage(
+                                            sports: sportsToAdd)));
                           },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFF0085FF)),
                           child: const Text(
                             "Ajouter un sport",
                             style: TextStyle(
@@ -62,49 +97,22 @@ class _RegisterSportPage extends State<RegisterSportPage> {
                   const Padding(
                     padding: EdgeInsets.only(top: 10, right: 90, bottom: 10),
                     child: Text(
-                      "Sport  -  Niveau",
+                      "Sport - Niveau",
                       style: TextStyle(fontSize: 24, color: Colors.white),
                     ),
                   ),
                   SizedBox(
-                    height: 130,
-                    width: MediaQuery.of(context).size.width,
-                    child: ListView(
-                      shrinkWrap: true,
-                      children: [
-                        Center(
-                            child: Padding(
-                          padding: EdgeInsets.only(right: 40),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
-                                Padding(
-                                  padding: EdgeInsets.only(bottom: 5),
-                                  child: Text(
-                                    "Football  -  Débutant",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 18),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(bottom: 5),
-                                  child: Text("Volleyball  -  Expert",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 18)),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(bottom: 5),
-                                  child: Text("Handball  -  Intermédiaire",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 18)),
-                                ),
-                              ]),
-                        ))
-                      ],
-                    ),
-                  ),
+                      height: 110,
+                      width: MediaQuery.of(context).size.width,
+                      child: CustomListViewSportsRegister(
+                          onDeletePressed: (List<SportSchema> newSports) {
+                            setState(() {
+                              sportsToAdd = newSports;
+                            });
+                          },
+                          list: sportsToAdd)),
                   Padding(
-                      padding: const EdgeInsets.only(top: 15),
+                      padding: const EdgeInsets.only(top: 10),
                       child: SizedBox(
                         width: 250,
                         height: 50,
@@ -112,7 +120,8 @@ class _RegisterSportPage extends State<RegisterSportPage> {
                           onPressed: () {
                             displaySnackBar("inscription");
                           },
-                          style: ElevatedButton.styleFrom(),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFF0085FF)),
                           child: const Text(
                             "S'inscrire",
                             style: TextStyle(

@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:maating/main.dart';
 
 class HomePage extends StatefulWidget {
-    const HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,12 +18,12 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Container(
         decoration: const BoxDecoration(
-          gradient: LinearGradient(colors: [Color(0xFF2196F3), Color(0xFF000000)],
-          begin: FractionalOffset.topCenter,
-          end: FractionalOffset.bottomCenter,
-          stops: [0.0, 1.0],
-          tileMode: TileMode.clamp
-          ),
+          gradient: LinearGradient(
+              colors: [Color(0xFF2196F3), Color(0xFF000000)],
+              begin: FractionalOffset.topCenter,
+              end: FractionalOffset.bottomCenter,
+              stops: [0.0, 1.0],
+              tileMode: TileMode.clamp),
         ),
         child: Center(
           child: Column(
@@ -40,12 +39,12 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const Text(
-                  'Bienvenue sur \n Maating',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 30,
-                    color: Colors.white,
-                  ),
+                'Bienvenue sur \n Maating',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.white,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 40, bottom: 50),
@@ -54,58 +53,59 @@ class _HomePageState extends State<HomePage> {
                       Navigator.pushNamed(context, '/register');
                     },
                     style: ElevatedButton.styleFrom(
-                      fixedSize: const Size(300, 50), backgroundColor: Colors.white,
+                      fixedSize: const Size(300, 50),
+                      backgroundColor: Colors.white,
                     ),
                     child: const Text(
-                        'Inscription',
+                      'Inscription',
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 22,
                       ),
-                    )
+                    )),
+              ),
+              const Text(
+                'Déjà un compte ?',
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: 20,
                 ),
               ),
-                const Text(
-                  'Déjà un compte ?',
-                  style: TextStyle(
-                    color: Colors.blue,
-                    fontSize: 20,
-                  ),
-                ),
               Padding(
                 padding: const EdgeInsets.only(top: 20, bottom: 20),
                 child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/login');
-                    },
-                    style: ElevatedButton.styleFrom(
-                      fixedSize: const Size(300, 50), backgroundColor: Colors.white,
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/login');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(300, 50),
+                    backgroundColor: Colors.white,
+                  ),
+                  child: const Text(
+                    'Connexion',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 22,
                     ),
-                    child: const Text(
-                      'Connexion',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
-                      ),
-                    ),
-                ),
-              ),
-              ElevatedButton.icon(
-                icon: Icon(Icons.google),
-                onPressed: () {
-                  Navigator.pushNamed(context, '');
-                },
-                style: ElevatedButton.styleFrom(
-                  fixedSize: const Size(300, 50), backgroundColor: Colors.black.withOpacity(0.05),
-                ),
-                child: const Text(
-                  'Se connecter avec Google',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.blue
                   ),
                 ),
               ),
+              // ElevatedButton.icon(
+              //   icon: Icon(Icons.google),
+              //   onPressed: () {
+              //     Navigator.pushNamed(context, '');
+              //   },
+              //   style: ElevatedButton.styleFrom(
+              //     fixedSize: const Size(300, 50), backgroundColor: Colors.black.withOpacity(0.05),
+              //   ),
+              //   child: const Text(
+              //     'Se connecter avec Google',
+              //     style: TextStyle(
+              //       fontSize: 20,
+              //       color: Colors.blue
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),
