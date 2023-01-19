@@ -4,6 +4,7 @@ const controller = require('../controllers/events.controllers');
 const router = express.Router();
 
 router.get('/', controller.getEvents);
+router.get('/map', controller.getMapEvents);
 router.get('/:id', controller.getEvent);
 router.get('/:id/participants', controller.getEventParticipants);
 router.post('/', controller.createEvent);

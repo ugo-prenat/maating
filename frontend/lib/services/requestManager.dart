@@ -6,10 +6,10 @@ import 'package:http/http.dart' as http;
 import 'package:maating/models/event.dart';
 import 'package:maating/models/sport.dart';
 
-Future<List<Event>> getEventsAround(LatLng location, int maxDistance) async {
+Future<List<Event>> getMapEvents(LatLng location, int maxDistance) async {
   final response = await http.get(
     Uri.parse(
-        'http://10.0.2.2:4000/events?lat=${location.latitude}&lng=${location.longitude}&maxDistance=$maxDistance'),
+        'http://10.0.2.2:4000/events/map?lat=${location.latitude}&lng=${location.longitude}&maxDistance=$maxDistance'),
   );
 
   if (response.statusCode != 200) {

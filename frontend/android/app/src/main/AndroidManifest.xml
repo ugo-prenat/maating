@@ -2,6 +2,7 @@
     package="com.example.maating">
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
    <application
         android:label="maating"
         android:name="${applicationName}"
@@ -35,5 +36,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDNjD98HYd-8HcEBc872D6_7S6ZlPVe2TM" />
+        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+        <uses-library android:name="org.apache.http.legacy" android:required="false" />
     </application>
 </manifest>
