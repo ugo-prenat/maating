@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:maating/extension/checkInput.dart';
 import 'dart:io';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:maating/widgets/sourceAvatar.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:maating/pages/register_sports_page.dart';
 
 class RegisterPage2 extends StatefulWidget {
@@ -40,78 +40,11 @@ class _RegisterPage2State extends State<RegisterPage2> {
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            title: const Text(
-                'Sélectionnez une image depuis votre galerie ou prenez une photo.'),
-            content: Container(
-              height: MediaQuery.of(context).size.height / 6,
-              child: Column(
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      getImage(ImageSource.gallery);
-                    },
-                    child: Row(
-                      children: const [
-                        Icon(Icons.image),
-                        Text('Galerie'),
-                      ],
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      getImage(ImageSource.camera);
-                    },
-                    child: Row(
-                      children: const [
-                        Icon(Icons.camera),
-                        Text('Caméra'),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
-  }
-
-  DateTime selectedDate = DateTime.now();
-  TimeOfDay selectedTime = const TimeOfDay(hour: 00, minute: 00);
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-      });
-    }
-    // Select time after select day
-    _selectTime(context);
-  }
-
-  Future<void> _selectTime(BuildContext context) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: selectedTime,
+          return SourceAvatar(onTakingImage: (ImageSource media) {
+            getImage(media);
+          });
+        }
     );
-    if (picked != null) {
-      setState(() {
-        selectedDate = DateTime(
-          selectedDate.year,
-          selectedDate.month,
-          selectedDate.day,
-        );
-      });
-    }
   }
 
   @override
@@ -161,7 +94,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
                     SizedBox(
                       width: 300,
                       height: 100,
-                      child: TextField(
+                      child: TextFormField(
                         controller: ageController,
                         decoration: InputDecoration(
                             suffixIcon:
@@ -187,13 +120,16 @@ class _RegisterPage2State extends State<RegisterPage2> {
                             firstDate: DateTime(2000),
                             lastDate: DateTime(2100),
                           );
-                          if (pickedDate != null) {
-                            print(pickedDate);
-                            String formattedDate =
-                                DateFormat('dd/MM/yyyy').format(pickedDate);
+                          if(pickedDate != null) {
+                            String formattedDate = DateFormat('dd/MM/yyyy').format(pickedDate);
                             setState(() {
                               ageController.text = formattedDate;
                             });
+                          }
+                        },
+                        validator: (input) {
+                          if(input == '') {
+                            return 'Veuillez renseignez une date.';
                           }
                         },
                       ),
@@ -225,6 +161,11 @@ class _RegisterPage2State extends State<RegisterPage2> {
                           focusedBorder: const OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.blue),
                           ),
+                          validator: (input) {
+                            if(input == '') {
+                              return 'Veuillez renseigner une ville';
+                            }
+                          },
                         ),
                       ),
                     ),
@@ -255,6 +196,17 @@ class _RegisterPage2State extends State<RegisterPage2> {
                               _currentSliderValue = values;
                             });
                           },
+                        ),
+                    )
+                     : TextButton(
+                      onPressed: () {
+                        chooseImageSource();
+                      },
+                        style: TextButton.styleFrom(
+                        fixedSize: const Size(120, 120),
+                        side: const BorderSide(
+                            width: 2,
+                            color: Colors.blue,
                         ),
                       ),
                     ),
@@ -295,12 +247,11 @@ class _RegisterPage2State extends State<RegisterPage2> {
                       padding: const EdgeInsets.only(left: 140, top: 40),
                       child: ElevatedButton(
                           onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          const RegisterSportPage(sports: [])));
+                            var birthDate = ageController.text;
+                            var city = cityController.text;
+
+                            if(_formKey.currentState!.validate()) {
+                              Navigator.pushNamed(context, '/map');
                             }
                           },
                           style: ElevatedButton.styleFrom(

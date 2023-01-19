@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
                             fontSize: 22,
                           ),
                         )),
-                  ), 
+                  ),
                 const Text(
                   'Déjà un compte ?',
                   style: TextStyle(
