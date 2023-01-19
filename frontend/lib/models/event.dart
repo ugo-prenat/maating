@@ -1,4 +1,6 @@
+import 'package:maating/models/location.dart';
 import 'package:maating/models/sport.dart';
+import 'package:maating/models/user.dart';
 
 class Event {
   String? id;
@@ -7,30 +9,31 @@ class Event {
   int duration;
   double price;
   String description;
-  String sportId;
+  Sport sport;
   int level;
   int maxNb;
-  String organizerId;
-  List<String> participantsIds;
+  Map<String, dynamic> organizer;
+  List<dynamic> participants;
   bool isPrivate;
   String? privateCode;
-  String location;
+  Location location;
 
   Event(
-      this.name,
-      this.date,
-      this.duration,
-      this.price,
-      this.description,
-      this.sportId,
-      this.level,
-      this.maxNb,
-      this.organizerId,
-      this.participantsIds,
-      this.isPrivate,
-      this.location,
-      [this.id,
-      this.privateCode]);
+    this.name,
+    this.date,
+    this.duration,
+    this.price,
+    this.description,
+    this.sport,
+    this.level,
+    this.maxNb,
+    this.organizer,
+    this.participants,
+    this.isPrivate,
+    this.location, [
+    this.id,
+    this.privateCode,
+  ]);
 
   Map<String, dynamic> toMap() {
     return {
@@ -39,11 +42,11 @@ class Event {
       "duration": duration,
       "price": price,
       "description": description,
-      "sport": sportId,
+      "sport": sport,
       "level": level,
       "max_nb": maxNb,
-      "organizer": organizerId,
-      "participants": participantsIds,
+      "organizer": organizer,
+      "participants": participants,
       "is_private": isPrivate,
       "private_code": privateCode,
       "location": location
@@ -55,14 +58,14 @@ class Event {
         name = map["name"],
         date = map["date"],
         duration = map["duration"],
-        price = map["price"],
+        price = (map["price"] as num).toDouble(),
         description = map["description"],
-        sportId = map["sport"],
+        sport = Sport.fromMap(map["sport"]),
         level = map["level"],
         maxNb = map["max_nb"],
-        organizerId = map["organizer"],
-        participantsIds = map["participants"],
+        organizer = map["organizer"] as Map<String, dynamic>,
+        participants = map["participants"] as List<dynamic>,
         isPrivate = map["is_private"],
         privateCode = map["private_code"],
-        location = map["location"];
+        location = Location.fromMap(map["location"]);
 }

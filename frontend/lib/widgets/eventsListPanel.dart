@@ -16,26 +16,27 @@ class EventsListPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ListView(
+        padding: const EdgeInsets.only(top: 20),
         controller: controller,
         children: <Widget>[
           GestureDetector(
             onTap: togglePanel,
-            child: Column(children: [
-              dragHandle(),
-              const SizedBox(height: 18),
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 25),
+            child: Column(
+              children: [
+                dragHandle(),
+                const SizedBox(height: 15),
+                Center(
                   child: Text(
                     'Liste des évènements',
                     style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.grey[500],
-                        fontWeight: FontWeight.w500),
+                      fontSize: 18,
+                      color: Colors.grey[500],
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
-              )
-            ]),
+              ],
+            ),
           ),
           const EventsList(eventsLocation: currentLocation)
         ],

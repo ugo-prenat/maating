@@ -1,3 +1,5 @@
+import 'package:maating/models/sport.dart';
+
 class User {
   String? id;
   String name;
@@ -40,7 +42,7 @@ class User {
         mobilityRange = map["mobility_range"],
         avatarUrl = map["avatar_url"],
         personalRating = map["personal_rating"],
-        ratingNumber = map["rating_number"],
+        ratingNumber = map["rating_nb"],
         sports = map["sports"];
 }
 
@@ -48,10 +50,10 @@ const defaultAvatarUrl =
     "https://sustainable-investment.eu/wp-content/uploads/2021/02/profile.png";
 
 class SportSchema {
-  String sportId;
+  Sport sport;
   int level;
 
-  SportSchema(this.sportId, this.level);
+  SportSchema(this.sport, this.level);
 }
 
 class LevelSchema {

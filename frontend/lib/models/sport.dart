@@ -10,5 +10,5 @@ class Sport {
 
   Sport.fromMap(map)
       : id = map["_id"],
-        name = map["_name"];
+        name = map["name"];
 }

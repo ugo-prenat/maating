@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:maating/models/event.dart';
 
 class EventCard extends StatefulWidget {
   const EventCard({
@@ -8,9 +9,7 @@ class EventCard extends StatefulWidget {
     required this.event,
   });
 
-  //final Event event;
-  // ignore: prefer_typing_uninitialized_variables
-  final event;
+  final Event event;
 
   @override
   State<EventCard> createState() => _EventCardState();
@@ -39,7 +38,7 @@ class _EventCardState extends State<EventCard> {
           // Card top
           GestureDetector(
             onTap: () {
-              String eventId = widget.event['_id'];
+              String? eventId = widget.event.id;
               print('go to event page $eventId');
             },
             child: Column(children: [Location(), Places(), DateAndsport()]),
@@ -77,7 +76,7 @@ class _EventCardState extends State<EventCard> {
                 image: DecorationImage(
                   fit: BoxFit.cover,
                   image: NetworkImage(
-                    widget.event['location']['thumbnail_url'],
+                    widget.event.location.thumbnailUrl,
                   ),
                 ),
               ),
@@ -89,7 +88,7 @@ class _EventCardState extends State<EventCard> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    widget.event['name'],
+                    widget.event.name,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -97,7 +96,7 @@ class _EventCardState extends State<EventCard> {
                     ),
                   ),
                   Text(
-                    widget.event['location']['address'],
+                    widget.event.location.address,
                     style: TextStyle(
                       color: Colors.grey[500]!,
                       fontSize: 12,
@@ -112,8 +111,7 @@ class _EventCardState extends State<EventCard> {
 
   // ignore: non_constant_identifier_names
   Widget Places() {
-    var remainingPlaces =
-        widget.event['max_nb'] - widget.event['participants'].length;
+    var remainingPlaces = widget.event.maxNb - widget.event.participants.length;
 
     return Container(
       padding: const EdgeInsets.only(bottom: 10),
@@ -122,7 +120,7 @@ class _EventCardState extends State<EventCard> {
           Padding(
             padding: const EdgeInsets.only(right: 20),
             child: Icon(
-              widget.event['is_private']
+              widget.event.isPrivate
                   ? Icons.lock_outline
                   : Icons.lock_open_outlined,
               color: Colors.black,
@@ -139,7 +137,7 @@ class _EventCardState extends State<EventCard> {
                 Padding(
                   padding: const EdgeInsets.only(left: 5),
                   child: Text(
-                    "${widget.event['participants'].length}/${widget.event['max_nb']}",
+                    "${widget.event.participants.length}/${widget.event.maxNb}",
                     style: const TextStyle(fontSize: 15),
                   ),
                 )
@@ -160,7 +158,7 @@ class _EventCardState extends State<EventCard> {
 
   // ignore: non_constant_identifier_names
   Widget DateAndsport() {
-    DateTime dt = DateTime.parse(widget.event['date']);
+    DateTime dt = DateTime.parse(widget.event.date);
     DateFormat dateFormatter = DateFormat('EE d MMM', 'fr');
     String date = dateFormatter.format(dt);
     String hour = DateFormat.Hm('fr').format(dt);
@@ -225,7 +223,7 @@ class _EventCardState extends State<EventCard> {
               Padding(
                 padding: const EdgeInsets.only(left: 5),
                 child: Text(
-                  widget.event['sport']['name'],
+                  widget.event.sport.name,
                   style: const TextStyle(
                     fontSize: 15,
                   ),
@@ -241,7 +239,7 @@ class _EventCardState extends State<EventCard> {
   // ignore: non_constant_identifier_names
   Widget Organizer() => GestureDetector(
         onTap: () {
-          String userId = widget.event['organizer']['_id'];
+          String? userId = widget.event.organizer["id"];
           print('go to user page $userId');
         },
         child: Row(
@@ -255,7 +253,7 @@ class _EventCardState extends State<EventCard> {
                 image: DecorationImage(
                   fit: BoxFit.cover,
                   image: NetworkImage(
-                    "https://maating-api.onrender.com${widget.event['organizer']['avatar_url']}",
+                    "https://maating-api.onrender.com${widget.event.organizer["avatar_url"]}",
                   ),
                 ),
               ),
@@ -267,7 +265,7 @@ class _EventCardState extends State<EventCard> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "${widget.event['organizer']['firstname']} ${widget.event['organizer']['lastname']}",
+                    widget.event.organizer["name"],
                     style: const TextStyle(
                       height: .5,
                       fontWeight: FontWeight.bold,
@@ -284,7 +282,7 @@ class _EventCardState extends State<EventCard> {
                         ),
                       ),
                       Text(
-                        widget.event['organizer']['personal_rating'].toString(),
+                        widget.event.organizer["personal_rating"].toString(),
                         style: const TextStyle(
                           color: Color(0xFF0085FF),
                           fontWeight: FontWeight.bold,
