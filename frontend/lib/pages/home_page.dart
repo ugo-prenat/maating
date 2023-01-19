@@ -63,27 +63,7 @@ class _HomePageState extends State<HomePage> {
                             fontSize: 22,
                           ),
                         )),
-                  ),
-                  const Text(
-                    'Déjà un compte ?',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 20,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20, bottom: 20),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/login');
-                      },
-                      style: ElevatedButton.styleFrom(
-                        fixedSize: const Size(300, 50),
-                        backgroundColor: Colors.white,
-                      ),
-                    )
-                ),
-              ),
+                  ), 
                 const Text(
                   'Déjà un compte ?',
                   style: TextStyle(
@@ -109,51 +89,34 @@ class _HomePageState extends State<HomePage> {
                     ),
                 ),
               ),
-              ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    fixedSize: const Size(300, 50),
-                    backgroundColor: Colors.transparent.withOpacity(0.01),
-                    side: const BorderSide(
-                      width: 2,
-                      color: Colors.blue
-                    )
-                  ),
-                  child: Row(
-                    children: [
-                      const Text(
-                        'Se connecter avec Google',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 22,
-                        ),
-                      ),
-                    ),
-                    // ElevatedButton(
-                    //     onPressed: () {},
-                    //     style: ElevatedButton.styleFrom(
-                    //         fixedSize: const Size(300, 50),
-                    //         backgroundColor:
-                    //             Colors.transparent.withOpacity(0.01),
-                    //         side:
-                    //             const BorderSide(width: 2, color: Colors.blue)),
-                    //     child: Row(children: [
-                    //       const Text(
-                    //         'Se connecter avec Google',
-                    //         style: TextStyle(fontSize: 17, color: Colors.blue),
-                    //       ),
-                    //       Padding(
-                    //         padding: const EdgeInsets.only(left: 10),
-                    //         child: Image.asset(
-                    //           'lib/assets/google.png',
-                    //           width: 30,
-                    //           height: 30,
-                    //         ),
-                    //       ),
-                    //     ])),
-                  ),
-                ]),
+                  ElevatedButton(
+                         onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                             fixedSize: const Size(300, 50),
+                            backgroundColor:
+                                 Colors.transparent.withOpacity(0.01),
+                             side:
+                                 const BorderSide(width: 2, color: Colors.blue)),
+                         child: Row(children: [
+                           const Text(
+                             'Se connecter avec Google',
+                            style: TextStyle(fontSize: 17, color: Colors.blue),
+                          ),
+                           Padding(
+                             padding: const EdgeInsets.only(left: 10),
+                            child: Image.asset(
+                               'lib/assets/google.png',
+                               width: 30,
+                               height: 30,
+                             ),
+                           ),
+                         ]
+                         ),
+                     ),
+                ]
+            ),
           ),
-        ));
+        ),
+    );
   }
 }
