@@ -43,8 +43,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
           return SourceAvatar(onTakingImage: (ImageSource media) {
             getImage(media);
           });
-        }
-    );
+        });
   }
 
   @override
@@ -120,15 +119,16 @@ class _RegisterPage2State extends State<RegisterPage2> {
                             firstDate: DateTime(2000),
                             lastDate: DateTime(2100),
                           );
-                          if(pickedDate != null) {
-                            String formattedDate = DateFormat('dd/MM/yyyy').format(pickedDate);
+                          if (pickedDate != null) {
+                            String formattedDate =
+                                DateFormat('dd/MM/yyyy').format(pickedDate);
                             setState(() {
                               ageController.text = formattedDate;
                             });
                           }
                         },
                         validator: (input) {
-                          if(input == '') {
+                          if (input == '') {
                             return 'Veuillez renseignez une date.';
                           }
                         },
@@ -161,12 +161,12 @@ class _RegisterPage2State extends State<RegisterPage2> {
                           focusedBorder: const OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.blue),
                           ),
-                          validator: (input) {
-                            if(input == '') {
-                              return 'Veuillez renseigner une ville';
-                            }
-                          },
                         ),
+                        validator: (input) {
+                          if (input == '') {
+                            return 'Veuillez renseigner une ville';
+                          }
+                        },
                       ),
                     ),
                     const Padding(
@@ -180,36 +180,24 @@ class _RegisterPage2State extends State<RegisterPage2> {
                       ),
                     ),
                     SizedBox(
-                      width: 350,
-                      height: 50,
-                      child: SliderTheme(
-                        data: const SliderThemeData(
-                          valueIndicatorColor: Colors.transparent,
-                        ),
-                        child: Slider(
-                          value: _currentSliderValue,
-                          max: 100,
-                          divisions: 100,
-                          label: '${_currentSliderValue.round()} km',
-                          onChanged: (double values) {
-                            setState(() {
-                              _currentSliderValue = values;
-                            });
-                          },
-                        ),
-                    )
-                     : TextButton(
-                      onPressed: () {
-                        chooseImageSource();
-                      },
-                        style: TextButton.styleFrom(
-                        fixedSize: const Size(120, 120),
-                        side: const BorderSide(
-                            width: 2,
-                            color: Colors.blue,
-                        ),
-                      ),
-                    ),
+                        width: 350,
+                        height: 50,
+                        child: SliderTheme(
+                          data: const SliderThemeData(
+                            valueIndicatorColor: Colors.transparent,
+                          ),
+                          child: Slider(
+                            value: _currentSliderValue,
+                            max: 100,
+                            divisions: 100,
+                            label: '${_currentSliderValue.round()} km',
+                            onChanged: (double values) {
+                              setState(() {
+                                _currentSliderValue = values;
+                              });
+                            },
+                          ),
+                        )),
                     image != null
                         ? SizedBox(
                             width: 300,
@@ -250,7 +238,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
                             var birthDate = ageController.text;
                             var city = cityController.text;
 
-                            if(_formKey.currentState!.validate()) {
+                            if (_formKey.currentState!.validate()) {
                               Navigator.pushNamed(context, '/map');
                             }
                           },
