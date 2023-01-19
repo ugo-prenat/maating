@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:maating/pages/login_page.dart';
 import 'package:maating/pages/map_page.dart';
 import 'package:maating/pages/register_page.dart';
+import 'package:maating/pages/register_page2.dart';
 import 'package:maating/pages/sports_selection_register_page.dart';
 
 void main() {
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
+        '/register2': (context) => const RegisterPage2(),
         '/map': (context) => const MapPage(),
         '/register_sports': (context) => const RegisterSportPage(
               sports: [],
@@ -35,7 +37,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           textTheme: GoogleFonts.poppinsTextTheme().copyWith(
               bodyText1: GoogleFonts.poppins(textStyle: textTheme.bodyText1))),
-      home: const MapPage(),
+      home: const HomePage(),
     );
   }
 }
