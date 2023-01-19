@@ -15,9 +15,14 @@ class RegisterSportPage extends StatefulWidget {
 }
 
 class _RegisterSportPage extends State<RegisterSportPage> {
+  List<SportSchema> sportsToAdd = <SportSchema>[];
   @override
   Widget build(BuildContext context) {
-    List<SportSchema> sportsToAdd = widget.sports;
+    if (sportsToAdd.isEmpty) {
+      setState(() {
+        sportsToAdd = widget.sports;
+      });
+    }
     return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color(0xFF2196F3),
@@ -59,13 +64,18 @@ class _RegisterSportPage extends State<RegisterSportPage> {
                         width: 200,
                         height: 45,
                         child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushReplacement(
+                          onPressed: () async {
+                            final result = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (BuildContext context) =>
+                                    builder: (context) =>
                                         SportSelectionRegisterPage(
                                             sports: sportsToAdd)));
+                            if (result != null) {
+                              setState(() {
+                                sportsToAdd = result;
+                              });
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Color(0xFF0085FF)),

@@ -143,8 +143,7 @@ class _SportSelectionRegisterPage extends State<SportSelectionRegisterPage> {
                                         },
                                       );
                                     } else {
-                                      return const Text(
-                                          'Aucun évènement trouvé');
+                                      return const Text('Aucun autre sport');
                                     }
                                   } else {
                                     return Text(
@@ -209,19 +208,11 @@ class _SportSelectionRegisterPage extends State<SportSelectionRegisterPage> {
                               Sport sportSelected =
                                   dropdownValueList.firstWhere((element) =>
                                       element.name == dropdownValueSport);
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          RegisterSportPage(
-                                            sports: [
-                                              ...widget.sports,
-                                              SportSchema(
-                                                  sportSelected,
-                                                  int.parse(
-                                                      dropdownValueLevel!))
-                                            ],
-                                          )));
+                              Navigator.pop(context, [
+                                ...widget.sports,
+                                SportSchema(sportSelected,
+                                    int.parse(dropdownValueLevel!))
+                              ]);
                             } else {
                               displaySnackBar(
                                   "Veuillez renseigner le sport et votre niveau");
@@ -235,32 +226,6 @@ class _SportSelectionRegisterPage extends State<SportSelectionRegisterPage> {
                               fontSize: 20,
                               fontWeight: FontWeight.normal,
                             ),
-                          ),
-                        ),
-                      )),
-                  Padding(
-                      padding: const EdgeInsets.only(top: 30),
-                      child: SizedBox(
-                        width: 125,
-                        height: 50,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        RegisterSportPage(
-                                          sports: widget.sports,
-                                        )));
-                          },
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white),
-                          child: const Text(
-                            "Annuler",
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.normal,
-                                color: Color(0xFF0085FF)),
                           ),
                         ),
                       )),

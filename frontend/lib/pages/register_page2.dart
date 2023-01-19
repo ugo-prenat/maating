@@ -3,6 +3,7 @@ import 'package:maating/extension/checkInput.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:maating/pages/register_sports_page.dart';
 
 class RegisterPage2 extends StatefulWidget {
   const RegisterPage2({super.key});
@@ -12,7 +13,6 @@ class RegisterPage2 extends StatefulWidget {
 }
 
 class _RegisterPage2State extends State<RegisterPage2> {
-
   final _formKey = GlobalKey<FormState>();
 
   bool isPasswordVisible = true;
@@ -41,23 +41,25 @@ class _RegisterPage2State extends State<RegisterPage2> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-              title: const Text('Sélectionnez une image depuis votre galerie ou prenez une photo.'),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            title: const Text(
+                'Sélectionnez une image depuis votre galerie ou prenez une photo.'),
             content: Container(
               height: MediaQuery.of(context).size.height / 6,
               child: Column(
                 children: [
                   ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        getImage(ImageSource.gallery);
-                      },
-                      child: Row(
-                        children: const [
-                          Icon(Icons.image),
-                          Text('Galerie'),
-                        ],
-                      ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      getImage(ImageSource.gallery);
+                    },
+                    child: Row(
+                      children: const [
+                        Icon(Icons.image),
+                        Text('Galerie'),
+                      ],
+                    ),
                   ),
                   ElevatedButton(
                     onPressed: () {
@@ -75,8 +77,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
               ),
             ),
           );
-        }
-    );
+        });
   }
 
   DateTime selectedDate = DateTime.now();
@@ -96,6 +97,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
     // Select time after select day
     _selectTime(context);
   }
+
   Future<void> _selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
@@ -104,9 +106,9 @@ class _RegisterPage2State extends State<RegisterPage2> {
     if (picked != null) {
       setState(() {
         selectedDate = DateTime(
-            selectedDate.year,
-            selectedDate.month,
-            selectedDate.day,
+          selectedDate.year,
+          selectedDate.month,
+          selectedDate.day,
         );
       });
     }
@@ -122,12 +124,12 @@ class _RegisterPage2State extends State<RegisterPage2> {
       ),
       body: Container(
         decoration: const BoxDecoration(
-          gradient: LinearGradient(colors: [Color(0xFF2196F3), Color(0xFF000000)],
+          gradient: LinearGradient(
+              colors: [Color(0xFF2196F3), Color(0xFF000000)],
               begin: FractionalOffset.topCenter,
               end: FractionalOffset.bottomCenter,
               stops: [0.0, 1.0],
-              tileMode: TileMode.clamp
-          ),
+              tileMode: TileMode.clamp),
         ),
         child: Center(
           child: Column(
@@ -162,31 +164,33 @@ class _RegisterPage2State extends State<RegisterPage2> {
                       child: TextField(
                         controller: ageController,
                         decoration: InputDecoration(
-                          suffixIcon: const Icon(Icons.calendar_today_outlined),
-                          hintText: 'jj/MM/yyyy',
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                            borderSide: const BorderSide(color: Colors.white),
-                            borderRadius: BorderRadius.circular(10)
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(color: Colors.blue),
-                              borderRadius: BorderRadius.circular(10)
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(vertical: 2, horizontal: 15)
-                        ),
+                            suffixIcon:
+                                const Icon(Icons.calendar_today_outlined),
+                            hintText: 'jj/MM/yyyy',
+                            filled: true,
+                            fillColor: Colors.white,
+                            border: OutlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: Colors.white),
+                                borderRadius: BorderRadius.circular(10)),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: Colors.blue),
+                                borderRadius: BorderRadius.circular(10)),
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 2, horizontal: 15)),
                         readOnly: true,
                         onTap: () async {
-                          DateTime ? pickedDate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime(2100),
+                          DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100),
                           );
-                          if(pickedDate != null) {
+                          if (pickedDate != null) {
                             print(pickedDate);
-                            String formattedDate = DateFormat('dd/MM/yyyy').format(pickedDate);
+                            String formattedDate =
+                                DateFormat('dd/MM/yyyy').format(pickedDate);
                             setState(() {
                               ageController.text = formattedDate;
                             });
@@ -204,98 +208,99 @@ class _RegisterPage2State extends State<RegisterPage2> {
                         ),
                       ),
                     ),
-                     SizedBox(
-                        width: 300,
-                        height: 100,
-                        child: TextFormField(
-                          controller: cityController,
-                          decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 15.0),
-                              filled: true,
-                              fillColor: Colors.white,
-                              hintText: 'Paris (75000)',
-                              border: OutlineInputBorder(
-                                  borderSide: const BorderSide(color: Colors.white),
-                                  borderRadius: BorderRadius.circular(10)
-                              ),
-                              focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue),
-                              ),
+                    SizedBox(
+                      width: 300,
+                      height: 100,
+                      child: TextFormField(
+                        controller: cityController,
+                        decoration: InputDecoration(
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 15.0),
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: 'Paris (75000)',
+                          border: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.white),
+                              borderRadius: BorderRadius.circular(10)),
+                          focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue),
                           ),
                         ),
                       ),
+                    ),
                     const Padding(
-                          padding: EdgeInsets.only(right: 220),
-                          child: Text(
-                              'Mobilité',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                              ),
-                          ),
+                      padding: EdgeInsets.only(right: 220),
+                      child: Text(
+                        'Mobilité',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
                         ),
+                      ),
+                    ),
                     SizedBox(
                       width: 350,
                       height: 50,
                       child: SliderTheme(
-                          data: const SliderThemeData(
-                            valueIndicatorColor: Colors.transparent,
-                          ),
-                          child: Slider(
-                            value: _currentSliderValue,
-                            max: 100,
-                            divisions: 100,
-                            label: '${_currentSliderValue.round()} km',
-                            onChanged: (double values) {
-                              setState(() {
-                                _currentSliderValue = values;
-                              });
-                            },
-                          ),
+                        data: const SliderThemeData(
+                          valueIndicatorColor: Colors.transparent,
                         ),
-                    ),
-                    image != null
-                    ? SizedBox(
-                      width: 300,
-                      height: 100,
-                      child: ClipRRect(
-                          child: Image.file(
-                            File(image!.path),
-                            fit: BoxFit.contain,
-                            width: MediaQuery.of(context).size.width,
-                            height: 400,
-                          ),
-                        ),
-                    )
-                     : TextButton(
-                      onPressed: () {
-                        chooseImageSource();
-                        },
-                        style: TextButton.styleFrom(
-                        fixedSize: const Size(120, 120),
-                        side: const BorderSide(
-                            width: 2,
-                            color: Colors.blue,
+                        child: Slider(
+                          value: _currentSliderValue,
+                          max: 100,
+                          divisions: 100,
+                          label: '${_currentSliderValue.round()} km',
+                          onChanged: (double values) {
+                            setState(() {
+                              _currentSliderValue = values;
+                            });
+                          },
                         ),
                       ),
-                      child: const Icon(Icons.add),
                     ),
+                    image != null
+                        ? SizedBox(
+                            width: 300,
+                            height: 100,
+                            child: ClipRRect(
+                              child: Image.file(
+                                File(image!.path),
+                                fit: BoxFit.contain,
+                                width: MediaQuery.of(context).size.width,
+                                height: 400,
+                              ),
+                            ),
+                          )
+                        : TextButton(
+                            onPressed: () {
+                              chooseImageSource();
+                            },
+                            style: TextButton.styleFrom(
+                              fixedSize: const Size(120, 120),
+                              side: const BorderSide(
+                                width: 2,
+                                color: Colors.blue,
+                              ),
+                            ),
+                            child: const Icon(Icons.add),
+                          ),
                     const Padding(
                       padding: EdgeInsets.only(top: 10),
                       child: Text(
-                          'Sélectionnez un avatar',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white
-                        ),
+                        'Sélectionnez un avatar',
+                        style: TextStyle(fontSize: 16, color: Colors.white),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 140, top: 40),
                       child: ElevatedButton(
                           onPressed: () async {
-                            if(_formKey.currentState!.validate()) {
-                              Navigator.pushNamed(context, '');
+                            if (_formKey.currentState!.validate()) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          const RegisterSportPage(sports: [])));
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -305,17 +310,13 @@ class _RegisterPage2State extends State<RegisterPage2> {
                               side: const BorderSide(
                                   width: 2,
                                   color: Colors.white,
-                                strokeAlign: StrokeAlign.center
-                              )
-                          ),
+                                  strokeAlign: StrokeAlign.center)),
                           child: Row(
                             children: [
                               const Text(
                                 'Suivant',
                                 style: TextStyle(
-                                    fontSize: 17,
-                                    color: Colors.black
-                                ),
+                                    fontSize: 17, color: Colors.black),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(left: 10),
@@ -326,8 +327,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
                                 ),
                               ),
                             ],
-                          )
-                      ),
+                          )),
                     ),
                   ],
                 ),
