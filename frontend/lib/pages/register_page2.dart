@@ -147,7 +147,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
                 child: Column(
                   children: [
                     const Padding(
-                      padding: EdgeInsets.only(right: 110),
+                      padding: EdgeInsets.only(right: 105),
                       child: Text(
                         'Date de Naissance',
                         style: TextStyle(
@@ -174,7 +174,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
                             borderSide: const BorderSide(color: Colors.blue),
                               borderRadius: BorderRadius.circular(10)
                           ),
-                          contentPadding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5)
+                          contentPadding: const EdgeInsets.symmetric(vertical: 2, horizontal: 15)
                         ),
                         readOnly: true,
                         onTap: () async {
@@ -263,7 +263,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
                             File(image!.path),
                             fit: BoxFit.contain,
                             width: MediaQuery.of(context).size.width,
-                            height: 300,
+                            height: 400,
                           ),
                         ),
                     )
