@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
-const LatLng currentLocation = LatLng(49.035617, 2.060325);
+import 'package:location/location.dart';
 
 class MapWidget extends StatefulWidget {
-  const MapWidget({super.key});
+  const MapWidget({
+    super.key,
+    required this.userLocation,
+    required this.defaultCityLocation,
+  });
+
+  final LocationData? userLocation;
+  final LatLng defaultCityLocation;
 
   @override
   State<MapWidget> createState() => _MapWidgetState();
@@ -18,17 +24,18 @@ class _MapWidgetState extends State<MapWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: (GoogleMap(
-      initialCameraPosition: const CameraPosition(
-        target: currentLocation,
-        zoom: 13.0,
+      body: GoogleMap(
+        initialCameraPosition: CameraPosition(
+          target: widget.defaultCityLocation,
+          zoom: 13.0,
+        ),
+        onMapCreated: (controller) async {
+          _mapController = controller;
+          await setEventMarkers();
+        },
+        markers: _markers.values.toSet(),
       ),
-      onMapCreated: (controller) async {
-        _mapController = controller;
-        await setEventMarkers();
-      },
-      markers: _markers.values.toSet(),
-    )));
+    );
   }
 
   setEventMarkers() async {
@@ -56,11 +63,11 @@ class _MapWidgetState extends State<MapWidget> {
       },
     ];
     for (var event in fakeEvents) {
-      await addMarker(event['id'], event['latLng'], event['eventNb']);
+      await addMarker(event['id'], event['latLng'], event['eventNb'], 'event');
     }
   }
 
-  addMarker(String id, LatLng position, int eventNb) async {
+  addMarker(String id, LatLng position, int eventNb, String type) async {
     var marker = Marker(
         markerId: MarkerId(id),
         position: position,

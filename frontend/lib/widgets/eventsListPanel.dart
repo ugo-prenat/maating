@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:maating/pages/map_page.dart';
-import 'package:maating/widgets/eventCard.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:maating/widgets/eventsList.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class EventsListPanel extends StatelessWidget {
   final ScrollController controller;
   final PanelController panelController;
+  final LocationData? userLocation;
+  final LatLng defaultCityLocation;
 
   const EventsListPanel({
     Key? key,
     required this.panelController,
     required this.controller,
+    required this.userLocation,
+    required this.defaultCityLocation,
   }) : super(key: key);
 
   @override
@@ -38,7 +42,7 @@ class EventsListPanel extends StatelessWidget {
               ],
             ),
           ),
-          const EventsList(eventsLocation: currentLocation)
+          EventsList(eventsLocation: defaultCityLocation)
         ],
       );
 
