@@ -6,6 +6,7 @@ class User {
   String email;
   String password;
   String birthDate;
+  String location;
   int? mobilityRange;
   String? avatarUrl;
   double? personalRating;
@@ -13,6 +14,7 @@ class User {
   List<SportSchema> sports;
 
   User(this.name, this.email, this.password, this.birthDate, this.sports,
+      this.location,
       [this.ratingNumber,
       this.avatarUrl,
       this.id,
@@ -20,16 +22,21 @@ class User {
       this.personalRating]);
 
   Map<String, dynamic> toMap() {
+    var sportsArray = [];
+    for (var sport in sports) {
+      sportsArray = [...sportsArray, sport.toMap()];
+    }
     return {
       "name": name,
       "email": email,
       "password": password,
       "birth_date": birthDate,
+      "location": location,
       "mobility_range": mobilityRange ?? 10000,
       "avatar_url": avatarUrl ?? defaultAvatarUrl,
       "personal_rating": personalRating ?? 0.0,
-      "rating_number": ratingNumber ?? 0,
-      "sports": sports
+      "rating_nb": ratingNumber ?? 0,
+      "sports": sportsArray
     };
   }
 
@@ -39,11 +46,16 @@ class User {
         password = map["password"],
         email = map["email"],
         birthDate = map["birth_date"],
+        location = map["location"],
         mobilityRange = map["mobility_range"],
         avatarUrl = map["avatar_url"],
         personalRating = map["personal_rating"],
         ratingNumber = map["rating_nb"],
-        sports = map["sports"];
+        sports = map["sports"] is List<dynamic>
+            ? <SportSchema>[]
+            : map["sports"]
+                .map((sportSchema) => SportSchema.fromMap(sportSchema))
+                .toList();
 }
 
 const defaultAvatarUrl =
@@ -54,6 +66,14 @@ class SportSchema {
   int level;
 
   SportSchema(this.sport, this.level);
+
+  Map<String, dynamic> toMap() {
+    return {"sport": sport.id, "level": level};
+  }
+
+  SportSchema.fromMap(map)
+      : sport = Sport.fromMap(map["sport"]),
+        level = map["level"];
 }
 
 class LevelSchema {

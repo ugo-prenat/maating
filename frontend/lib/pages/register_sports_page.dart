@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:maating/main.dart';
 import 'package:maating/models/user.dart';
+import 'package:maating/pages/map_page.dart';
 import 'package:maating/pages/sports_selection_register_page.dart';
+import 'package:maating/services/requestManager.dart';
 import 'package:maating/widgets/register_sports_list.dart';
 
 class RegisterSportPage extends StatefulWidget {
@@ -104,8 +106,34 @@ class _RegisterSportPage extends State<RegisterSportPage> {
                         width: 250,
                         height: 50,
                         child: ElevatedButton(
-                          onPressed: () {
-                            displaySnackBar("inscription");
+                          onPressed: () async {
+                            if (sportsToAdd.length > 0) {
+                              await postUser(User(
+                                      "User03",
+                                      "user03@gmail.com",
+                                      "azerty",
+                                      "2002-05-22 20:18:04Z",
+                                      sportsToAdd,
+                                      "Cergy",
+                                      null,
+                                      null,
+                                      null,
+                                      null,
+                                      0.1))
+                                  .then((value) => Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              MapPage())))
+                                  .catchError(
+                                      (err) => displaySnackBar(
+                                          "Un problème est survenu durant la création de votre compte"),
+                                      test: (error) => error is User);
+                            } else {
+                              displaySnackBar(
+                                  "Veuillez ajouter au moins un sport");
+                            }
+                            // ignore: avoid_print
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Color(0xFF0085FF)),

@@ -24,7 +24,7 @@ class SportSelectionRegisterPage extends StatefulWidget {
 }
 
 class _SportSelectionRegisterPage extends State<SportSelectionRegisterPage> {
-  Sport? dropdownValueSport;
+  String? dropdownValueSport;
   String? dropdownValueLevel;
   @override
   Widget build(BuildContext context) {
@@ -84,9 +84,16 @@ class _SportSelectionRegisterPage extends State<SportSelectionRegisterPage> {
                                 ) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.waiting) {
-                                    return const CircularProgressIndicator(
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                          Colors.grey),
+                                    return const Center(
+                                      child: SizedBox(
+                                        height: 30,
+                                        width: 30,
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                  Colors.grey),
+                                        ),
+                                      ),
                                     );
                                   }
                                   if (snapshot.connectionState ==
@@ -100,7 +107,7 @@ class _SportSelectionRegisterPage extends State<SportSelectionRegisterPage> {
                                             .firstWhere(
                                                 (sportSchema) =>
                                                     sportSchema.sport.name ==
-                                                    value,
+                                                    value.name,
                                                 orElse: () => SportSchema(
                                                     Sport("", ""), 0));
                                         if (sportSchema.sport.name == "") {
@@ -110,37 +117,30 @@ class _SportSelectionRegisterPage extends State<SportSelectionRegisterPage> {
                                           ];
                                         }
                                       }).toList();
-                                      return ListView.builder(
-                                        shrinkWrap: true,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        itemBuilder: (context, index) =>
-                                            DropdownButton<Sport>(
-                                                value: dropdownValueSport,
-                                                underline: Container(),
-                                                isExpanded: true,
-                                                hint: Text(
-                                                  snapshot.data![0].name,
-                                                  style: const TextStyle(
-                                                      color: Colors.grey),
-                                                ),
-                                                items: dropdownValueList.map<
-                                                    DropdownMenuItem<
-                                                        Sport>>((Sport? value) {
-                                                  return DropdownMenuItem<
-                                                      Sport>(
-                                                    value: value,
-                                                    child: Text(
-                                                      value!.name,
-                                                    ),
-                                                  );
-                                                }).toList(),
-                                                onChanged: (Sport? value) {
-                                                  setState(() {
-                                                    dropdownValueSport = value!;
-                                                  });
-                                                }),
-                                        itemCount: snapshot.data!.length,
+                                      return DropdownButton<String>(
+                                        value: dropdownValueSport,
+                                        underline: Container(),
+                                        isExpanded: true,
+                                        hint: Text(
+                                          snapshot.data![0].name,
+                                          style: const TextStyle(
+                                              color: Colors.grey),
+                                        ),
+                                        items: dropdownValueList
+                                            .map<DropdownMenuItem<String>>(
+                                                (Sport? value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value?.name,
+                                            child: Text(
+                                              value!.name,
+                                            ),
+                                          );
+                                        }).toList(),
+                                        onChanged: (String? value) {
+                                          setState(() {
+                                            dropdownValueSport = value!;
+                                          });
+                                        },
                                       );
                                     } else {
                                       return const Text(
@@ -206,6 +206,9 @@ class _SportSelectionRegisterPage extends State<SportSelectionRegisterPage> {
                           onPressed: () {
                             if (dropdownValueLevel != null &&
                                 dropdownValueSport != null) {
+                              Sport sportSelected =
+                                  dropdownValueList.firstWhere((element) =>
+                                      element.name == dropdownValueSport);
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
@@ -214,7 +217,7 @@ class _SportSelectionRegisterPage extends State<SportSelectionRegisterPage> {
                                             sports: [
                                               ...widget.sports,
                                               SportSchema(
-                                                  dropdownValueSport!,
+                                                  sportSelected,
                                                   int.parse(
                                                       dropdownValueLevel!))
                                             ],
