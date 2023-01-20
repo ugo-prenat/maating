@@ -92,7 +92,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                       ),
                                       validator: (input) {
                                         if(input == '') {
-                                          return 'Veuillez renseignez ce champ.';
+                                          return 'Veuillez renseignez votre prénom';
                                         } else if(input!.length < 3) {
                                           return 'Votre prénom doit comporter \n au moins 3 caractères.';
                                         }
@@ -132,7 +132,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 ),
                                 validator: (input) {
                                   if (input == '') {
-                                    return 'Veuillez renseignez ce champ.';
+                                    return 'Veuillez renseignez un email.';
                                   } else if (!input!.isValidEmail()) {
                                     return 'Mauvais format d\'email.';
                                   }
@@ -182,7 +182,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 ),
                                 validator: (input) {
                                   if (input == '') {
-                                    return 'Veuillez renseignez ce champ.';
+                                    return 'Veuillez renseignez un mot de passe.';
                                   } else if (input!.length < 6) {
                                     return "Le mot de passe doit contenir \n plus de 5 caractères";
                                   }
