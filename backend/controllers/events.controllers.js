@@ -1,7 +1,10 @@
 const Events = require('../models/events.models');
-const { isParticipantAlreadyInEvent } = require('../utils/events.utils');
+const {
+  isParticipantAlreadyInEvent,
+  formatEventsForMapDisplay
+} = require('../utils/events.utils');
 
-const getEvents = (req, res) => {
+const getMapEvents = (req, res) => {
   const { lat, lng, maxDistance } = req.query;
 
   if (lat && lng && maxDistance) {
@@ -14,6 +17,34 @@ const getEvents = (req, res) => {
               coordinates: [parseFloat(lng), parseFloat(lat)]
             },
             $maxDistance: parseInt(maxDistance)
+          }
+        }
+      })
+      .then((events) =>
+        res
+          .status(200)
+          .json(formatEventsForMapDisplay(events.filter((e) => e.location)))
+      )
+      .catch((error) => res.status(500).json({ error }));
+  }
+  return res
+    .status(400)
+    .json({ error: 'Missing lat, lng or maxDistance params' });
+};
+
+const getEvents = (req, res) => {
+  const { lat, lng, maxDistance } = req.query;
+
+  if (lat && lng) {
+    return Events.find()
+      .populate('location', null, {
+        loc: {
+          $near: {
+            $geometry: {
+              type: 'Point',
+              coordinates: [parseFloat(lng), parseFloat(lat)]
+            },
+            $maxDistance: parseInt(maxDistance ? maxDistance : '0')
           }
         }
       })
@@ -85,6 +116,7 @@ const deleteEvent = (req, res) => {
 
 module.exports = {
   getEvents,
+  getMapEvents,
   getEvent,
   getEventParticipants,
   createEvent,

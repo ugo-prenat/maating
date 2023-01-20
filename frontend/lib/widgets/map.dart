@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 
-const LatLng currentLocation = LatLng(49.035617, 2.060325);
+import '../models/event.dart';
+import '../pages/map_page.dart';
 
 class MapWidget extends StatefulWidget {
-  const MapWidget({super.key});
+  const MapWidget({
+    super.key,
+    required this.userLocation,
+    required this.events,
+  });
+
+  final LocationData? userLocation;
+  final List<dynamic> events;
 
   @override
   State<MapWidget> createState() => _MapWidgetState();
@@ -18,53 +27,40 @@ class _MapWidgetState extends State<MapWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: (GoogleMap(
-      initialCameraPosition: const CameraPosition(
-        target: currentLocation,
-        zoom: 13.0,
+      body: GoogleMap(
+        initialCameraPosition: const CameraPosition(
+          target: defaultCityLocation,
+          zoom: 13.0,
+        ),
+        onMapCreated: (controller) async {
+          _mapController = controller;
+          await setEventMarkers();
+        },
+        markers: _markers.values.toSet(),
       ),
-      onMapCreated: (controller) async {
-        _mapController = controller;
-        await setEventMarkers();
-      },
-      markers: _markers.values.toSet(),
-    )));
+    );
   }
 
   setEventMarkers() async {
-    List<Map<String, dynamic>> fakeEvents = [
-      {"id": '1', "latLng": const LatLng(49.035617, 2.060325), "eventNb": 1},
-      {
-        "id": '2',
-        "latLng": const LatLng(49.046050188140526, 2.044003490086851),
-        "eventNb": 2
-      },
-      {
-        "id": '3',
-        "latLng": const LatLng(49.04495283646002, 2.032249409489712),
-        "eventNb": 9
-      },
-      {
-        "id": '4',
-        "latLng": const LatLng(49.06116510689557, 2.054753637854887),
-        "eventNb": 12
-      },
-      {
-        "id": '5',
-        "latLng": const LatLng(49.02371749973055, 2.0767029443089813),
-        "eventNb": 3
-      },
-    ];
-    for (var event in fakeEvents) {
-      await addMarker(event['id'], event['latLng'], event['eventNb']);
+    for (var event in widget.events) {
+      await addMarker(
+        event['id'],
+        LatLng(
+          event['coordinates'][1],
+          event['coordinates'][0],
+        ),
+        event['eventsNb'],
+        'event',
+      );
     }
   }
 
-  addMarker(String id, LatLng position, int eventNb) async {
+  addMarker(String id, LatLng position, int eventNb, String type) async {
     var marker = Marker(
-        markerId: MarkerId(id),
-        position: position,
-        icon: await createMarkerIcon(eventNb));
+      markerId: MarkerId(id),
+      position: position,
+      icon: await createMarkerIcon(eventNb),
+    );
     setState(() {
       _markers[id] = marker;
     });
