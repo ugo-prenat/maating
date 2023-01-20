@@ -14,7 +14,7 @@ class MapWidget extends StatefulWidget {
   });
 
   final LocationData? userLocation;
-  final List<Event> events;
+  final List<dynamic> events;
 
   @override
   State<MapWidget> createState() => _MapWidgetState();
@@ -44,12 +44,12 @@ class _MapWidgetState extends State<MapWidget> {
   setEventMarkers() async {
     for (var event in widget.events) {
       await addMarker(
-        event.id ?? '',
+        event['id'],
         LatLng(
-          event.location.loc.coordinates[1],
-          event.location.loc.coordinates[0],
+          event['coordinates'][1],
+          event['coordinates'][0],
         ),
-        1,
+        event['eventsNb'],
         'event',
       );
     }

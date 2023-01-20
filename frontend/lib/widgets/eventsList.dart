@@ -74,8 +74,6 @@ class _EventsListState extends State<EventsList> {
   }
 
   Future<List<Event>> getEvents(LatLng location) async {
-    return loadAllEvents
-        ? await getMapEvents(location, defaultUserMobilityRange)
-        : await getEventsByLocation(location);
+    return await getEventsByLocation(location, loadAllEvents);
   }
 }

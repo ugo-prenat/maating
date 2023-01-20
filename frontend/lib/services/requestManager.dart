@@ -5,8 +5,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:maating/models/event.dart';
 import 'package:maating/models/sport.dart';
+import 'package:maating/pages/map_page.dart';
 
-Future<List<Event>> getMapEvents(LatLng location, int maxDistance) async {
+Future<List<dynamic>> getMapEvents(LatLng location, int maxDistance) async {
   final response = await http.get(
     Uri.parse(
         'http://10.0.2.2:4000/events/map?lat=${location.latitude}&lng=${location.longitude}&maxDistance=$maxDistance'),
@@ -16,14 +17,16 @@ Future<List<Event>> getMapEvents(LatLng location, int maxDistance) async {
     return throw Exception('Failed to load events');
   }
 
-  List<dynamic> body = jsonDecode(response.body);
-  return body.map((dynamic event) => Event.fromMap(event)).toList();
+  print(jsonDecode(response.body));
+  return jsonDecode(response.body);
 }
 
-Future<List<Event>> getEventsByLocation(LatLng location) async {
+Future<List<Event>> getEventsByLocation(
+    LatLng location, bool loadAllEvents) async {
   final response = await http.get(
     Uri.parse(
-        'http://10.0.2.2:4000/events?lat=${location.latitude}&lng=${location.longitude}'),
+      'http://10.0.2.2:4000/events?lat=${location.latitude}&lng=${location.longitude}${loadAllEvents ? '&maxDistance=$defaultUserMobilityRange' : ''}}',
+    ),
   );
 
   if (response.statusCode != 200) {

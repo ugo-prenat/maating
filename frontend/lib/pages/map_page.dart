@@ -27,11 +27,11 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<List<Event>>(
+      body: FutureBuilder<List<dynamic>>(
         future: getMapEvents(defaultCityLocation, defaultUserMobilityRange),
         builder: (
           BuildContext context,
-          AsyncSnapshot<List<Event>> snapshot,
+          AsyncSnapshot<List<dynamic>> snapshot,
         ) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Stack(
