@@ -54,6 +54,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
       appBar: AppBar(
         backgroundColor: const Color(0xFF2196F3),
         elevation: 0.0,
+        automaticallyImplyLeading: false,
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -109,15 +110,18 @@ class _RegisterPage2State extends State<RegisterPage2> {
                             borderSide: const BorderSide(color: Colors.blue),
                               borderRadius: BorderRadius.circular(10)
                           ),
-                          contentPadding: const EdgeInsets.symmetric(vertical: 2, horizontal: 15)
+                          contentPadding: const EdgeInsets.symmetric(vertical: 2, horizontal: 15),
+                          errorStyle: const TextStyle(
+                            fontSize: 16,
+                        ),
                         ),
                         readOnly: true,
                         onTap: () async {
                           DateTime ? pickedDate = await showDatePicker(
                               context: context,
                               initialDate: DateTime.now(),
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime(2100),
+                              firstDate: DateTime(1950),
+                              lastDate: DateTime.now(),
                           );
                           if(pickedDate != null) {
                             String formattedDate = DateFormat('dd/MM/yyyy').format(pickedDate);
@@ -130,6 +134,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
                           if(input == '') {
                             return 'Veuillez renseignez une date.';
                           }
+                          return null;
                         },
                       ),
                     ),
@@ -145,7 +150,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
                     ),
                      SizedBox(
                         width: 300,
-                        height: 100,
+                        height: 80,
                         child: TextFormField(
                           controller: cityController,
                           decoration: InputDecoration(
@@ -157,13 +162,17 @@ class _RegisterPage2State extends State<RegisterPage2> {
                                   borderSide: const BorderSide(color: Colors.white),
                                   borderRadius: BorderRadius.circular(10)
                               ),
-                              focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(color: Colors.blue),
+                                  borderRadius: BorderRadius.circular(10)
                               ),
+                            errorStyle: const TextStyle(
+                              fontSize: 16,
+                            ),
                           ),
                           validator: (input) {
                             if(input == '') {
-                              return 'Veuillez renseigner une ville';
+                              return 'Veuillez renseigner une ville.';
                             }
                           },
                         ),
@@ -187,6 +196,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
                           ),
                           child: Slider(
                             value: _currentSliderValue,
+                            min: 1,
                             max: 100,
                             divisions: 100,
                             label: '${_currentSliderValue.round()} km',

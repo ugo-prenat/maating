@@ -72,6 +72,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     child: TextFormField(
                                       controller: firstNameController,
                                       autovalidateMode: AutovalidateMode.onUserInteraction,
+                                      textInputAction: TextInputAction.next,
                                       maxLength: 25,
                                       decoration: InputDecoration(
                                         contentPadding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -96,6 +97,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                         } else if(input!.length < 3) {
                                           return 'Votre prénom doit comporter \n au moins 3 caractères.';
                                         }
+                                        return null;
                                       },
                                     ),
                                   ),
@@ -112,6 +114,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               child: TextFormField(
                                 controller: emailController,
                                 autovalidateMode: AutovalidateMode.onUserInteraction,
+                                textInputAction: TextInputAction.next,
                                 maxLength: 40,
                                 decoration: InputDecoration(
                                     contentPadding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -123,8 +126,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                         borderSide: const BorderSide(color: Colors.white),
                                         borderRadius: BorderRadius.circular(10)
                                     ),
-                                    focusedBorder: const OutlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.blue),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderSide: const BorderSide(color: Colors.blue),
+                                        borderRadius: BorderRadius.circular(10)
                                     ),
                                   errorStyle: const TextStyle(
                                     fontSize: 16,
@@ -136,6 +140,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   } else if (!input!.isValidEmail()) {
                                     return 'Mauvais format d\'email.';
                                   }
+                                  return null;
                                 },
                               ),
                             ),
@@ -145,6 +150,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               fontSize: 20,
                               color: Colors.white,
                             ),
+
                           ),
                           SizedBox(
                               width: 300,
@@ -153,6 +159,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 controller: passwordController,
                                 obscureText: isPasswordVisible,
                                 autovalidateMode: AutovalidateMode.onUserInteraction,
+                                textInputAction: TextInputAction.done,
                                 maxLength: 25,
                                 decoration: InputDecoration(
                                     suffixIcon:
@@ -173,8 +180,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                         borderSide: const BorderSide(color: Colors.white),
                                         borderRadius: BorderRadius.circular(10)
                                     ),
-                                    focusedBorder: const OutlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.blue),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderSide: const BorderSide(color: Colors.blue),
+                                        borderRadius: BorderRadius.circular(10)
                                     ),
                                   errorStyle: const TextStyle(
                                     fontSize: 16,
@@ -182,10 +190,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                 ),
                                 validator: (input) {
                                   if (input == '') {
-                                    return 'Veuillez renseignez un mot de passe.';
+                                    return 'Veuillez renseignez un mot de\n passe.';
                                   } else if (input!.length < 6) {
                                     return "Le mot de passe doit contenir \n plus de 5 caractères";
                                   }
+                                  return null;
                                 },
                               ),
                             ),
