@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:maating/widgets/sourceAvatar.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:maating/pages/register_sports_page.dart';
 
 class RegisterPage2 extends StatefulWidget {
   const RegisterPage2({super.key});
@@ -12,7 +13,6 @@ class RegisterPage2 extends StatefulWidget {
 }
 
 class _RegisterPage2State extends State<RegisterPage2> {
-
   final _formKey = GlobalKey<FormState>();
 
   bool isPasswordVisible = true;
@@ -43,8 +43,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
           return SourceAvatar(onTakingImage: (ImageSource media) {
             getImage(media);
           });
-        }
-    );
+        });
   }
 
   @override
@@ -58,12 +57,12 @@ class _RegisterPage2State extends State<RegisterPage2> {
       ),
       body: Container(
         decoration: const BoxDecoration(
-          gradient: LinearGradient(colors: [Color(0xFF2196F3), Color(0xFF000000)],
+          gradient: LinearGradient(
+              colors: [Color(0xFF2196F3), Color(0xFF000000)],
               begin: FractionalOffset.topCenter,
               end: FractionalOffset.bottomCenter,
               stops: [0.0, 1.0],
-              tileMode: TileMode.clamp
-          ),
+              tileMode: TileMode.clamp),
         ),
         child: Center(
           child: Column(
@@ -123,15 +122,16 @@ class _RegisterPage2State extends State<RegisterPage2> {
                               firstDate: DateTime(1950),
                               lastDate: DateTime.now(),
                           );
-                          if(pickedDate != null) {
-                            String formattedDate = DateFormat('dd/MM/yyyy').format(pickedDate);
+                          if (pickedDate != null) {
+                            String formattedDate =
+                                DateFormat('dd/MM/yyyy').format(pickedDate);
                             setState(() {
                               ageController.text = formattedDate;
                             });
                           }
                         },
                         validator: (input) {
-                          if(input == '') {
+                          if (input == '') {
                             return 'Veuillez renseignez une date.';
                           }
                           return null;
@@ -177,20 +177,11 @@ class _RegisterPage2State extends State<RegisterPage2> {
                           },
                         ),
                       ),
-                    const Padding(
-                          padding: EdgeInsets.only(right: 220),
-                          child: Text(
-                              'Mobilité',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                              ),
-                          ),
-                        ),
+                    ),
                     SizedBox(
-                      width: 350,
-                      height: 50,
-                      child: SliderTheme(
+                        width: 350,
+                        height: 50,
+                        child: SliderTheme(
                           data: const SliderThemeData(
                             valueIndicatorColor: Colors.transparent,
                           ),
@@ -206,42 +197,38 @@ class _RegisterPage2State extends State<RegisterPage2> {
                               });
                             },
                           ),
-                        ),
-                    ),
+                        )),
                     image != null
-                    ? SizedBox(
-                      width: 300,
-                      height: 100,
-                      child: ClipRRect(
-                          child: Image.file(
-                            File(image!.path),
-                            fit: BoxFit.contain,
-                            width: MediaQuery.of(context).size.width,
-                            height: 400,
+                        ? SizedBox(
+                            width: 300,
+                            height: 100,
+                            child: ClipRRect(
+                              child: Image.file(
+                                File(image!.path),
+                                fit: BoxFit.contain,
+                                width: MediaQuery.of(context).size.width,
+                                height: 400,
+                              ),
+                            ),
+                          )
+                        : TextButton(
+                            onPressed: () {
+                              chooseImageSource();
+                            },
+                            style: TextButton.styleFrom(
+                              fixedSize: const Size(120, 120),
+                              side: const BorderSide(
+                                width: 2,
+                                color: Colors.blue,
+                              ),
+                            ),
+                            child: const Icon(Icons.add),
                           ),
-                        ),
-                    )
-                     : TextButton(
-                      onPressed: () {
-                        chooseImageSource();
-                      },
-                        style: TextButton.styleFrom(
-                        fixedSize: const Size(120, 120),
-                        side: const BorderSide(
-                            width: 2,
-                            color: Colors.blue,
-                        ),
-                      ),
-                      child: const Icon(Icons.add),
-                    ),
                     const Padding(
                       padding: EdgeInsets.only(top: 10),
                       child: Text(
-                          'Sélectionnez un avatar',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white
-                        ),
+                        'Sélectionnez un avatar',
+                        style: TextStyle(fontSize: 16, color: Colors.white),
                       ),
                     ),
                     Padding(
@@ -251,7 +238,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
                             var birthDate = ageController.text;
                             var city = cityController.text;
 
-                            if(_formKey.currentState!.validate()) {
+                            if (_formKey.currentState!.validate()) {
                               Navigator.pushNamed(context, '/map');
                             }
                           },
@@ -262,17 +249,13 @@ class _RegisterPage2State extends State<RegisterPage2> {
                               side: const BorderSide(
                                   width: 2,
                                   color: Colors.white,
-                                strokeAlign: StrokeAlign.center
-                              )
-                          ),
+                                  strokeAlign: StrokeAlign.center)),
                           child: Row(
                             children: [
                               const Text(
                                 'Suivant',
                                 style: TextStyle(
-                                    fontSize: 17,
-                                    color: Colors.black
-                                ),
+                                    fontSize: 17, color: Colors.black),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(left: 10),
@@ -283,8 +266,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
                                 ),
                               ),
                             ],
-                          )
-                      ),
+                          )),
                     ),
                   ],
                 ),

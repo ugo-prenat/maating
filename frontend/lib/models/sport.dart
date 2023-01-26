@@ -5,10 +5,10 @@ class Sport {
   Sport(this.id, this.name);
 
   Map<String, dynamic> toMap() {
-    return {"name": name};
+    return {"id": id, "name": name};
   }
 
   Sport.fromMap(map)
-      : id = map["_id"],
+      : id = map["_id"].toString(),
         name = map["name"];
 }

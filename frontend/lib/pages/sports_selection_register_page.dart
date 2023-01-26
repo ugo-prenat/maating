@@ -24,7 +24,7 @@ class SportSelectionRegisterPage extends StatefulWidget {
 }
 
 class _SportSelectionRegisterPage extends State<SportSelectionRegisterPage> {
-  Sport? dropdownValueSport;
+  String? dropdownValueSport;
   String? dropdownValueLevel;
   @override
   Widget build(BuildContext context) {
@@ -84,9 +84,16 @@ class _SportSelectionRegisterPage extends State<SportSelectionRegisterPage> {
                                 ) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.waiting) {
-                                    return const CircularProgressIndicator(
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                          Colors.grey),
+                                    return const Center(
+                                      child: SizedBox(
+                                        height: 30,
+                                        width: 30,
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                  Colors.grey),
+                                        ),
+                                      ),
                                     );
                                   }
                                   if (snapshot.connectionState ==
@@ -100,7 +107,7 @@ class _SportSelectionRegisterPage extends State<SportSelectionRegisterPage> {
                                             .firstWhere(
                                                 (sportSchema) =>
                                                     sportSchema.sport.name ==
-                                                    value,
+                                                    value.name,
                                                 orElse: () => SportSchema(
                                                     Sport("", ""), 0));
                                         if (sportSchema.sport.name == "") {
@@ -110,41 +117,33 @@ class _SportSelectionRegisterPage extends State<SportSelectionRegisterPage> {
                                           ];
                                         }
                                       }).toList();
-                                      return ListView.builder(
-                                        shrinkWrap: true,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        itemBuilder: (context, index) =>
-                                            DropdownButton<Sport>(
-                                                value: dropdownValueSport,
-                                                underline: Container(),
-                                                isExpanded: true,
-                                                hint: Text(
-                                                  snapshot.data![0].name,
-                                                  style: const TextStyle(
-                                                      color: Colors.grey),
-                                                ),
-                                                items: dropdownValueList.map<
-                                                    DropdownMenuItem<
-                                                        Sport>>((Sport? value) {
-                                                  return DropdownMenuItem<
-                                                      Sport>(
-                                                    value: value,
-                                                    child: Text(
-                                                      value!.name,
-                                                    ),
-                                                  );
-                                                }).toList(),
-                                                onChanged: (Sport? value) {
-                                                  setState(() {
-                                                    dropdownValueSport = value!;
-                                                  });
-                                                }),
-                                        itemCount: snapshot.data!.length,
+                                      return DropdownButton<String>(
+                                        value: dropdownValueSport,
+                                        underline: Container(),
+                                        isExpanded: true,
+                                        hint: Text(
+                                          snapshot.data![0].name,
+                                          style: const TextStyle(
+                                              color: Colors.grey),
+                                        ),
+                                        items: dropdownValueList
+                                            .map<DropdownMenuItem<String>>(
+                                                (Sport? value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value?.name,
+                                            child: Text(
+                                              value!.name,
+                                            ),
+                                          );
+                                        }).toList(),
+                                        onChanged: (String? value) {
+                                          setState(() {
+                                            dropdownValueSport = value!;
+                                          });
+                                        },
                                       );
                                     } else {
-                                      return const Text(
-                                          'Aucun évènement trouvé');
+                                      return const Text('Aucun autre sport');
                                     }
                                   } else {
                                     return Text(
@@ -206,19 +205,14 @@ class _SportSelectionRegisterPage extends State<SportSelectionRegisterPage> {
                           onPressed: () {
                             if (dropdownValueLevel != null &&
                                 dropdownValueSport != null) {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          RegisterSportPage(
-                                            sports: [
-                                              ...widget.sports,
-                                              SportSchema(
-                                                  dropdownValueSport!,
-                                                  int.parse(
-                                                      dropdownValueLevel!))
-                                            ],
-                                          )));
+                              Sport sportSelected =
+                                  dropdownValueList.firstWhere((element) =>
+                                      element.name == dropdownValueSport);
+                              Navigator.pop(context, [
+                                ...widget.sports,
+                                SportSchema(sportSelected,
+                                    int.parse(dropdownValueLevel!))
+                              ]);
                             } else {
                               displaySnackBar(
                                   "Veuillez renseigner le sport et votre niveau");
@@ -232,32 +226,6 @@ class _SportSelectionRegisterPage extends State<SportSelectionRegisterPage> {
                               fontSize: 20,
                               fontWeight: FontWeight.normal,
                             ),
-                          ),
-                        ),
-                      )),
-                  Padding(
-                      padding: const EdgeInsets.only(top: 30),
-                      child: SizedBox(
-                        width: 125,
-                        height: 50,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        RegisterSportPage(
-                                          sports: widget.sports,
-                                        )));
-                          },
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white),
-                          child: const Text(
-                            "Annuler",
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.normal,
-                                color: Color(0xFF0085FF)),
                           ),
                         ),
                       )),
