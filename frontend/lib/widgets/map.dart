@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import '../models/event.dart';
 import '../pages/map_page.dart';
 
 class MapWidget extends StatefulWidget {
   const MapWidget({
     super.key,
-    required this.userLocation,
     required this.events,
+    required this.panelController,
+    required this.updateEventsLocation,
   });
 
-  final LocationData? userLocation;
   final List<dynamic> events;
+  final PanelController panelController;
+  final Function updateEventsLocation;
 
   @override
   State<MapWidget> createState() => _MapWidgetState();
@@ -60,6 +61,10 @@ class _MapWidgetState extends State<MapWidget> {
       markerId: MarkerId(id),
       position: position,
       icon: await createMarkerIcon(eventNb),
+      onTap: () => {
+        widget.updateEventsLocation(position),
+        widget.panelController.open(),
+      },
     );
     setState(() {
       _markers[id] = marker;
