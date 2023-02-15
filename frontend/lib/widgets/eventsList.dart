@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maating/models/event.dart';
-import 'package:maating/pages/map_page.dart';
 import 'package:maating/services/requestManager.dart';
 import 'package:maating/widgets/eventCard.dart';
+
+import '../pages/map_page.dart';
 
 class EventsList extends StatefulWidget {
   const EventsList({
     super.key,
     required this.eventsLocation,
+    required this.updateEventsLocation,
   });
 
   final LatLng eventsLocation;
+  final Function updateEventsLocation;
 
   @override
   State<EventsList> createState() => _EventsListState();
 }
 
 class _EventsListState extends State<EventsList> {
-  final bool loadAllEvents = true;
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -45,25 +46,17 @@ class _EventsListState extends State<EventsList> {
             }
             if (snapshot.hasData) {
               return Center(
-                child: snapshot.data!.isEmpty
-                    ? Padding(
-                        padding: const EdgeInsets.only(top: 40),
-                        child: Text(
-                          'Aucun évènement trouvé',
-                          style: TextStyle(
-                            color: Colors.grey[500],
+                  child: snapshot.data!.isEmpty
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 40),
+                          child: Text(
+                            'Aucun évènement trouvé',
+                            style: TextStyle(
+                              color: Colors.grey[500],
+                            ),
                           ),
-                        ),
-                      )
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) => EventCard(
-                          event: snapshot.data![index],
-                        ),
-                        itemCount: snapshot.data!.length,
-                      ),
-              );
+                        )
+                      : ListViewBuilder(snapshot.data!));
             } else {
               return const Text('Une erreur est survenue');
             }
@@ -73,7 +66,67 @@ class _EventsListState extends State<EventsList> {
     );
   }
 
+  // ignore: non_constant_identifier_names
+  Widget ListViewBuilder(List<Event> events) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 30),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 20),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.location_on_outlined,
+                      color: Colors.grey[500]!,
+                      size: 18,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 5),
+                      child: Text(
+                        widget.eventsLocation == defaultCityLocation
+                            ? 'Toutes les localisations'
+                            : events[0].location.name,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey[500]!,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              TextButton(
+                onPressed: () =>
+                    widget.updateEventsLocation(defaultCityLocation),
+                child: Text(
+                  'Réinitialiser',
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    fontSize: 12,
+                    color: Colors.grey[500]!,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) => EventCard(
+            event: events[index],
+          ),
+          itemCount: events.length,
+        ),
+      ],
+    );
+  }
+
   Future<List<Event>> getEvents(LatLng location) async {
-    return await getEventsByLocation(location, loadAllEvents);
+    return await getEventsByLocation(location, location == defaultCityLocation);
   }
 }
