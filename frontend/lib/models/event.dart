@@ -69,3 +69,29 @@ class Event {
         privateCode = map["private_code"],
         location = Location.fromMap(map["location"]);
 }
+
+final rawEvent = Event(
+  'name',
+  'date',
+  000,
+  000,
+  '000',
+  Sport(
+    'id',
+    'name',
+  ),
+  000,
+  000,
+  {},
+  [],
+  false,
+  Location(
+    'id',
+    'name',
+    '000',
+    LoctSchema(
+      '000',
+      [],
+    ),
+  ),
+);
