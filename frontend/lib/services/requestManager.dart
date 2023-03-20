@@ -12,7 +12,7 @@ import '../models/user.dart';
 Future<List<dynamic>> getMapEvents(LatLng location, int maxDistance) async {
   final response = await http.get(
     Uri.parse(
-        'http://10.0.2.2:4000/events/map?lat=${location.latitude}&lng=${location.longitude}&maxDistance=$maxDistance'),
+        'http://localhost:4000/events/map?lat=${location.latitude}&lng=${location.longitude}&maxDistance=$maxDistance'),
   );
 
   if (response.statusCode != 200) {
@@ -26,7 +26,7 @@ Future<List<Event>> getEventsByLocation(
     LatLng location, bool loadAllEvents) async {
   final response = await http.get(
     Uri.parse(
-      'http://10.0.2.2:4000/events?lat=${location.latitude}&lng=${location.longitude}${loadAllEvents ? '&maxDistance=$defaultUserMobilityRange' : ''}}',
+      'http://localhost:4000/events?lat=${location.latitude}&lng=${location.longitude}${loadAllEvents ? '&maxDistance=$defaultUserMobilityRange' : ''}}',
     ),
   );
 
@@ -40,7 +40,7 @@ Future<List<Event>> getEventsByLocation(
 
 Future<List<Sport>> getSports() async {
   final response = await http.get(
-    Uri.parse('http://10.0.2.2:4000/sports'),
+    Uri.parse('http://localhost:4000/sports'),
   );
 
   if (response.statusCode != 200)
@@ -53,7 +53,7 @@ Future<List<Sport>> getSports() async {
 
 Future<User> postUser(User user) async {
   final response = await http.post(
-    Uri.parse('http://10.0.2.2:4000/users'),
+    Uri.parse('http://localhost:4000/users'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -64,4 +64,34 @@ Future<User> postUser(User user) async {
   } else {
     return throw Exception('Failed to create user ${response.body}');
   }
+}
+
+Future<User> getUser(String userId) async {
+  final response = await http.get(
+    Uri.parse('http://localhost:4000/users/$userId'),
+  );
+
+  if (response.statusCode != 200) {
+    return throw Exception('Failed to load user');
+  }
+  dynamic json = jsonDecode(response.body);
+  List<SportSchema> sports = json["sports"]
+      .map((sportSchema) => SportSchema.fromMap(sportSchema))
+      .toList()
+      .cast<SportSchema>();
+  print(User(
+      json["name"],
+      json["email"],
+      json["password"],
+      json["birth_date"],
+      json["sports"]
+          .map((sportSchema) => SportSchema.fromMap(sportSchema))
+          .toList()
+          .cast<SportSchema>(),
+      json["location"],
+      json["rating_nb"],
+      json["avatar_url"],
+      json["_id"],
+      json["mobility_range"]));
+  return User.fromMap(jsonDecode(response.body));
 }
