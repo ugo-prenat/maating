@@ -19,7 +19,7 @@ class _SelectAvatarState extends State<SelectAvatar> {
 
   var profilImgController = TextEditingController();
 
-  XFile? image;
+  XFile? _image;
 
   final ImagePicker picker = ImagePicker();
 
@@ -33,15 +33,25 @@ class _SelectAvatarState extends State<SelectAvatar> {
       image = await cropImage(imageFile: image);
 
       setState(() {
-        image = img;
-        Navigator.of(context).pop();
+        _image = img;
       });
-
-
   }
 
   Future<XFile?> cropImage({required XFile imageFile}) async {
-      CroppedFile? croppedImage = await ImageCropper().cropImage(sourcePath: imageFile.path);
+      CroppedFile? croppedImage = await ImageCropper().cropImage(
+          sourcePath: imageFile.path,
+          uiSettings: [
+            AndroidUiSettings(
+              toolbarTitle: 'Modifier l\'image',
+              toolbarColor: const Color(0xFF2196F3),
+              toolbarWidgetColor: Colors.white,
+              activeControlsWidgetColor: const Color(0xFF2196F3),
+            ),
+            IOSUiSettings(
+              title: 'Modifier l\'image'
+            )
+          ]
+      );
       if(croppedImage == null) return null;
       return XFile(croppedImage.path);
   }
@@ -87,7 +97,7 @@ class _SelectAvatarState extends State<SelectAvatar> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 100),
+                padding: const EdgeInsets.only(bottom: 50),
                 child: Image.asset(
                   'lib/assets/logo_maating.png',
                   fit: BoxFit.contain,
@@ -100,16 +110,16 @@ class _SelectAvatarState extends State<SelectAvatar> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    image != null
+                    _image != null
                         ? ClipRRect(
+                              borderRadius: BorderRadius.circular(100.0),
                                 child: Image.file(
-                                  File(image!.path),
-                                  fit: BoxFit.contain,
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 400,
-                        ),
-                      )
-                        : TextButton(
+                                  File(_image!.path),
+                                  fit: BoxFit.cover,
+                                  width: 200,
+                                  height: 200,
+                                ),
+                      ) : TextButton(
                             onPressed: () {
                               chooseImageSource();
                             },
@@ -123,7 +133,7 @@ class _SelectAvatarState extends State<SelectAvatar> {
                           child: const Icon(Icons.add),
                       ),
                     const Padding(
-                      padding: EdgeInsets.only(top: 20, bottom: 20),
+                      padding: EdgeInsets.only(top: 30, bottom: 50),
                       child: Text(
                         'Sélectionnez un avatar',
                         style: TextStyle(fontSize: 18, color: Colors.white),
