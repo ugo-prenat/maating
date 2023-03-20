@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -20,6 +19,33 @@ Future<List<dynamic>> getMapEvents(LatLng location, int maxDistance) async {
   }
 
   return jsonDecode(response.body);
+}
+
+Future<List<dynamic>> getEvents() async {
+    final response = await http.get(Uri.parse('http://10.0.2.2:4000/events/'));
+    final data = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      return throw Exception('Failed to load events');
+    }
+    return data;
+  }
+
+Future<List<Event>> getEventsByOrganizerId(String id) async {
+  final response = await http.get(Uri.parse('http://10.0.2.2:4000/events/organizer/${id}'));
+  if (response.statusCode != 200) {
+    return throw Exception('Failed to load events');
+  }
+  List<dynamic> body = jsonDecode(response.body);
+  return body.map((dynamic event) => Event.fromMap(event)).toList();
+}
+
+Future<List<Event>> getEventWithParticipantId(String id) async {
+  final response = await http.get(Uri.parse('http://10.0.2.2:4000/events/participant/${id}'));
+  if (response.statusCode != 200) {
+    return throw Exception('Failed to load events');
+  }
+  List<dynamic> body = jsonDecode(response.body);
+  return body.map((dynamic event) => Event.fromMap(event)).toList();
 }
 
 Future<List<Event>> getEventsByLocation(
