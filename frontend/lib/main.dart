@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maating/models/event.dart';
 import 'package:maating/pages/event_page.dart';
+import 'package:maating/pages/home_page.dart';
 import 'package:maating/pages/register_sports_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:maating/pages/login_page.dart';
@@ -41,7 +42,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           textTheme: GoogleFonts.poppinsTextTheme().copyWith(
               bodyText1: GoogleFonts.poppins(textStyle: textTheme.bodyText1))),
-      home: const SelectAvatar(),
+      home: const HomePage(),
     );
   }
 }

@@ -145,13 +145,13 @@ class _RegisterPage2State extends State<RegisterPage2> {
                               fontSize: 16,
                             ),
                           ),
+                          validator: (input) {
+                            if (input == '') {
+                              return 'Veuillez renseigner une ville.';
+                            }
+                          },
                         ),
-                        validator: (input) {
-                          if (input == '') {
-                            return 'Veuillez renseigner une ville.';
-                          }
-                        },
-                      ),
+                     ),
                     const Padding(
                       padding: EdgeInsets.only(right: 210),
                       child: Text(

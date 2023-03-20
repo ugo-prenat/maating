@@ -23,21 +23,20 @@ class _SelectAvatarState extends State<SelectAvatar> {
 
   final ImagePicker picker = ImagePicker();
 
-  Future getImage(ImageSource media) async {
+  getImage(ImageSource media) async {
+    var img = await picker.pickImage(source: media);
+    if(img == null) return;
 
-      var img = await picker.pickImage(source: media);
-      if(img == null) return;
+    XFile? image = XFile(img.path);
 
-      XFile? image = XFile(img.path);
+    image = await cropImage(imageFile: image);
 
-      image = await cropImage(imageFile: image);
-
-      setState(() {
-        _image = img;
-      });
+    setState(() {
+      _image = img;
+    });
   }
 
-  Future<XFile?> cropImage({required XFile imageFile}) async {
+  cropImage({required XFile imageFile}) async {
       CroppedFile? croppedImage = await ImageCropper().cropImage(
           sourcePath: imageFile.path,
           uiSettings: [
@@ -144,7 +143,7 @@ class _SelectAvatarState extends State<SelectAvatar> {
                       child: ElevatedButton(
                           onPressed: () async {
                             if(_formKey.currentState!.validate()) {
-                              Navigator.pushNamed(context, '/map');
+                              Navigator.pushNamed(context, '/register_sports');
                             }
                           },
                           style: ElevatedButton.styleFrom(
