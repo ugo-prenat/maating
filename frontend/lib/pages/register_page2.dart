@@ -77,25 +77,24 @@ class _RegisterPage2State extends State<RegisterPage2> {
                           filled: true,
                           fillColor: Colors.white,
                           border: OutlineInputBorder(
-                            borderSide: const BorderSide(color: Colors.white),
-                            borderRadius: BorderRadius.circular(10)
-                          ),
+                              borderSide: const BorderSide(color: Colors.white),
+                              borderRadius: BorderRadius.circular(10)),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(color: Colors.blue),
-                              borderRadius: BorderRadius.circular(10)
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(vertical: 2, horizontal: 15),
+                              borderSide: const BorderSide(color: Colors.blue),
+                              borderRadius: BorderRadius.circular(10)),
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 2, horizontal: 15),
                           errorStyle: const TextStyle(
                             fontSize: 16,
-                        ),
+                          ),
                         ),
                         readOnly: true,
                         onTap: () async {
-                          DateTime ? pickedDate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(1950),
-                              lastDate: DateTime.now(),
+                          DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1950),
+                            lastDate: DateTime.now(),
                           );
                           if (pickedDate != null) {
                             String formattedDate =
@@ -146,12 +145,12 @@ class _RegisterPage2State extends State<RegisterPage2> {
                               fontSize: 16,
                             ),
                           ),
-                          validator: (input) {
-                            if(input == '') {
-                              return 'Veuillez renseigner une ville.';
-                            }
-                          },
                         ),
+                        validator: (input) {
+                          if (input == '') {
+                            return 'Veuillez renseigner une ville.';
+                          }
+                        },
                       ),
                     const Padding(
                       padding: EdgeInsets.only(right: 210),

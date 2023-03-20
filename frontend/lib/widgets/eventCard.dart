@@ -38,8 +38,11 @@ class _EventCardState extends State<EventCard> {
           // Card top
           GestureDetector(
             onTap: () {
-              String? eventId = widget.event.id;
-              print('go to event page $eventId');
+              Navigator.pushNamed(
+                context,
+                '/event_page',
+                arguments: widget.event,
+              );
             },
             child: Column(children: [Location(), Places(), DateAndsport()]),
           ),
@@ -112,6 +115,7 @@ class _EventCardState extends State<EventCard> {
   // ignore: non_constant_identifier_names
   Widget Places() {
     var remainingPlaces = widget.event.maxNb - widget.event.participants.length;
+    var isFull = remainingPlaces == 0;
 
     return Container(
       padding: const EdgeInsets.only(bottom: 10),
@@ -145,9 +149,11 @@ class _EventCardState extends State<EventCard> {
             ),
           ),
           Text(
-            "$remainingPlaces place${remainingPlaces > 1 ? 's' : ''} restante${remainingPlaces > 1 ? 's' : ''}",
-            style: const TextStyle(
-              color: Color(0xFF0085FF),
+            isFull
+                ? "Complet"
+                : "$remainingPlaces place${remainingPlaces > 1 ? 's' : ''} restante${remainingPlaces > 1 ? 's' : ''}",
+            style: TextStyle(
+              color: isFull ? Colors.red : const Color(0xFF0085FF),
               fontSize: 15,
             ),
           ),
@@ -239,7 +245,7 @@ class _EventCardState extends State<EventCard> {
   // ignore: non_constant_identifier_names
   Widget Organizer() => GestureDetector(
         onTap: () {
-          String? userId = widget.event.organizer["id"];
+          String? userId = widget.event.organizer["_id"];
           print('go to user page $userId');
         },
         child: Row(

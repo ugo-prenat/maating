@@ -8,6 +8,7 @@ import 'package:maating/models/sport.dart';
 import 'package:maating/pages/map_page.dart';
 
 import '../models/user.dart';
+
 Future<List<dynamic>> getMapEvents(LatLng location, int maxDistance) async {
   final response = await http.get(
     Uri.parse(
@@ -18,7 +19,6 @@ Future<List<dynamic>> getMapEvents(LatLng location, int maxDistance) async {
     return throw Exception('Failed to load events');
   }
 
-  print(jsonDecode(response.body));
   return jsonDecode(response.body);
 }
 
