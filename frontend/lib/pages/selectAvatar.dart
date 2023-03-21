@@ -2,19 +2,22 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:maating/pages/register_sports_page.dart';
+import 'package:maating/pages/sports_selection_register_page.dart';
+import 'package:maating/services/requestManager.dart';
 import 'package:maating/widgets/sourceAvatar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
 
 class SelectAvatar extends StatefulWidget {
-  const SelectAvatar({super.key});
+  const SelectAvatar({super.key, required this.userFirstInfo});
 
+  final List<dynamic> userFirstInfo;
   @override
   State<SelectAvatar> createState() => _SelectAvatarState();
 }
 
 class _SelectAvatarState extends State<SelectAvatar> {
-
   final _formKey = GlobalKey<FormState>();
 
   var profilImgController = TextEditingController();
@@ -25,7 +28,7 @@ class _SelectAvatarState extends State<SelectAvatar> {
 
   getImage(ImageSource media) async {
     var img = await picker.pickImage(source: media);
-    if(img == null) return;
+    if (img == null) return;
 
     XFile? image = XFile(img.path);
 
@@ -37,38 +40,33 @@ class _SelectAvatarState extends State<SelectAvatar> {
   }
 
   cropImage({required XFile imageFile}) async {
-      CroppedFile? croppedImage = await ImageCropper().cropImage(
-          sourcePath: imageFile.path,
-          uiSettings: [
-            AndroidUiSettings(
-              toolbarTitle: 'Modifier l\'image',
-              toolbarColor: const Color(0xFF2196F3),
-              toolbarWidgetColor: Colors.white,
-              activeControlsWidgetColor: const Color(0xFF2196F3),
-            ),
-            IOSUiSettings(
-              title: 'Modifier l\'image'
-            )
-          ]
-      );
-      if(croppedImage == null) return null;
-      return XFile(croppedImage.path);
+    CroppedFile? croppedImage =
+        await ImageCropper().cropImage(sourcePath: imageFile.path, uiSettings: [
+      AndroidUiSettings(
+        toolbarTitle: 'Modifier l\'image',
+        toolbarColor: const Color(0xFF2196F3),
+        toolbarWidgetColor: Colors.white,
+        activeControlsWidgetColor: const Color(0xFF2196F3),
+      ),
+      IOSUiSettings(title: 'Modifier l\'image')
+    ]);
+    if (croppedImage == null) return null;
+    return XFile(croppedImage.path);
   }
 
   void chooseImageSource() {
     showGeneralDialog(
-        context: context,
-        pageBuilder: (ctx, a1, a2) {
-          return Container();
-        },
+      context: context,
+      pageBuilder: (ctx, a1, a2) {
+        return Container();
+      },
       transitionBuilder: (ctx, a1, a2, child) {
         var curve = Curves.easeInOut.transform(a1.value);
         return Transform.scale(
-          scale: curve,
-          child: SourceAvatar(onTakingImage: (ImageSource media) {
-            getImage(media);
-          })
-        );
+            scale: curve,
+            child: SourceAvatar(onTakingImage: (ImageSource media) {
+              getImage(media);
+            }));
       },
       transitionDuration: const Duration(milliseconds: 300),
     );
@@ -84,12 +82,12 @@ class _SelectAvatarState extends State<SelectAvatar> {
       ),
       body: Container(
         decoration: const BoxDecoration(
-          gradient: LinearGradient(colors: [Color(0xFF2196F3), Color(0xFF000000)],
+          gradient: LinearGradient(
+              colors: [Color(0xFF2196F3), Color(0xFF000000)],
               begin: FractionalOffset.topCenter,
               end: FractionalOffset.bottomCenter,
               stops: [0.0, 1.0],
-              tileMode: TileMode.clamp
-          ),
+              tileMode: TileMode.clamp),
         ),
         child: Center(
           child: Column(
@@ -111,26 +109,27 @@ class _SelectAvatarState extends State<SelectAvatar> {
                   children: [
                     _image != null
                         ? ClipRRect(
-                              borderRadius: BorderRadius.circular(100.0),
-                                child: Image.file(
-                                  File(_image!.path),
-                                  fit: BoxFit.cover,
-                                  width: 200,
-                                  height: 200,
-                                ),
-                      ) : TextButton(
+                            borderRadius: BorderRadius.circular(100.0),
+                            child: Image.file(
+                              File(_image!.path),
+                              fit: BoxFit.cover,
+                              width: 200,
+                              height: 200,
+                            ),
+                          )
+                        : TextButton(
                             onPressed: () {
                               chooseImageSource();
                             },
                             style: TextButton.styleFrom(
-                            fixedSize: const Size(140, 140),
-                            side: const BorderSide(
-                              width: 2,
-                              color: Colors.blue,
+                              fixedSize: const Size(140, 140),
+                              side: const BorderSide(
+                                width: 2,
+                                color: Colors.blue,
+                              ),
+                            ),
+                            child: const Icon(Icons.add),
                           ),
-                        ),
-                          child: const Icon(Icons.add),
-                      ),
                     const Padding(
                       padding: EdgeInsets.only(top: 30, bottom: 50),
                       child: Text(
@@ -142,8 +141,25 @@ class _SelectAvatarState extends State<SelectAvatar> {
                       padding: const EdgeInsets.only(left: 140),
                       child: ElevatedButton(
                           onPressed: () async {
-                            if(_formKey.currentState!.validate()) {
-                              Navigator.pushNamed(context, '/register_sports');
+                            if (_formKey.currentState!.validate()) {
+                              try {
+                                // ignore: use_build_context_synchronously
+                                dynamic urlImage = await uploadImage(_image!);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            RegisterSportPage(userFirstInfo: [
+                                              ...widget.userFirstInfo,
+                                              urlImage
+                                            ], sports: const [])));
+                              } catch (e) {
+                                // ignore: use_build_context_synchronously
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            'Une erreur est survenue lors de l\'envoi de l\'image, essayez une autre image, peut-être moins volumineuse')));
+                              }
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -151,18 +167,13 @@ class _SelectAvatarState extends State<SelectAvatar> {
                               fixedSize: const Size(150, 50),
                               backgroundColor: Colors.white,
                               side: const BorderSide(
-                                  width: 2,
-                                  color: Colors.white
-                              )
-                          ),
+                                  width: 2, color: Colors.white)),
                           child: Row(
                             children: [
                               const Text(
                                 'Suivant',
                                 style: TextStyle(
-                                    fontSize: 17,
-                                    color: Colors.black
-                                ),
+                                    fontSize: 17, color: Colors.black),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(left: 10),
@@ -173,8 +184,7 @@ class _SelectAvatarState extends State<SelectAvatar> {
                                 ),
                               ),
                             ],
-                          )
-                      ),
+                          )),
                     ),
                   ],
                 ),
