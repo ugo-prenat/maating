@@ -205,13 +205,15 @@ class _RegisterPage2State extends State<RegisterPage2> {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.only(left: 25),
-                              fixedSize: const Size(150, 50),
-                              backgroundColor: Colors.white,
-                              side: const BorderSide(
-                                  width: 2,
-                                  color: Colors.white,
-                                  strokeAlign: StrokeAlign.center)),
+                            padding: const EdgeInsets.only(left: 25),
+                            fixedSize: const Size(150, 50),
+                            backgroundColor: Colors.white,
+                            side: const BorderSide(
+                              width: 2,
+                              color: Colors.white,
+                              strokeAlign: BorderSide.strokeAlignCenter,
+                            ),
+                          ),
                           child: Row(
                             children: [
                               const Text(
