@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:maating/models/event.dart';
 import 'package:maating/models/user.dart';
 import 'package:maating/pages/event_participants_page.dart';
+import 'package:maating/pages/event_participation_page.dart';
 import 'package:maating/services/eventService.dart';
 
 class EventPage extends StatefulWidget {
@@ -49,7 +50,7 @@ class _EventPageState extends State<EventPage> {
           const SizedBox(height: 20),
           ParticipantsList(event),
           const SizedBox(height: 50),
-          BottomButtons(event.id, event.organizer["_id"], isFull),
+          BottomButtons(event, event.organizer["_id"], isFull),
         ],
       ),
     );
@@ -282,14 +283,21 @@ class _EventPageState extends State<EventPage> {
   }
 
   // ignore: non_constant_identifier_names
-  Widget BottomButtons(String? eventId, String organizerId, bool isFull) {
+  Widget BottomButtons(Event event, String organizerId, bool isFull) {
     return Padding(
       padding: const EdgeInsets.only(left: 25, right: 25),
       child: ElevatedButton(
         onPressed: isFull
             ? null
             : () {
-                print('pariticpate to event $eventId');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EventParticipationPage(
+                      event: event,
+                    ),
+                  ),
+                );
               },
         style: ElevatedButton.styleFrom(
           minimumSize: const Size.fromHeight(40),

@@ -65,3 +65,24 @@ Future<User> postUser(User user) async {
     return throw Exception('Failed to create user ${response.body}');
   }
 }
+
+Future<int> addUserToEvent(
+    String? eventId, String? userId, int additionalPlaces) async {
+  Map<String, dynamic> body = {'participantId': userId};
+
+  if (additionalPlaces > 0) {
+    body['additionalPlaces'] = {
+      'participantId': userId,
+      'nbPlaces': additionalPlaces,
+    };
+  }
+
+  final response = await http.post(
+    Uri.parse('http://10.0.2.2:4000/events/$eventId/participants'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(body),
+  );
+  return response.statusCode;
+}
