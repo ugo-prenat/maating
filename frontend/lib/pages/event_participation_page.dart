@@ -23,7 +23,7 @@ class _EventParticpantsPageState extends State<EventParticipationPage> {
   int _additionalPlacesNb = 0;
   User fakeUser = User(
     "User 1",
-    "fake@user.fr",
+    "user1@user.fr",
     "azerty",
     "1990-01-01",
     [],
@@ -85,9 +85,7 @@ class _EventParticpantsPageState extends State<EventParticipationPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Text(
-                '${widget.event.name}',
-              )
+              Text(widget.event.name)
             ],
           ),
         )
