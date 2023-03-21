@@ -15,22 +15,31 @@ class _SourceAvatarState extends State<SourceAvatar> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      title: const Text('Sélectionnez une image depuis votre galerie ou prenez une photo.'),
-      content: Container(
-        height: MediaQuery.of(context).size.height / 6,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      title: const Text(
+          'Sélectionnez une image depuis votre galerie ou prenez une photo.',
+      ),
+      content: SizedBox(
+        height: MediaQuery.of(context).size.height / 7,
         child: Column(
           children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-                widget.onTakingImage(ImageSource.gallery);
-              },
-              child: Row(
-                children: const [
-                  Icon(Icons.image),
-                  Text('Galerie'),
-                ],
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  widget.onTakingImage(ImageSource.gallery);
+                },
+                style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(150, 50)
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(Icons.image),
+                    Text('Galerie'),
+                  ],
+                ),
               ),
             ),
             ElevatedButton(
@@ -38,7 +47,11 @@ class _SourceAvatarState extends State<SourceAvatar> {
                 Navigator.pop(context);
                 widget.onTakingImage(ImageSource.camera);
               },
+              style: ElevatedButton.styleFrom(
+                fixedSize: const Size(150, 50)
+              ),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
                   Icon(Icons.camera),
                   Text('Caméra'),

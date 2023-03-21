@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:io';
 import 'package:intl/intl.dart';
-import 'package:maating/widgets/sourceAvatar.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:maating/pages/register_sports_page.dart';
+
 
 class RegisterPage2 extends StatefulWidget {
   const RegisterPage2({super.key});
@@ -20,31 +17,8 @@ class _RegisterPage2State extends State<RegisterPage2> {
   var ageController = TextEditingController();
   var cityController = TextEditingController();
   var mobilityController = TextEditingController();
-  var profilImgController = TextEditingController();
 
   double _currentSliderValue = 20;
-
-  XFile? image;
-
-  final ImagePicker picker = ImagePicker();
-
-  Future getImage(ImageSource media) async {
-    var img = await picker.pickImage(source: media);
-
-    setState(() {
-      image = img;
-    });
-  }
-
-  void chooseImageSource() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return SourceAvatar(onTakingImage: (ImageSource media) {
-            getImage(media);
-          });
-        });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,6 +70,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
                       height: 100,
                       child: TextFormField(
                         controller: ageController,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
                         decoration: InputDecoration(
                           suffixIcon: const Icon(Icons.calendar_today_outlined),
                           hintText: 'jj/MM/yyyy',
@@ -147,96 +122,76 @@ class _RegisterPage2State extends State<RegisterPage2> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      width: 300,
-                      height: 80,
-                      child: TextFormField(
-                        controller: cityController,
-                        decoration: InputDecoration(
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 15.0),
-                          filled: true,
-                          fillColor: Colors.white,
-                          hintText: 'Paris (75000)',
-                          border: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.white),
-                              borderRadius: BorderRadius.circular(10)),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.blue),
-                              borderRadius: BorderRadius.circular(10)),
-                          errorStyle: const TextStyle(
-                            fontSize: 16,
+                     SizedBox(
+                        width: 300,
+                        height: 100,
+                        child: TextFormField(
+                          controller: cityController,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 15.0),
+                              filled: true,
+                              fillColor: Colors.white,
+                              hintText: 'Paris (75000)',
+                              border: OutlineInputBorder(
+                                  borderSide: const BorderSide(color: Colors.white),
+                                  borderRadius: BorderRadius.circular(10)
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(color: Colors.blue),
+                                  borderRadius: BorderRadius.circular(10)
+                              ),
+                            errorStyle: const TextStyle(
+                              fontSize: 16,
+                            ),
                           ),
+                          validator: (input) {
+                            if (input == '') {
+                              return 'Veuillez renseigner une ville.';
+                            }
+                          },
                         ),
-                        validator: (input) {
-                          if (input == '') {
-                            return 'Veuillez renseigner une ville.';
-                          }
-                        },
+                     ),
+                    const Padding(
+                      padding: EdgeInsets.only(right: 210),
+                      child: Text(
+                        'Mobilité',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                     SizedBox(
-                        width: 350,
-                        height: 50,
-                        child: SliderTheme(
-                          data: const SliderThemeData(
-                            valueIndicatorColor: Colors.transparent,
-                          ),
-                          child: Slider(
-                            value: _currentSliderValue,
-                            min: 1,
-                            max: 100,
-                            divisions: 100,
-                            label: '${_currentSliderValue.round()} km',
-                            onChanged: (double values) {
-                              setState(() {
-                                _currentSliderValue = values;
-                              });
-                            },
-                          ),
-                        )),
-                    image != null
-                        ? SizedBox(
-                            width: 300,
+                            width: 350,
                             height: 100,
-                            child: ClipRRect(
-                              child: Image.file(
-                                File(image!.path),
-                                fit: BoxFit.contain,
-                                width: MediaQuery.of(context).size.width,
-                                height: 400,
+                            child: SliderTheme(
+                              data: const SliderThemeData(
+                                valueIndicatorColor: Colors.transparent,
+                              ),
+                              child: Slider(
+                                value: _currentSliderValue,
+                                min: 1,
+                                max: 100,
+                                divisions: 100,
+                                label: '${_currentSliderValue.round()} km',
+                                onChanged: (double values) {
+                                  setState(() {
+                                    _currentSliderValue = values;
+                                  });
+                                },
                               ),
                             ),
-                          )
-                        : TextButton(
-                            onPressed: () {
-                              chooseImageSource();
-                            },
-                            style: TextButton.styleFrom(
-                              fixedSize: const Size(120, 120),
-                              side: const BorderSide(
-                                width: 2,
-                                color: Colors.blue,
-                              ),
-                            ),
-                            child: const Icon(Icons.add),
-                          ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 10),
-                      child: Text(
-                        'Sélectionnez un avatar',
-                        style: TextStyle(fontSize: 16, color: Colors.white),
-                      ),
-                    ),
+                        ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 140, top: 40),
+                      padding: const EdgeInsets.only(left: 140, top: 20),
                       child: ElevatedButton(
                           onPressed: () async {
                             var birthDate = ageController.text;
                             var city = cityController.text;
 
                             if (_formKey.currentState!.validate()) {
-                              Navigator.pushNamed(context, '/map');
+                              Navigator.pushNamed(context, '/avatar');
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -263,7 +218,8 @@ class _RegisterPage2State extends State<RegisterPage2> {
                                 ),
                               ),
                             ],
-                          )),
+                          )
+                      ),
                     ),
                   ],
                 ),
@@ -275,29 +231,3 @@ class _RegisterPage2State extends State<RegisterPage2> {
     );
   }
 }
-
-/*
-
-Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                            DateFormat('dd/MM/yyyy').format(selectedDate),
-                          style: const TextStyle(
-                              fontSize: 16,
-                              color: Colors.blue,
-                              backgroundColor: Colors.white,
-                              height: 2.5,
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () => _selectDate(context),
-                          style: TextButton.styleFrom(
-                            backgroundColor: Colors.white,
-                          ),
-                          child: const Icon(Icons.calendar_month_outlined),
-                        ),
-                      ],
-                    ),
- */
