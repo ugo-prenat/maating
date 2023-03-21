@@ -27,10 +27,13 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
-        '/register2': (context) => const RegisterPage2(),
-        '/avatar': (context) => const SelectAvatar(),
+        '/register2': (context) => const RegisterPage2(userFirstInfo: []),
+        '/avatar': (context) => const SelectAvatar(
+              userFirstInfo: [],
+            ),
         '/map': (context) => const MapPage(),
         '/register_sports': (context) => const RegisterSportPage(
+              userFirstInfo: [],
               sports: [],
             ),
         '/register_sports_selection': (context) =>

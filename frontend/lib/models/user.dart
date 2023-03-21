@@ -49,7 +49,7 @@ class User {
         location = map["location"],
         mobilityRange = map["mobility_range"],
         avatarUrl = map["avatar_url"],
-        personalRating = map["personal_rating"],
+        personalRating = map["personal_rating"].toDouble(),
         ratingNumber = map["rating_nb"],
         sports = map["sports"] is List<dynamic>
             ? <SportSchema>[]

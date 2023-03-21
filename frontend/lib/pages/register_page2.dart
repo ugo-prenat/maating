@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
+import 'package:maating/pages/selectAvatar.dart';
 
 class RegisterPage2 extends StatefulWidget {
-  const RegisterPage2({super.key});
+  const RegisterPage2({super.key, required this.userFirstInfo});
 
+  final List<dynamic> userFirstInfo;
   @override
   State<RegisterPage2> createState() => _RegisterPage2State();
 }
@@ -122,36 +123,35 @@ class _RegisterPage2State extends State<RegisterPage2> {
                         ),
                       ),
                     ),
-                     SizedBox(
-                        width: 300,
-                        height: 100,
-                        child: TextFormField(
-                          controller: cityController,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 15.0),
-                              filled: true,
-                              fillColor: Colors.white,
-                              hintText: 'Paris (75000)',
-                              border: OutlineInputBorder(
-                                  borderSide: const BorderSide(color: Colors.white),
-                                  borderRadius: BorderRadius.circular(10)
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(color: Colors.blue),
-                                  borderRadius: BorderRadius.circular(10)
-                              ),
-                            errorStyle: const TextStyle(
-                              fontSize: 16,
-                            ),
+                    SizedBox(
+                      width: 300,
+                      height: 100,
+                      child: TextFormField(
+                        controller: cityController,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        decoration: InputDecoration(
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 15.0),
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: 'Paris (75000)',
+                          border: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.white),
+                              borderRadius: BorderRadius.circular(10)),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.blue),
+                              borderRadius: BorderRadius.circular(10)),
+                          errorStyle: const TextStyle(
+                            fontSize: 16,
                           ),
-                          validator: (input) {
-                            if (input == '') {
-                              return 'Veuillez renseigner une ville.';
-                            }
-                          },
                         ),
-                     ),
+                        validator: (input) {
+                          if (input == '') {
+                            return 'Veuillez renseigner une ville.';
+                          }
+                        },
+                      ),
+                    ),
                     const Padding(
                       padding: EdgeInsets.only(right: 210),
                       child: Text(
@@ -163,26 +163,26 @@ class _RegisterPage2State extends State<RegisterPage2> {
                       ),
                     ),
                     SizedBox(
-                            width: 350,
-                            height: 100,
-                            child: SliderTheme(
-                              data: const SliderThemeData(
-                                valueIndicatorColor: Colors.transparent,
-                              ),
-                              child: Slider(
-                                value: _currentSliderValue,
-                                min: 1,
-                                max: 100,
-                                divisions: 100,
-                                label: '${_currentSliderValue.round()} km',
-                                onChanged: (double values) {
-                                  setState(() {
-                                    _currentSliderValue = values;
-                                  });
-                                },
-                              ),
-                            ),
+                      width: 350,
+                      height: 100,
+                      child: SliderTheme(
+                        data: const SliderThemeData(
+                          valueIndicatorColor: Colors.transparent,
                         ),
+                        child: Slider(
+                          value: _currentSliderValue,
+                          min: 1,
+                          max: 100,
+                          divisions: 100,
+                          label: '${_currentSliderValue.round()} km',
+                          onChanged: (double values) {
+                            setState(() {
+                              _currentSliderValue = values;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(left: 140, top: 20),
                       child: ElevatedButton(
@@ -191,7 +191,17 @@ class _RegisterPage2State extends State<RegisterPage2> {
                             var city = cityController.text;
 
                             if (_formKey.currentState!.validate()) {
-                              Navigator.pushNamed(context, '/avatar');
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SelectAvatar(
+                                        userFirstInfo: [
+                                          ...widget.userFirstInfo,
+                                          birthDate,
+                                          city,
+                                          _currentSliderValue.round()
+                                        ]),
+                                  ));
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -218,8 +228,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
                                 ),
                               ),
                             ],
-                          )
-                      ),
+                          )),
                     ),
                   ],
                 ),
