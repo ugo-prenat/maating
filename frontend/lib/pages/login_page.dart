@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maating/extension/checkInput.dart';
+import 'package:maating/pages/map_page.dart';
+import 'package:maating/services/requestManager.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -26,6 +28,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: const Color(0xFF2196F3),
         elevation: 0.0,
@@ -163,7 +166,8 @@ class _LoginPageState extends State<LoginPage> {
                               var password = passwordController.text;
 
                               if(_formKey.currentState!.validate()) {
-                                Navigator.pushNamed(context, '/map');
+                                LoginUser(email, password);
+
                               }
                             },
                             style: ElevatedButton.styleFrom(

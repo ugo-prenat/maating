@@ -39,6 +39,7 @@ const getUserJoinedEvents = (req, res) => {
     .catch((error) => res.status(500).json({ error }));
 };
 const loginUser = (req, res) => {
+    console.log(req.body)
   return Users.findOne({ email: req.body.email })
     .then((user) => {
       if (!user) return res.status(404).json({ error: 'User not found' });

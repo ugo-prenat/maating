@@ -90,3 +90,19 @@ Future<dynamic> uploadImage(XFile uploadImage) async {
     return throw Exception('Failed to upload image');
   }
 }
+
+Future<User> LoginUser(String email, String password) async {
+  final response = await http.post(
+    Uri.parse('http://10.0.2.2:4000/users/login'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode({'email': email, 'password': password}),
+  );
+  print(response.body);
+  if (response.statusCode == 201) {
+    return User.fromMap(jsonDecode(response.body));
+  } else {
+    return throw Exception('Failed to create user ${response.body}');
+  }
+}
