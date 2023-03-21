@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:maating/models/event.dart';
+import 'package:maating/models/user.dart';
+import 'package:maating/pages/event_participants_page.dart';
+import 'package:maating/services/eventService.dart';
 
 class EventPage extends StatefulWidget {
   const EventPage({
@@ -24,8 +27,10 @@ class _EventPageState extends State<EventPage> {
       'Expert',
     ];
     final event = ModalRoute.of(context)!.settings.arguments as Event;
-    var remainingPlaces = event.maxNb - event.participants.length;
-    var isFull = remainingPlaces == 0;
+
+    int participantsNb = getEventParticipantsNb(event);
+    int remainingPlaces = event.maxNb - participantsNb;
+    var isFull = remainingPlaces < 1;
 
     return Scaffold(
       body: Column(
@@ -42,7 +47,7 @@ class _EventPageState extends State<EventPage> {
           const SizedBox(height: 30),
           Level(levels[event.level - 1]),
           const SizedBox(height: 20),
-          ParticipantsList(event.participants),
+          ParticipantsList(event),
           const SizedBox(height: 50),
           BottomButtons(event.id, event.organizer["_id"], isFull),
         ],
@@ -150,7 +155,7 @@ class _EventPageState extends State<EventPage> {
           ],
         ),
         Text(
-          "$remainingPlaces place${remainingPlaces > 1 ? 's' : ''} disponible${remainingPlaces > 1 ? 's' : ''}",
+          "${remainingPlaces > 0 ? '$remainingPlaces' : '0'} place${remainingPlaces > 1 ? 's' : ''} disponible${remainingPlaces > 1 ? 's' : ''}",
         )
       ],
     );
@@ -240,14 +245,21 @@ class _EventPageState extends State<EventPage> {
   }
 
   // ignore: non_constant_identifier_names
-  Widget ParticipantsList(List<dynamic> participants) {
+  Widget ParticipantsList(Event event) {
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: Align(
         alignment: Alignment.centerLeft,
         child: TextButton(
           onPressed: () {
-            print('go to participants list page');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EventParticipantsPage(
+                  event: event,
+                ),
+              ),
+            );
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
