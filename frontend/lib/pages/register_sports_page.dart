@@ -7,8 +7,10 @@ import 'package:maating/services/requestManager.dart';
 import 'package:maating/widgets/register_sports_list.dart';
 
 class RegisterSportPage extends StatefulWidget {
-  const RegisterSportPage({super.key, required this.sports});
+  const RegisterSportPage(
+      {super.key, required this.userFirstInfo, required this.sports});
 
+  final List<dynamic> userFirstInfo;
   final List<SportSchema> sports;
   @override
   State<RegisterSportPage> createState() => _RegisterSportPage();
@@ -117,24 +119,24 @@ class _RegisterSportPage extends State<RegisterSportPage> {
                         height: 50,
                         child: ElevatedButton(
                           onPressed: () async {
-                            if (sportsToAdd.length > 0) {
+                            if (sportsToAdd.isNotEmpty) {
                               await postUser(User(
-                                      "User03",
-                                      "user03@gmail.com",
-                                      "azerty",
-                                      "2002-05-22 20:18:04Z",
+                                      widget.userFirstInfo[0],
+                                      widget.userFirstInfo[1],
+                                      widget.userFirstInfo[2],
+                                      widget.userFirstInfo[3],
                                       sportsToAdd,
-                                      "Cergy",
+                                      widget.userFirstInfo[4],
                                       null,
+                                      widget.userFirstInfo[6],
                                       null,
-                                      null,
-                                      null,
-                                      0.1))
+                                      widget.userFirstInfo[5],
+                                      null))
                                   .then((value) => Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
                                           builder: (BuildContext context) =>
-                                              MapPage())))
+                                              const MapPage())))
                                   .catchError(
                                       (err) => displaySnackBar(
                                           "Un problème est survenu durant la création de votre compte"),

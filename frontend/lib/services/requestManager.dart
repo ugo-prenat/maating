@@ -1,8 +1,13 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi';
+import 'dart:io';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:maating/extension/filetype.dart';
 import 'package:maating/models/event.dart';
 import 'package:maating/models/sport.dart';
 import 'package:maating/pages/map_page.dart';
@@ -85,4 +90,24 @@ Future<int> addUserToEvent(
     body: jsonEncode(body),
   );
   return response.statusCode;
+}
+
+Future<dynamic> uploadImage(XFile uploadImage) async {
+  var uri = Uri.parse("http://10.0.2.2:4000/uploads");
+  var request = http.MultipartRequest("POST", uri);
+
+  request.headers.addAll({
+    'Accept': '*/*',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Content-Type': 'multipart/form-data',
+  });
+  request.files.add(await http.MultipartFile.fromPath('file', uploadImage.path,
+      filename: uploadImage.name,
+      contentType: MediaType('image', getFileExtension(uploadImage.path))));
+  var res = await request.send();
+  if (res.statusCode == 201) {
+    return jsonDecode(await res.stream.bytesToString())["url"];
+  } else {
+    return throw Exception('Failed to upload image');
+  }
 }
