@@ -91,7 +91,7 @@ Future<dynamic> uploadImage(XFile uploadImage) async {
   }
 }
 
-Future<User> LoginUser(String email, String password) async {
+Future<User> loginUser(String email, String password) async {
   final response = await http.post(
     Uri.parse('http://10.0.2.2:4000/users/login'),
     headers: <String, String>{
@@ -99,10 +99,9 @@ Future<User> LoginUser(String email, String password) async {
     },
     body: jsonEncode({'email': email, 'password': password}),
   );
-  print(response.body);
   if (response.statusCode == 201) {
     return User.fromMap(jsonDecode(response.body));
   } else {
-    return throw Exception('Failed to create user ${response.body}');
+    return throw Exception(response.body);
   }
 }
