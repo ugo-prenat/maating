@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:maating/models/event.dart';
+import 'package:maating/models/user.dart';
+import 'package:maating/pages/event_participants_page.dart';
+import 'package:maating/pages/event_participation_page.dart';
+import 'package:maating/utils/eventUtils.dart';
 
 class EventPage extends StatefulWidget {
   const EventPage({
@@ -24,8 +28,26 @@ class _EventPageState extends State<EventPage> {
       'Expert',
     ];
     final event = ModalRoute.of(context)!.settings.arguments as Event;
-    var remainingPlaces = event.maxNb - event.participants.length;
-    var isFull = remainingPlaces == 0;
+
+    User fakeUser = User(
+      "User 1",
+      "user1@user.fr",
+      "azerty",
+      "1990-01-01",
+      [],
+      "Paris",
+      10000,
+      "/uploads/1679315619805-test/user01.jpeg",
+      "641852e4f92f960c8b1217a8",
+      10000,
+      4.2,
+    );
+
+    int participantsNb = getEventParticipantsNb(event);
+    int remainingPlaces = event.maxNb - participantsNb;
+    bool isFull = remainingPlaces < 1;
+    bool isAlreadyParticipating = event.participants
+        .any((participant) => participant["_id"] == fakeUser.id);
 
     return Scaffold(
       body: Column(
@@ -42,9 +64,10 @@ class _EventPageState extends State<EventPage> {
           const SizedBox(height: 30),
           Level(levels[event.level - 1]),
           const SizedBox(height: 20),
-          ParticipantsList(event.participants),
+          ParticipantsList(event),
           const SizedBox(height: 50),
-          BottomButtons(event.id, event.organizer["_id"], isFull),
+          BottomButtons(
+              event, event.organizer["_id"], isFull, isAlreadyParticipating),
         ],
       ),
     );
@@ -150,7 +173,7 @@ class _EventPageState extends State<EventPage> {
           ],
         ),
         Text(
-          "$remainingPlaces place${remainingPlaces > 1 ? 's' : ''} disponible${remainingPlaces > 1 ? 's' : ''}",
+          "${remainingPlaces > 0 ? '$remainingPlaces' : '0'} place${remainingPlaces > 1 ? 's' : ''} disponible${remainingPlaces > 1 ? 's' : ''}",
         )
       ],
     );
@@ -240,14 +263,21 @@ class _EventPageState extends State<EventPage> {
   }
 
   // ignore: non_constant_identifier_names
-  Widget ParticipantsList(List<dynamic> participants) {
+  Widget ParticipantsList(Event event) {
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: Align(
         alignment: Alignment.centerLeft,
         child: TextButton(
           onPressed: () {
-            print('go to participants list page');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EventParticipantsPage(
+                  event: event,
+                ),
+              ),
+            );
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -270,14 +300,22 @@ class _EventPageState extends State<EventPage> {
   }
 
   // ignore: non_constant_identifier_names
-  Widget BottomButtons(String? eventId, String organizerId, bool isFull) {
+  Widget BottomButtons(Event event, String organizerId, bool isFull,
+      bool isAlreadyParticipating) {
     return Padding(
       padding: const EdgeInsets.only(left: 25, right: 25),
       child: ElevatedButton(
-        onPressed: isFull
+        onPressed: isFull || isAlreadyParticipating
             ? null
             : () {
-                print('pariticpate to event $eventId');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EventParticipationPage(
+                      event: event,
+                    ),
+                  ),
+                );
               },
         style: ElevatedButton.styleFrom(
           minimumSize: const Size.fromHeight(40),
@@ -288,7 +326,11 @@ class _EventPageState extends State<EventPage> {
           ),
         ),
         child: Text(
-          isFull ? 'Complet' : 'Participer',
+          isFull
+              ? 'Complet'
+              : isAlreadyParticipating
+                  ? 'Inscription enregistrée'
+                  : 'Participer',
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,

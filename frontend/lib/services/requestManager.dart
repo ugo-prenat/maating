@@ -1,13 +1,19 @@
+import 'dart:async';
 import 'dart:convert';
-import 'dart:ffi';
-
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:maating/extension/filetype.dart';
 import 'package:maating/models/event.dart';
 import 'package:maating/models/sport.dart';
 import 'package:maating/pages/map_page.dart';
+import 'package:maating/utils/backendUtils.dart';
 
 import '../models/user.dart';
+
+// ignore: non_constant_identifier_names
+String BACK_URL = getBackendUrl();
 
 /// Get all the events in a given area
 /// @param {LatLng} location - The location of the center of the area
@@ -16,7 +22,7 @@ import '../models/user.dart';
 Future<List<dynamic>> getMapEvents(LatLng location, int maxDistance) async {
   final response = await http.get(
     Uri.parse(
-        'http://localhost:4000/events/map?lat=${location.latitude}&lng=${location.longitude}&maxDistance=$maxDistance'),
+        '$BACK_URL/events/map?lat=${location.latitude}&lng=${location.longitude}&maxDistance=$maxDistance'),
   );
 
   if (response.statusCode != 200) {
@@ -44,7 +50,7 @@ Future<List<Event>> getEventsByOrganizerId(String id) async {
 /// @returns {List<Event>} The list of events
 Future<List<Event>> getEventWithParticipantId(String id) async {
   final response = await http
-      .get(Uri.parse('http://localhost:4000/events/participant/${id}'));
+      .get(Uri.parse('$BACK_URL/events/participant/${id}'));
   if (response.statusCode != 200) {
     return throw Exception('Failed to load events');
   }
@@ -58,7 +64,7 @@ Future<List<Event>> getEventsByLocation(
     LatLng location, bool loadAllEvents) async {
   final response = await http.get(
     Uri.parse(
-      'http://localhost:4000/events?lat=${location.latitude}&lng=${location.longitude}${loadAllEvents ? '&maxDistance=$defaultUserMobilityRange' : ''}}',
+      '$BACK_URL/events?lat=${location.latitude}&lng=${location.longitude}${loadAllEvents ? '&maxDistance=$defaultUserMobilityRange' : ''}}',
     ),
   );
 
@@ -74,7 +80,7 @@ Future<List<Event>> getEventsByLocation(
 /// @returns {List<Sport>} The list of sports
 Future<List<Sport>> getSports() async {
   final response = await http.get(
-    Uri.parse('http://localhost:4000/sports'),
+    Uri.parse('$BACK_URL/sports'),
   );
 
   if (response.statusCode != 200)
@@ -90,7 +96,7 @@ Future<List<Sport>> getSports() async {
 /// @returns {User} The created user
 Future<User> postUser(User user) async {
   final response = await http.post(
-    Uri.parse('http://localhost:4000/users'),
+    Uri.parse('$BACK_URL/users'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -108,7 +114,7 @@ Future<User> postUser(User user) async {
 /// @returns {User} The user
 Future<User> getUser(String userId) async {
   final response = await http.get(
-    Uri.parse('http://localhost:4000/users/$userId'),
+    Uri.parse('$BACK_URL/users/$userId'),
   );
 
   if (response.statusCode != 200) {
@@ -120,4 +126,45 @@ Future<User> getUser(String userId) async {
       .toList()
       .cast<SportSchema>();
   return User.fromMap(jsonDecode(response.body));
+}
+
+Future<int> addUserToEvent(
+    String? eventId, String? userId, int additionalPlaces) async {
+  Map<String, dynamic> body = {'participantId': userId};
+
+  if (additionalPlaces > 0) {
+    body['additionalPlaces'] = {
+      'participantId': userId,
+      'nbPlaces': additionalPlaces,
+    };
+  }
+
+  final response = await http.post(
+    Uri.parse('$BACK_URL/events/$eventId/participants'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(body),
+  );
+  return response.statusCode;
+}
+
+Future<dynamic> uploadImage(XFile uploadImage) async {
+  var uri = Uri.parse("$BACK_URL/uploads");
+  var request = http.MultipartRequest("POST", uri);
+
+  request.headers.addAll({
+    'Accept': '*/*',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Content-Type': 'multipart/form-data',
+  });
+  request.files.add(await http.MultipartFile.fromPath('file', uploadImage.path,
+      filename: uploadImage.name,
+      contentType: MediaType('image', getFileExtension(uploadImage.path))));
+  var res = await request.send();
+  if (res.statusCode == 201) {
+    return jsonDecode(await res.stream.bytesToString())["url"];
+  } else {
+    return throw Exception('Failed to upload image');
+  }
 }

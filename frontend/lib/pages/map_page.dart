@@ -8,7 +8,12 @@ const LatLng defaultCityLocation = LatLng(49.035617, 2.060325);
 const int defaultUserMobilityRange = 10000;
 
 class MapPage extends StatefulWidget {
-  const MapPage({super.key});
+  const MapPage({
+    super.key,
+    this.successMsg,
+  });
+
+  final String? successMsg;
 
   @override
   State<MapPage> createState() => _MapPageState();
@@ -16,6 +21,13 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   LatLng eventsLocation = defaultCityLocation;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) =>
+        {if (widget.successMsg != null) displaySnackBar(widget.successMsg!)});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,5 +85,10 @@ class _MapPageState extends State<MapPage> {
         ),
       ],
     );
+  }
+
+  displaySnackBar(String msg) {
+    var snackBar = SnackBar(backgroundColor: Colors.green, content: Text(msg));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
