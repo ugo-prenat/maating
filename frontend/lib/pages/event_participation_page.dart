@@ -109,7 +109,7 @@ class _EventParticpantsPageState extends State<EventParticipationPage> {
               image: DecorationImage(
                 fit: BoxFit.cover,
                 image: NetworkImage(
-                  "http://10.0.2.2:4000${fakeUser.avatarUrl}",
+                  "$BACK_URL${fakeUser.avatarUrl}",
                 ),
               ),
             ),

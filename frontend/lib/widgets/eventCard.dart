@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:maating/models/event.dart';
 import 'package:maating/services/eventService.dart';
+import 'package:maating/services/requestManager.dart';
 
 class EventCard extends StatefulWidget {
   const EventCard({
@@ -261,7 +262,7 @@ class _EventCardState extends State<EventCard> {
                 image: DecorationImage(
                   fit: BoxFit.cover,
                   image: NetworkImage(
-                    "http://10.0.2.2:4000${widget.event.organizer["avatar_url"]}",
+                    "$BACK_URL${widget.event.organizer["avatar_url"]}",
                   ),
                 ),
               ),

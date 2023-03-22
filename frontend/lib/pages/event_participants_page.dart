@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maating/models/event.dart';
 import 'package:maating/services/eventService.dart';
+import 'package:maating/utils/backendUtils.dart';
 
 class EventParticipantsPage extends StatefulWidget {
   const EventParticipantsPage({
@@ -15,6 +16,9 @@ class EventParticipantsPage extends StatefulWidget {
 }
 
 class _EventParticpantsPageState extends State<EventParticipantsPage> {
+  // ignore: non_constant_identifier_names
+  String BACK_URL = getBackendUrl();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,7 +99,7 @@ class _EventParticpantsPageState extends State<EventParticipantsPage> {
           child: CircleAvatar(
             radius: 25,
             backgroundImage: NetworkImage(
-              'http://10.0.2.2:4000${participant["avatar_url"]}',
+              '$BACK_URL${participant["avatar_url"]}',
             ),
           ),
         ),
