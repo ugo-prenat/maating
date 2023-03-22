@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:maating/models/event.dart';
-import 'package:maating/services/eventService.dart';
+import 'package:maating/utils/eventUtils.dart';
 import 'package:maating/services/requestManager.dart';
 
 class EventCard extends StatefulWidget {

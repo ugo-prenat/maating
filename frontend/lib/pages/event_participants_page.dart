@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maating/models/event.dart';
-import 'package:maating/services/eventService.dart';
+import 'package:maating/utils/eventUtils.dart';
 import 'package:maating/utils/backendUtils.dart';
 
 class EventParticipantsPage extends StatefulWidget {

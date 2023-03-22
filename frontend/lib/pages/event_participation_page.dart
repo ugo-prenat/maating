@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:maating/models/event.dart';
 import 'package:maating/models/user.dart';
 import 'package:maating/pages/map_page.dart';
-import 'package:maating/services/eventService.dart';
+import 'package:maating/utils/eventUtils.dart';
 import 'package:maating/services/requestManager.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:flutter/services.dart';

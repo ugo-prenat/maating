@@ -4,7 +4,7 @@ import 'package:maating/models/event.dart';
 import 'package:maating/models/user.dart';
 import 'package:maating/pages/event_participants_page.dart';
 import 'package:maating/pages/event_participation_page.dart';
-import 'package:maating/services/eventService.dart';
+import 'package:maating/utils/eventUtils.dart';
 
 class EventPage extends StatefulWidget {
   const EventPage({
