@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                 height: 150,
               ),
             ),
-            Form(
+              Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,7 +160,24 @@ class _LoginPageState extends State<LoginPage> {
                           var password = passwordController.text;
 
                           if (_formKey.currentState!.validate()) {
-                            loginUser(email, password);
+                            loginUser(email, password).then((res) => {
+                              if(res.statusCode == 200) {
+                                Navigator.pushNamed(context, '/map'),
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("Vous êtes connectés. Bienvenue !", textAlign: TextAlign.center,),
+                                      backgroundColor: Colors.green,
+                                    )
+                                )
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("Une erreur est survenue.", textAlign: TextAlign.center,),
+                                      backgroundColor: Colors.redAccent,
+                                    )
+                                )
+                              }
+                            });
                           }
                         },
                         style: ElevatedButton.styleFrom(

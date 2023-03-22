@@ -113,7 +113,7 @@ Future<dynamic> uploadImage(XFile uploadImage) async {
   }
 }
 
-Future<User> loginUser(String email, String password) async {
+Future<http.Response> loginUser(String email, String password) async {
   final response = await http.post(
     Uri.parse('http://10.0.2.2:4000/users/login'),
     headers: <String, String>{
@@ -121,9 +121,5 @@ Future<User> loginUser(String email, String password) async {
     },
     body: jsonEncode({'email': email, 'password': password}),
   );
-  if (response.statusCode == 201) {
-    return User.fromMap(jsonDecode(response.body));
-  } else {
-    return throw Exception(response.body);
-  }
+  return response;
 }
