@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:maating/main.dart';
 import 'package:maating/models/user.dart';
 import 'package:maating/services/requestManager.dart';
+import '../utils/backendUtils.dart';
 import '../widgets/userInformations.dart';
 
 class UserProfilPage extends StatefulWidget {
@@ -14,6 +15,8 @@ class UserProfilPage extends StatefulWidget {
 }
 
 class _UserProfilPage extends State<UserProfilPage> {
+  String BACK_URL = getBackendUrl();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,7 +67,7 @@ class _UserProfilPage extends State<UserProfilPage> {
                   image: DecorationImage(
                     fit: BoxFit.cover,
                     image: NetworkImage(
-                      "http://localhost:4000${user.avatarUrl!}",
+                      "http://$BACK_URL${user.avatarUrl!}",
                     ),
                   ),
                 ),
