@@ -72,6 +72,24 @@ const getEvent = (req, res) => {
     .then((event) => res.status(200).json(event))
     .catch((error) => res.status(500).json({ error }));
 };
+const getEventByOrganizerId = (req, res) => {
+  return Events.find({ organizer: req.params.id })
+    .populate('sport')
+    .populate('organizer')
+    .populate('participants')
+    .populate('location')
+    .then((events) => res.status(200).json(events))
+    .catch((error) => res.status(500).json({ error }));
+};
+const getEventWithParticipantId = (req, res) => {
+  return Events.find({ participants: req.params.id })
+    .populate('sport')
+    .populate('organizer')
+    .populate('participants')
+    .populate('location')
+    .then((events) => res.status(200).json(events))
+    .catch((error) => res.status(500).json({ error }));
+};
 const getEventParticipants = (req, res) => {
   return Events.findById(req.params.id)
     .populate('participants')
@@ -118,6 +136,8 @@ module.exports = {
   getEvents,
   getMapEvents,
   getEvent,
+  getEventByOrganizerId,
+  getEventWithParticipantId,
   getEventParticipants,
   createEvent,
   addEventParticipant,

@@ -1,7 +1,9 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:maating/main.dart';
 import 'package:maating/models/user.dart';
 import 'package:maating/services/requestManager.dart';
+import '../widgets/userInformations.dart';
 
 class UserProfilPage extends StatefulWidget {
   const UserProfilPage({super.key, required this.userId});
@@ -15,14 +17,19 @@ class _UserProfilPage extends State<UserProfilPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<User>(
-          future: getUser(widget.userId),
-          builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+      body: FutureBuilder<List>(
+          future: Future.wait([
+            getUser(widget.userId),
+            getEventWithParticipantId(widget.userId),
+            getEventsByOrganizerId(widget.userId)
+          ]),
+          builder: (context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Text('Chargement...');
+              return LoadingUser();
             }
             if (snapshot.hasData) {
-              return LoadedUser(snapshot.data!);
+              return LoadedUser(snapshot.data![0], snapshot.data![1].length,
+                  snapshot.data![2].length);
             } else {
               return const Text('Une erreur est survenue');
             }
@@ -30,44 +37,73 @@ class _UserProfilPage extends State<UserProfilPage> {
     );
   }
 
+  /// Widget to display when the user is loading
+  // ignore: non_constant_identifier_names
   Widget LoadingUser() {
-    return Container();
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
   }
 
-  Widget LoadedUser(User user) {
+  /// Widget to display when the user is loaded
+  // ignore: non_constant_identifier_names
+  Widget LoadedUser(
+      User user, int nbParticipationsEvent, int nbOrganizationsEvent) {
     return Center(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 75),
-            child: Container(
-              width: 200,
-              height: 200,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Color.fromARGB(255, 156, 156, 156),
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: NetworkImage(
-                    "http://localhost:4000${user.avatarUrl!}",
+      child: Stack(children: [
+        Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 75),
+              child: Container(
+                width: 200,
+                height: 200,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: const Color.fromARGB(255, 156, 156, 156),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(
+                      "http://localhost:4000${user.avatarUrl!}",
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: UserInfos(user),
-          ),
-          SizedBox(height: 20, width: 300, child: Divider(thickness: 3)),
-          UserActivities(user),
-          SizedBox(height: 20),
-          UserSports(user.sports),
-        ],
-      ),
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: UserInfos(user),
+            ),
+            const SizedBox(
+                height: 20, width: 300, child: Divider(thickness: 3)),
+            UserInformations(
+                user: user,
+                nbParticipationsEvent: nbParticipationsEvent,
+                nbOrganizationsEvent: nbOrganizationsEvent,
+                sports: user.sports)
+          ],
+        ),
+        Positioned(
+            right: 30,
+            top: 25,
+            child: IconButton(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onPressed: () {
+                print("Update profile");
+              },
+              icon: const Icon(
+                Icons.edit_outlined,
+                color: Color(0xFFB8B8B8),
+                size: 40,
+              ),
+            ))
+      ]),
     );
   }
 
+  /// Widget to display the user main informations
+// ignore: non_constant_identifier_names
   Widget UserInfos(User user) {
     return Column(
       children: [
@@ -75,7 +111,7 @@ class _UserProfilPage extends State<UserProfilPage> {
           padding: const EdgeInsets.only(top: 20),
           child: Text(
             user.name,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
@@ -83,189 +119,10 @@ class _UserProfilPage extends State<UserProfilPage> {
         ),
         Text(
           user.location,
-          style: TextStyle(fontSize: 16),
+          style: const TextStyle(
+              fontSize: 16, color: Color.fromARGB(160, 0, 0, 0)),
         ),
       ],
     );
-  }
-
-  Widget UserActivities(User user) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          width: 80,
-          child: Center(
-            child: Column(
-              children: const [
-                Text(
-                  "2",
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF0085FF)),
-                ),
-                Text(
-                  'Événements',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 10),
-                ),
-                Text(
-                  'créés',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 10),
-                ),
-              ],
-            ),
-          ),
-        ),
-        SizedBox(width: 40),
-        Container(
-          width: 80,
-          child: Center(
-            child: Column(
-              children: const [
-                Text(
-                  "4",
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF0085FF)),
-                ),
-                Text(
-                  'Événements',
-                  style: TextStyle(fontSize: 10),
-                ),
-                Text(
-                  'rejoins',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 10),
-                ),
-              ],
-            ),
-          ),
-        ),
-        SizedBox(width: 40),
-        UserRating(user),
-      ],
-    );
-  }
-
-  Widget UserRating(User user) {
-    if (user.personalRating == null) {
-      return Container(
-          width: 80,
-          child: Center(
-              child: Column(children: const [
-            Padding(
-              padding: EdgeInsets.only(top: 6),
-              child: Text(
-                "Pas de note",
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Color(0xFF0085FF),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                top: 8,
-              ),
-              child: Text(
-                '0 avis',
-                style: TextStyle(
-                    fontSize: 10,
-                    color: Color(0xFF0085FF),
-                    decoration: TextDecoration.underline),
-              ),
-            ),
-          ])));
-    }
-    return Container(
-      width: 80,
-      child: Center(
-        child: Column(
-          children: [
-            Row(
-              children: [
-                const Icon(
-                  Icons.star,
-                  color: Color(0xFF0085FF),
-                  size: 25,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 4),
-                  child: Text(
-                    user.personalRating.toString(),
-                    style: const TextStyle(
-                      fontSize: 20,
-                      color: Color(0xFF0085FF),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                )
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 4, right: 8),
-              child: Text(
-                '${user.ratingNumber} avis',
-                style: const TextStyle(
-                    fontSize: 10,
-                    color: Color(0xFF0085FF),
-                    decoration: TextDecoration.underline),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget UserSports(List<SportSchema> list) {
-    List<LevelSchema> levels = <LevelSchema>[
-      LevelSchema("Débutant", 0),
-      LevelSchema("Intermédiaire", 1),
-      LevelSchema("Avancé", 3),
-      LevelSchema("Expert", 4)
-    ];
-
-    return Column(children: [
-      Center(
-        child: Text("Sports pratiqués",
-            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-      ),
-      Center(
-          child: Container(
-        width: 400,
-        height: 300,
-        child: ListView.builder(
-          itemBuilder: (context, index) {
-            return Padding(
-                padding: const EdgeInsets.only(bottom: 5, left: 77, right: 60),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      list[index].sport.name,
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                    Text(
-                      levels
-                          .firstWhere(
-                              (level) => level.level == list[index].level)
-                          .name,
-                      style: const TextStyle(
-                          color: Color(0xFF0085FF), fontSize: 14),
-                    )
-                  ],
-                ));
-          },
-          itemCount: list.length,
-        ),
-      ))
-    ]);
   }
 }
