@@ -10,9 +10,14 @@ import 'package:maating/pages/register_page.dart';
 import 'package:maating/pages/register_page2.dart';
 import 'package:maating/pages/sports_selection_register_page.dart';
 import 'package:maating/pages/selectAvatar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+late SharedPreferences sp;
+
+Future<void> main() async {
   runApp(const MyApp());
+
+  sp = await SharedPreferences.getInstance();
 }
 
 class MyApp extends StatelessWidget {

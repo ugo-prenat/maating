@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:maating/extension/checkInput.dart';
-import 'package:maating/pages/map_page.dart';
+import 'package:maating/models/user.dart';
 import 'package:maating/services/requestManager.dart';
+import 'package:maating/main.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -158,17 +161,22 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: () async {
                           var email = emailController.text;
                           var password = passwordController.text;
+                          var bodyUser;
+                          var userId;
 
                           if (_formKey.currentState!.validate()) {
                             loginUser(email, password).then((res) => {
                               if(res.statusCode == 200) {
-                                Navigator.pushNamed(context, '/map'),
+                                bodyUser = jsonDecode(res.body),
+                                userId = bodyUser["_id"],
+                                sp.setString('User', userId),
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content: Text("Vous êtes connectés. Bienvenue !", textAlign: TextAlign.center,),
+                                      content: Text("Vous êtes connecté(e). Bienvenue !", textAlign: TextAlign.center,),
                                       backgroundColor: Colors.green,
                                     )
-                                )
+                                ),
+                                Navigator.pushNamed(context, '/map'),
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(

@@ -121,5 +121,6 @@ Future<http.Response> loginUser(String email, String password) async {
     },
     body: jsonEncode({'email': email, 'password': password}),
   );
+  print('user: ${response.body}');
   return response;
 }
