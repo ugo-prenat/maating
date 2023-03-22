@@ -1,5 +1,13 @@
 const mongoose = require('mongoose');
 
+const AdditionalPlacesSchema = new mongoose.Schema(
+  {
+    participantId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    nbPlaces: { type: Number, required: true }
+  },
+  { _id: false }
+);
+
 const schema = new mongoose.Schema(
   {
     name: { type: String, required: true },
@@ -12,12 +20,7 @@ const schema = new mongoose.Schema(
     max_nb: { type: Number, required: true },
     organizer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     participants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-    additional_places: [
-      {
-        participantId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-        nbPlaces: { type: Number, required: true }
-      }
-    ],
+    additional_places: [AdditionalPlacesSchema],
     is_private: { type: Boolean, required: true },
     private_code: { type: String },
     location: { type: mongoose.Schema.Types.ObjectId, ref: 'Location' }

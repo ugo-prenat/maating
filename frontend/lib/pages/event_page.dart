@@ -3,7 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:maating/models/event.dart';
 import 'package:maating/models/user.dart';
 import 'package:maating/pages/event_participants_page.dart';
-import 'package:maating/services/eventService.dart';
+import 'package:maating/pages/event_participation_page.dart';
+import 'package:maating/utils/eventUtils.dart';
 
 class EventPage extends StatefulWidget {
   const EventPage({
@@ -28,9 +29,25 @@ class _EventPageState extends State<EventPage> {
     ];
     final event = ModalRoute.of(context)!.settings.arguments as Event;
 
+    User fakeUser = User(
+      "User 1",
+      "user1@user.fr",
+      "azerty",
+      "1990-01-01",
+      [],
+      "Paris",
+      10000,
+      "/uploads/1679315619805-test/user01.jpeg",
+      "641852e4f92f960c8b1217a8",
+      10000,
+      4.2,
+    );
+
     int participantsNb = getEventParticipantsNb(event);
     int remainingPlaces = event.maxNb - participantsNb;
-    var isFull = remainingPlaces < 1;
+    bool isFull = remainingPlaces < 1;
+    bool isAlreadyParticipating = event.participants
+        .any((participant) => participant["_id"] == fakeUser.id);
 
     return Scaffold(
       body: Column(
@@ -49,7 +66,8 @@ class _EventPageState extends State<EventPage> {
           const SizedBox(height: 20),
           ParticipantsList(event),
           const SizedBox(height: 50),
-          BottomButtons(event.id, event.organizer["_id"], isFull),
+          BottomButtons(
+              event, event.organizer["_id"], isFull, isAlreadyParticipating),
         ],
       ),
     );
@@ -282,14 +300,22 @@ class _EventPageState extends State<EventPage> {
   }
 
   // ignore: non_constant_identifier_names
-  Widget BottomButtons(String? eventId, String organizerId, bool isFull) {
+  Widget BottomButtons(Event event, String organizerId, bool isFull,
+      bool isAlreadyParticipating) {
     return Padding(
       padding: const EdgeInsets.only(left: 25, right: 25),
       child: ElevatedButton(
-        onPressed: isFull
+        onPressed: isFull || isAlreadyParticipating
             ? null
             : () {
-                print('pariticpate to event $eventId');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EventParticipationPage(
+                      event: event,
+                    ),
+                  ),
+                );
               },
         style: ElevatedButton.styleFrom(
           minimumSize: const Size.fromHeight(40),
@@ -300,7 +326,11 @@ class _EventPageState extends State<EventPage> {
           ),
         ),
         child: Text(
-          isFull ? 'Complet' : 'Participer',
+          isFull
+              ? 'Complet'
+              : isAlreadyParticipating
+                  ? 'Inscription enregistrée'
+                  : 'Participer',
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,

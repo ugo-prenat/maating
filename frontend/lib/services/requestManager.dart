@@ -1,8 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:ffi';
-import 'dart:io';
-
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -11,13 +8,17 @@ import 'package:maating/extension/filetype.dart';
 import 'package:maating/models/event.dart';
 import 'package:maating/models/sport.dart';
 import 'package:maating/pages/map_page.dart';
+import 'package:maating/utils/backendUtils.dart';
 
 import '../models/user.dart';
+
+// ignore: non_constant_identifier_names
+String BACK_URL = getBackendUrl();
 
 Future<List<dynamic>> getMapEvents(LatLng location, int maxDistance) async {
   final response = await http.get(
     Uri.parse(
-        'http://10.0.2.2:4000/events/map?lat=${location.latitude}&lng=${location.longitude}&maxDistance=$maxDistance'),
+        '$BACK_URL/events/map?lat=${location.latitude}&lng=${location.longitude}&maxDistance=$maxDistance'),
   );
 
   if (response.statusCode != 200) {
@@ -31,7 +32,7 @@ Future<List<Event>> getEventsByLocation(
     LatLng location, bool loadAllEvents) async {
   final response = await http.get(
     Uri.parse(
-      'http://10.0.2.2:4000/events?lat=${location.latitude}&lng=${location.longitude}${loadAllEvents ? '&maxDistance=$defaultUserMobilityRange' : ''}}',
+      '$BACK_URL/events?lat=${location.latitude}&lng=${location.longitude}${loadAllEvents ? '&maxDistance=$defaultUserMobilityRange' : ''}}',
     ),
   );
 
@@ -45,7 +46,7 @@ Future<List<Event>> getEventsByLocation(
 
 Future<List<Sport>> getSports() async {
   final response = await http.get(
-    Uri.parse('http://10.0.2.2:4000/sports'),
+    Uri.parse('$BACK_URL/sports'),
   );
 
   if (response.statusCode != 200)
@@ -58,7 +59,7 @@ Future<List<Sport>> getSports() async {
 
 Future<User> postUser(User user) async {
   final response = await http.post(
-    Uri.parse('http://10.0.2.2:4000/users'),
+    Uri.parse('$BACK_URL/users'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -71,8 +72,29 @@ Future<User> postUser(User user) async {
   }
 }
 
+Future<int> addUserToEvent(
+    String? eventId, String? userId, int additionalPlaces) async {
+  Map<String, dynamic> body = {'participantId': userId};
+
+  if (additionalPlaces > 0) {
+    body['additionalPlaces'] = {
+      'participantId': userId,
+      'nbPlaces': additionalPlaces,
+    };
+  }
+
+  final response = await http.post(
+    Uri.parse('$BACK_URL/events/$eventId/participants'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(body),
+  );
+  return response.statusCode;
+}
+
 Future<dynamic> uploadImage(XFile uploadImage) async {
-  var uri = Uri.parse("http://10.0.2.2:4000/uploads");
+  var uri = Uri.parse("$BACK_URL/uploads");
   var request = http.MultipartRequest("POST", uri);
 
   request.headers.addAll({
