@@ -115,7 +115,7 @@ Future<dynamic> uploadImage(XFile uploadImage) async {
 
 Future<http.Response> loginUser(String email, String password) async {
   final response = await http.post(
-    Uri.parse('http://10.0.2.2:4000/users/login'),
+    Uri.parse('$BACK_URL/users/login'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

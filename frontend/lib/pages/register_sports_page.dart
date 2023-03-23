@@ -132,11 +132,15 @@ class _RegisterSportPage extends State<RegisterSportPage> {
                                       null,
                                       widget.userFirstInfo[5],
                                       null))
-                                  .then((value) => Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              const MapPage())))
+                                  .then((user) => {
+                                        sp.setString('User', user.id!),
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        const MapPage()))
+                                      })
                                   .catchError(
                                       (err) => displaySnackBar(
                                           "Un problème est survenu durant la création de votre compte"),
