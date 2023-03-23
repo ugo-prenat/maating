@@ -49,13 +49,14 @@ class User {
         location = map["location"],
         mobilityRange = map["mobility_range"],
         avatarUrl = map["avatar_url"],
-        personalRating = map["personal_rating"].toDouble(),
+        personalRating = map["personal_rating"] is int
+            ? map["personal_rating"].toDouble()
+            : map["personal_rating"],
         ratingNumber = map["rating_nb"],
-        sports = map["sports"] is List<dynamic>
-            ? <SportSchema>[]
-            : map["sports"]
-                .map((sportSchema) => SportSchema.fromMap(sportSchema))
-                .toList();
+        sports = map["sports"]
+            .map((sportSchema) => SportSchema.fromMap(sportSchema))
+            .toList()
+            .cast<SportSchema>();
 }
 
 const defaultAvatarUrl =
