@@ -97,7 +97,12 @@ const addEventParticipant = async (req, res) => {
 
   return Events.findByIdAndUpdate(
     req.params.id,
-    { $push: { participants: participantId } },
+    {
+      $push: {
+        participants: participantId,
+        additional_places: req.body.additionalPlaces
+      }
+    },
     { new: true }
   )
     .then((event) => res.status(200).json(event))
