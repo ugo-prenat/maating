@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:maating/main.dart';
 import 'package:maating/models/user.dart';
@@ -127,20 +129,32 @@ class _RegisterSportPage extends State<RegisterSportPage> {
                                       widget.userFirstInfo[3],
                                       sportsToAdd,
                                       widget.userFirstInfo[4],
-                                      null,
+                                      0,
                                       widget.userFirstInfo[6],
                                       null,
-                                      widget.userFirstInfo[5],
-                                      null))
-                                  .then((value) => Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              const MapPage())))
-                                  .catchError(
-                                      (err) => displaySnackBar(
-                                          "Un problème est survenu durant la création de votre compte"),
-                                      test: (error) => error is User);
+                                      widget.userFirstInfo[5] * 1000,
+                                      0.0))
+                                  .then((res) => {
+                                        if (res.statusCode == 201)
+                                          {
+                                            sp.setString('User',
+                                                jsonDecode(res.body)['_id']),
+                                            Navigator.pushNamedAndRemoveUntil(
+                                                context,
+                                                '/main_page',
+                                                (route) => false)
+                                          }
+                                        else if (res.statusCode == 400)
+                                          {
+                                            displaySnackBar(
+                                                "Un utilisateur avec cet email existe déjà")
+                                          }
+                                        else
+                                          {
+                                            displaySnackBar(
+                                                "Erreur serveur, veuillez réessayer plus tard")
+                                          }
+                                      });
                             } else {
                               displaySnackBar(
                                   "Veuillez ajouter au moins un sport");
@@ -164,7 +178,12 @@ class _RegisterSportPage extends State<RegisterSportPage> {
   }
 
   displaySnackBar(String msg) {
-    var snackBar = SnackBar(backgroundColor: Colors.red, content: Text(msg));
+    var snackBar = SnackBar(
+        backgroundColor: Colors.red,
+        content: Text(
+          msg,
+          textAlign: TextAlign.center,
+        ));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
