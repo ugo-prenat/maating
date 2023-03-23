@@ -4,7 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:maating/extension/filetype.dart';
+import 'package:maating/utils/filetype.dart';
 import 'package:maating/models/event.dart';
 import 'package:maating/models/sport.dart';
 import 'package:maating/pages/map_page.dart';
@@ -37,7 +37,7 @@ Future<List<dynamic>> getMapEvents(LatLng location, int maxDistance) async {
 /// @returns {List<Event>} The list of events
 Future<List<Event>> getEventsByOrganizerId(String id) async {
   final response =
-      await http.get(Uri.parse('http://localhost:4000/events/organizer/${id}'));
+      await http.get(Uri.parse('$BACK_URL/events/organizer/${id}'));
   if (response.statusCode != 200) {
     return throw Exception('Failed to load events');
   }

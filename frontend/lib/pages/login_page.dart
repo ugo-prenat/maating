@@ -72,6 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                       width: 300,
                       height: 100,
                       child: TextFormField(
+                        key: const Key('emailLogin'),
                         controller: emailController,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         textInputAction: TextInputAction.next,
