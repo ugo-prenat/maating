@@ -4,7 +4,7 @@ const controller = require('../controllers/users.controllers');
 const router = express.Router();
 
 router.get('/', controller.getUsers);
-router.get('/login', controller.loginUser);
+router.post('/login', controller.loginUser);
 router.get('/:id', controller.getUser);
 router.get('/:id/comments', controller.getUserComments);
 router.get('/:id/created-events', controller.getUserCreatedEvents);
