@@ -1,20 +1,22 @@
 # maating
 
-## Executer les tests
+
+## Exécution des tests
 
 ### Front
 
 `cd ./frontend`
 
-Pour éxecuter les tests d'intégration
+
+Pour exécuter les tests d'intégration</br>
 `flutter test integration_test/`
 
-Pour éxecuter les tests unitaires
+Pour exécuter les tests unitaires</br>
 `flutter test test`
 
 ### Back
 
 `cd ./backend`
 
-Pour éxecuter les tests unitaires
+Pour exécuter les tests unitaires</br>
 `npm test`
