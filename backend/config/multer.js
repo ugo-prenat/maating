@@ -7,7 +7,7 @@ const storage = new GridFsStorage({
   options: { useNewUrlParser: true, useUnifiedTopology: true },
   file: () => {
     return {
-      filename: Date.now() + '-test',
+      filename: Date.now() + '-maating', // generate a unique filename
       bucketName: 'uploads'
     };
   }

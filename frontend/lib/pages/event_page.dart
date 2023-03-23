@@ -68,7 +68,7 @@ class _EventPageState extends State<EventPage> {
                 const SizedBox(height: 30),
                 Location(event),
                 const SizedBox(height: 30),
-                EventDtails(event),
+                EventDetails(event),
                 const SizedBox(height: 30),
                 Level(levels[event.level - 1]),
                 const SizedBox(height: 20),
@@ -88,6 +88,7 @@ class _EventPageState extends State<EventPage> {
 
   // ignore: non_constant_identifier_names
   Widget Thumbnail(String thumbnail) {
+    // The thumbnail of the event
     return Stack(
       children: [
         FittedBox(
@@ -132,12 +133,13 @@ class _EventPageState extends State<EventPage> {
 
   // ignore: non_constant_identifier_names
   Widget Places(Event event, bool isFull, int remainingPlaces) {
+    // This widget displays the number of places available and the remaining places for the event
     var paddingPercentage = 0.7;
     var fullBoxWidth = MediaQuery.of(context).size.width * paddingPercentage;
     var boxWidth = MediaQuery.of(context).size.width *
         (event.maxNb - remainingPlaces) /
         event.maxNb *
-        paddingPercentage;
+        paddingPercentage; // calculation of the width of the box that will be filled
 
     return Column(
       children: [
@@ -194,6 +196,7 @@ class _EventPageState extends State<EventPage> {
 
   // ignore: non_constant_identifier_names
   Widget Location(Event event) {
+    // This widget displays the location of the event
     return Padding(
       padding: const EdgeInsets.only(left: 25),
       child: Column(
@@ -215,22 +218,22 @@ class _EventPageState extends State<EventPage> {
   }
 
   // ignore: non_constant_identifier_names
-  Widget EventDtails(Event event) {
+  Widget EventDetails(Event event) {
+    // This widget displays the details of the event
     DateTime dt = DateTime.parse(event.date);
     DateFormat dateFormatter = DateFormat('EE d MMM yyyy', 'fr');
-    String eventDate = dateFormatter.format(dt);
-    String eventTime = DateFormat.Hm('fr').format(dt);
+    String eventDate = dateFormatter.format(dt); // format the date
+    String eventTime = DateFormat.Hm('fr').format(dt); // format the time
 
     var price = event.price == 0 ? "gratuite" : "${event.price / 100}€";
 
     // ignore: non_constant_identifier_names
     Widget Separator() {
       return Row(
-        // ignore: prefer_const_literals_to_create_immutables
-        children: [
-          const SizedBox(width: 5),
-          const Icon(Icons.circle, size: 5),
-          const SizedBox(width: 5),
+        children: const [
+          SizedBox(width: 5),
+          Icon(Icons.circle, size: 5),
+          SizedBox(width: 5),
         ],
       );
     }
@@ -277,6 +280,7 @@ class _EventPageState extends State<EventPage> {
 
   // ignore: non_constant_identifier_names
   Widget ParticipantsList(Event event) {
+    // This widget displays a link to go to the participants list page
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: Align(
@@ -340,6 +344,7 @@ class _EventPageState extends State<EventPage> {
           ),
         ),
         child: Text(
+          // Display the appropriate text depending on the user status
           isFull
               ? 'Complet'
               : isAlreadyParticipating
