@@ -67,7 +67,7 @@ class _UserProfilPage extends State<UserProfilPage> {
                   image: DecorationImage(
                     fit: BoxFit.cover,
                     image: NetworkImage(
-                      "http://$BACK_URL${user.avatarUrl!}",
+                      "$BACK_URL${user.avatarUrl!}",
                     ),
                   ),
                 ),
