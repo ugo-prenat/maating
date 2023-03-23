@@ -24,14 +24,17 @@ class _SelectAvatarState extends State<SelectAvatar> {
 
   XFile? _image;
 
+  // Call the method in 'picker' variable
   final ImagePicker picker = ImagePicker();
 
+  // Get the source of the media (camera or gallery)
   getImage(ImageSource media) async {
     var img = await picker.pickImage(source: media);
     if (img == null) return;
 
     XFile? image = XFile(img.path);
 
+    // Send the path in cropImage() function
     image = await cropImage(imageFile: image);
 
     setState(() {
@@ -39,6 +42,7 @@ class _SelectAvatarState extends State<SelectAvatar> {
     });
   }
 
+  // Get the image's path and return an edited file
   cropImage({required XFile imageFile}) async {
     CroppedFile? croppedImage =
         await ImageCropper().cropImage(sourcePath: imageFile.path, uiSettings: [
@@ -54,6 +58,7 @@ class _SelectAvatarState extends State<SelectAvatar> {
     return XFile(croppedImage.path);
   }
 
+  // Create an animation when modal is display
   void chooseImageSource() {
     showGeneralDialog(
       context: context,
@@ -64,7 +69,9 @@ class _SelectAvatarState extends State<SelectAvatar> {
         var curve = Curves.easeInOut.transform(a1.value);
         return Transform.scale(
             scale: curve,
+            // Call the modal which get an image
             child: SourceAvatar(onTakingImage: (ImageSource media) {
+              // getImage() determine if it's a picture from the camera or from the gallery
               getImage(media);
             }));
       },
@@ -107,6 +114,7 @@ class _SelectAvatarState extends State<SelectAvatar> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    // If image is upload => Show avatar picture. Else show button to upload avatar.
                     _image != null
                         ? ClipRRect(
                             borderRadius: BorderRadius.circular(100.0),

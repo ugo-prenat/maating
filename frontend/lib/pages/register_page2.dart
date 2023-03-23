@@ -211,7 +211,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
                             side: const BorderSide(
                               width: 2,
                               color: Colors.white,
-                              strokeAlign: BorderSide.strokeAlignCenter,
+                              //strokeAlign: BorderSide.strokeAlignCenter,
                             ),
                           ),
                           child: Row(
