@@ -70,6 +70,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       width: 300,
                       height: 100,
                       child: TextFormField(
+                        key: const ValueKey('firstNameInput'),
                         controller: firstNameController,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         textInputAction: TextInputAction.next,
@@ -111,6 +112,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       width: 300,
                       height: 100,
                       child: TextFormField(
+                        key: const ValueKey('emailInput'),
                         controller: emailController,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         textInputAction: TextInputAction.next,
@@ -153,6 +155,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       width: 300,
                       height: 120,
                       child: TextFormField(
+                        key: const ValueKey('passwordInput'),
                         controller: passwordController,
                         obscureText: isPasswordVisible,
                         autovalidateMode: AutovalidateMode.onUserInteraction,

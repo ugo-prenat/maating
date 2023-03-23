@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                       width: 300,
                       height: 100,
                       child: TextFormField(
-                        key: const Key('emailLogin'),
+                        key: const Key('emailInput'),
                         controller: emailController,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         textInputAction: TextInputAction.next,
@@ -115,6 +115,7 @@ class _LoginPageState extends State<LoginPage> {
                       width: 300,
                       height: 120,
                       child: TextFormField(
+                        key: const Key('passwordInput'),
                         controller: passwordController,
                         obscureText: isPasswordVisible,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -159,6 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       child: ElevatedButton(
+                        key: const Key('loginButton'),
                         onPressed: () async {
                           var email = emailController.text;
                           var password = passwordController.text;
