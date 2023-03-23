@@ -186,6 +186,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
                     Padding(
                       padding: const EdgeInsets.only(left: 140, top: 20),
                       child: ElevatedButton(
+                          key: const Key('nextButton'),
                           onPressed: () async {
                             var birthDate = ageController.text;
                             var city = cityController.text;

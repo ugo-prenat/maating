@@ -10,10 +10,12 @@ import 'package:flutter/services.dart';
 class EventParticipationPage extends StatefulWidget {
   const EventParticipationPage({
     required this.event,
+    required this.user,
     super.key,
   });
 
   final Event event;
+  final User user;
 
   @override
   State<EventParticipationPage> createState() => _EventParticpantsPageState();
@@ -21,19 +23,6 @@ class EventParticipationPage extends StatefulWidget {
 
 class _EventParticpantsPageState extends State<EventParticipationPage> {
   int _additionalPlacesNb = 0;
-  User fakeUser = User(
-    "User 1",
-    "user1@user.fr",
-    "azerty",
-    "1990-01-01",
-    [],
-    "Paris",
-    10000,
-    "/uploads/1679315619805-test/user01.jpeg",
-    "641852e4f92f960c8b1217a8",
-    10000,
-    4.2,
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +98,7 @@ class _EventParticpantsPageState extends State<EventParticipationPage> {
               image: DecorationImage(
                 fit: BoxFit.cover,
                 image: NetworkImage(
-                  "$BACK_URL${fakeUser.avatarUrl}",
+                  "$BACK_URL${widget.user.avatarUrl}",
                 ),
               ),
             ),
@@ -121,7 +110,7 @@ class _EventParticpantsPageState extends State<EventParticipationPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  fakeUser.name,
+                  widget.user.name,
                   style: const TextStyle(
                     height: .5,
                     fontWeight: FontWeight.bold,
@@ -139,7 +128,7 @@ class _EventParticpantsPageState extends State<EventParticipationPage> {
                       ),
                     ),
                     Text(
-                      fakeUser.personalRating.toString(),
+                      widget.user.personalRating.toString(),
                       style: const TextStyle(
                         color: Color(0xFF0085FF),
                         fontWeight: FontWeight.bold,
@@ -243,7 +232,7 @@ class _EventParticpantsPageState extends State<EventParticipationPage> {
             : () => {
                   addUserToEvent(
                     widget.event.id,
-                    fakeUser.id,
+                    widget.user.id,
                     _additionalPlacesNb,
                   )
                       .then((statusCode) => statusCode == 200

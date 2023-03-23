@@ -200,6 +200,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     Padding(
                       padding: const EdgeInsets.only(left: 140),
                       child: ElevatedButton(
+                          key: const ValueKey('nextButton'),
                           onPressed: () async {
                             var firstName = firstNameController.text;
                             var email = emailController.text;

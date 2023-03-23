@@ -7,6 +7,6 @@ const DB_URL = `mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@maatingcluster.dxrsq
 const PORT = process.env.PORT;
 
 module.exports = {
-  mongo: { url: DB_URL },
-  server: { port: PORT }
+  mongo: { url: DB_URL }, // url to connect to the database
+  server: { port: PORT } // port to listen to
 };
