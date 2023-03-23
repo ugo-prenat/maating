@@ -56,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
                 height: 150,
               ),
             ),
-              Form(
+            Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,26 +166,34 @@ class _LoginPageState extends State<LoginPage> {
 
                           if (_formKey.currentState!.validate()) {
                             loginUser(email, password).then((res) => {
-                              if(res.statusCode == 200) {
-                                bodyUser = jsonDecode(res.body),
-                                userId = bodyUser["_id"],
-                                sp.setString('User', userId),
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text("Vous êtes connecté(e). Bienvenue !", textAlign: TextAlign.center,),
-                                      backgroundColor: Colors.green,
-                                    )
-                                ),
-                                Navigator.pushNamed(context, '/map'),
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text("Une erreur est survenue.", textAlign: TextAlign.center,),
-                                      backgroundColor: Colors.redAccent,
-                                    )
-                                )
-                              }
-                            });
+                                  if (res.statusCode == 200)
+                                    {
+                                      bodyUser = jsonDecode(res.body),
+                                      userId = bodyUser["_id"],
+                                      sp.setString('User', userId),
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                        content: Text(
+                                          "Vous êtes connecté(e). Bienvenue !",
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        backgroundColor: Colors.green,
+                                      )),
+                                      Navigator.pushNamedAndRemoveUntil(context,
+                                          '/main_page', (route) => false),
+                                    }
+                                  else
+                                    {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                        content: Text(
+                                          "Une erreur est survenue.",
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        backgroundColor: Colors.redAccent,
+                                      ))
+                                    }
+                                });
                           }
                         },
                         style: ElevatedButton.styleFrom(

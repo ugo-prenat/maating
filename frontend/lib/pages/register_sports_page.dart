@@ -139,12 +139,10 @@ class _RegisterSportPage extends State<RegisterSportPage> {
                                           {
                                             sp.setString('User',
                                                 jsonDecode(res.body)['_id']),
-                                            Navigator.pushReplacement(
+                                            Navigator.pushNamedAndRemoveUntil(
                                                 context,
-                                                MaterialPageRoute(
-                                                    builder: (BuildContext
-                                                            context) =>
-                                                        const MapPage()))
+                                                '/main_page',
+                                                (route) => false)
                                           }
                                         else if (res.statusCode == 400)
                                           {
