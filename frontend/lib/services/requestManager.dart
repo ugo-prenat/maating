@@ -91,3 +91,18 @@ Future<User> postUser(User user) async {
     return throw Exception('Failed to create user ${response.body}');
   }
 }
+
+Future<Event> postEvent(Event event) async {
+  final response = await http.post(
+    Uri.parse('http://10.0.2.2:4000/events'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(event.toMap()),
+  );
+  if (response.statusCode == 201) {
+    return Event.fromMap(jsonDecode(response.body)['event']);
+  } else {
+    return throw Exception('Failed to create Event ${response.body}');
+  }
+}

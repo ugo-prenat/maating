@@ -101,8 +101,10 @@ class _CreatedEventsState extends State<CreatedEvents> {
               padding: const EdgeInsets.symmetric(horizontal: 50),
               child: ElevatedButton(
                 onPressed: () {
-                  // Action à effectuer lors du clic sur le bouton
-                  print('Create Event Button');
+                  Navigator.pushNamed(
+                    context,
+                    '/create_event',
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,

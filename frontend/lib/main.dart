@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maating/models/event.dart';
+import 'package:maating/pages/create_event_page.dart';
 import 'package:maating/pages/event_page.dart';
 import 'package:maating/pages/register_sports_page.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
               sports: [],
             ),
         '/event_page': (context) => EventPage(event: rawEvent),
+        '/create_event': (context) => const CreateEventPage(),
       },
       theme: ThemeData(
           textTheme: GoogleFonts.poppinsTextTheme().copyWith(

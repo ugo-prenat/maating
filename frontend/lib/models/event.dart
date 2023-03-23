@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:maating/models/location.dart';
 import 'package:maating/models/sport.dart';
 import 'package:maating/models/user.dart';
@@ -42,16 +44,18 @@ class Event {
       "duration": duration,
       "price": price,
       "description": description,
-      "sport": sport,
+      "sport": sport.toMap(),
       "level": level,
       "max_nb": maxNb,
       "organizer": organizer,
       "participants": participants,
       "is_private": isPrivate,
       "private_code": privateCode,
-      "location": location
+      "location": location.toMap()
     };
   }
+
+  String toJson() => json.encode(toMap());
 
   Event.fromMap(Map<String, dynamic> map)
       : id = map["_id"],

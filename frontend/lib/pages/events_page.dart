@@ -23,7 +23,7 @@ class _EventsPageState extends State<EventsPage> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               TabBar(
-                indicatorPadding: EdgeInsets.symmetric(horizontal: 64.0, vertical: 8.0),
+                indicatorPadding: const EdgeInsets.symmetric(horizontal: 64.0, vertical: 8.0),
                 indicatorSize: TabBarIndicatorSize.tab,
                 indicator: BoxDecoration(
                   borderRadius: BorderRadius.circular(16.0),
@@ -31,7 +31,7 @@ class _EventsPageState extends State<EventsPage> {
                 ),
                 labelColor: Colors.white,
                 unselectedLabelColor: Colors.grey,
-                tabs: [
+                tabs: const [
                   Tab(
                     text: 'Créés',
                   ),
@@ -43,7 +43,7 @@ class _EventsPageState extends State<EventsPage> {
             ],
           ),
         ),
-        body: TabBarView(
+        body: const TabBarView(
           children: [
             CreatedEvents(),
             JoinedEvents(),
