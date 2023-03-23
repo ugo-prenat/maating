@@ -11,17 +11,26 @@ Event mockEvent = Event(
   Sport('123', 'Football'),
   1,
   10,
-  {'_id': 'da24ccbbd8', 'name': 'organizer'},
+  {
+    '_id': 'da24ccbbd8',
+    'name': 'participant 0',
+    'avatar_url': '/uploads/1679315764644-test/o4jnqhio_400x400.jpg'
+  },
   [
+    {
+      '_id': 'da24ccbbd8',
+      'name': 'participant 0',
+      'avatar_url': '/uploads/1679315764644-test/o4jnqhio_400x400.jpg'
+    },
     {
       '_id': '6688acee2b6c',
       'name': 'participant 1',
-      'avatar': '/uploads/dsc00141_82174b175dda24ccbbd86688acee2b6c.jpg',
+      'avatar_url': '/uploads/1679315619805-test/user01.jpeg',
     },
     {
       '_id': '82174b175d',
       'name': 'participant 2',
-      'avatar': '/uploads/dsc00141_82174b175dda24ccbbd86688acee2b6c.jpg',
+      'avatar_url': '/uploads/1679315717243-test/960x0.jpg',
     },
   ],
   [
@@ -44,16 +53,23 @@ Event mockEvent = Event(
 
 List<Map<String, dynamic>> groupedParticipants = [
   {
+    '_id': 'da24ccbbd8',
+    'name': 'participant 0',
+    'avatar_url': '/uploads/1679315764644-test/o4jnqhio_400x400.jpg',
+    'isOrganizer': true,
+    'additionalPlaces': 0,
+  },
+  {
     '_id': '6688acee2b6c',
     'name': 'participant 1',
-    'avatar': '/uploads/dsc00141_82174b175dda24ccbbd86688acee2b6c.jpg',
+    'avatar_url': '/uploads/1679315619805-test/user01.jpeg',
     'isOrganizer': false,
     'additionalPlaces': 1,
   },
   {
     '_id': '82174b175d',
     'name': 'participant 2',
-    'avatar': '/uploads/dsc00141_82174b175dda24ccbbd86688acee2b6c.jpg',
+    'avatar_url': '/uploads/1679315717243-test/960x0.jpg',
     'isOrganizer': false,
     'additionalPlaces': 0,
   },

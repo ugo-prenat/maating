@@ -10,7 +10,7 @@ const getMapEvents = (req, res) => {
   if (lat && lng && maxDistance) {
     return (
       Events.find()
-        // select events by the given location
+        // select events by the given coordinates
         .populate('location', null, {
           loc: {
             $near: {
@@ -42,7 +42,7 @@ const getEvents = (req, res) => {
   if (lat && lng) {
     return (
       Events.find()
-        // select events by the given location
+        // select events by the given coordinates
         .populate('location', null, {
           loc: {
             $near: {

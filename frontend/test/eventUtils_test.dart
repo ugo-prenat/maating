@@ -5,7 +5,7 @@ import '../mocks/events_mock.dart';
 
 void main() {
   test('get event participants number', () {
-    expect(getEventParticipantsNb(mockEvent), 3);
+    expect(getEventParticipantsNb(mockEvent), 4);
   });
   test('get event participants', () {
     expect(getEventParticipants(mockEvent), groupedParticipants);
