@@ -98,7 +98,7 @@ class UserInformations extends StatelessWidget {
   /// Widget to display the user ratings
 // ignore: non_constant_identifier_names
   Widget UserRating(User user) {
-    if (user.personalRating == null) {
+    if (user.ratingNumber == 0) {
       return SizedBox(
           width: 80,
           child: Center(
