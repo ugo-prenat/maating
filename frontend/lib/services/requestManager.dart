@@ -49,8 +49,8 @@ Future<List<Event>> getEventsByOrganizerId(String id) async {
 /// @param {String} id - The id of the user
 /// @returns {List<Event>} The list of events
 Future<List<Event>> getEventWithParticipantId(String id) async {
-  final response = await http
-      .get(Uri.parse('$BACK_URL/events/participant/${id}'));
+  final response =
+      await http.get(Uri.parse('$BACK_URL/events/participant/${id}'));
   if (response.statusCode != 200) {
     return throw Exception('Failed to load events');
   }
@@ -94,7 +94,7 @@ Future<List<Sport>> getSports() async {
 /// Create a new user
 /// @param {User} user - The user to create
 /// @returns {User} The created user
-Future<User> postUser(User user) async {
+Future<http.Response> postUser(User user) async {
   final response = await http.post(
     Uri.parse('$BACK_URL/users'),
     headers: <String, String>{
@@ -102,11 +102,7 @@ Future<User> postUser(User user) async {
     },
     body: jsonEncode(user.toMap()),
   );
-  if (response.statusCode == 201) {
-    return User.fromMap(jsonDecode(response.body));
-  } else {
-    return throw Exception('Failed to create user ${response.body}');
-  }
+  return response;
 }
 
 /// Get a user by id
@@ -121,13 +117,14 @@ Future<User> getUser(String userId) async {
     return throw Exception('Failed to load user');
   }
   dynamic json = jsonDecode(response.body);
-  List<SportSchema> sports = json["sports"]
-      .map((sportSchema) => SportSchema.fromMap(sportSchema))
-      .toList()
-      .cast<SportSchema>();
-  return User.fromMap(jsonDecode(response.body));
+  return User.fromMap(json);
 }
 
+/// Add a user to an event
+/// @param {String} eventId - The id of the event
+/// @param {String} userId - The id of the user
+/// @param {int} additionalPlaces - The number of additional places
+/// @returns {int} The status code of the response
 Future<int> addUserToEvent(
     String? eventId, String? userId, int additionalPlaces) async {
   Map<String, dynamic> body = {'participantId': userId};
@@ -149,6 +146,25 @@ Future<int> addUserToEvent(
   return response.statusCode;
 }
 
+/// Login a user
+/// @param {String} email - The email of the user
+/// @param {String} password - The password of the user
+/// @returns {Response} The response
+Future<http.Response> loginUser(String email, String password) async {
+  final response = await http.post(
+    Uri.parse('$BACK_URL/users/login'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode({'email': email, 'password': password}),
+  );
+  print('user: ${response.body}');
+  return response;
+}
+
+/// Upload an image
+/// @param {XFile} uploadImage - The image to upload
+/// @returns {String} The url of the uploaded image
 Future<dynamic> uploadImage(XFile uploadImage) async {
   var uri = Uri.parse("$BACK_URL/uploads");
   var request = http.MultipartRequest("POST", uri);
@@ -167,16 +183,4 @@ Future<dynamic> uploadImage(XFile uploadImage) async {
   } else {
     return throw Exception('Failed to upload image');
   }
-}
-
-Future<http.Response> loginUser(String email, String password) async {
-  final response = await http.post(
-    Uri.parse('$BACK_URL/users/login'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode({'email': email, 'password': password}),
-  );
-  print('user: ${response.body}');
-  return response;
 }
