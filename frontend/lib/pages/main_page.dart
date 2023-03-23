@@ -3,8 +3,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maating/pages/login_page.dart';
 import 'package:maating/pages/map_page.dart';
 import 'package:maating/pages/register_page2.dart';
-
-
+import 'package:maating/pages/user_profil_page.dart';
+import '../main.dart';
 import '../services/requestManager.dart';
 
 class MainPage extends StatefulWidget {
@@ -15,12 +15,12 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
 
   final List<Widget> _children = [
     LoginPage(),
     MapPage(),
-    RegisterPage2()
+    UserProfilPage(userId: sp.getString('User')!)
   ];
 
   void _onItemTapped(int index) {

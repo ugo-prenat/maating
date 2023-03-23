@@ -13,7 +13,7 @@ const formatEventsForMapDisplay = (events) => {
   }));
 };
 
-function groupEventsByLoc(array, property) {
+const groupEventsByLoc = (array, property) => {
   var hash = {},
     props = property.split('.');
   for (var i = 0; i < array.length; i++) {
@@ -24,9 +24,10 @@ function groupEventsByLoc(array, property) {
     hash[key].push(array[i]);
   }
   return hash;
-}
+};
 
 module.exports = {
   isParticipantAlreadyInEvent,
-  formatEventsForMapDisplay
+  formatEventsForMapDisplay,
+  groupEventsByLoc
 };

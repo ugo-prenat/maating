@@ -43,6 +43,9 @@ dependencies:
   intl: ^0.18.0
   http: ^0.13.5
   location: ^4.4.0
+  image_cropper: ^3.0.1
+  numberpicker: 2.0.1
+  shared_preferences: ^2.0.20
 
 dev_dependencies:
   flutter_test:
