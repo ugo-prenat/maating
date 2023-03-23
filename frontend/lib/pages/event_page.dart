@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:maating/main.dart';
 import 'package:maating/models/event.dart';
 import 'package:maating/models/user.dart';
 import 'package:maating/pages/event_participants_page.dart';
 import 'package:maating/pages/event_participation_page.dart';
+import 'package:maating/services/requestManager.dart';
 import 'package:maating/utils/eventUtils.dart';
 
 class EventPage extends StatefulWidget {
@@ -29,46 +31,57 @@ class _EventPageState extends State<EventPage> {
     ];
     final event = ModalRoute.of(context)!.settings.arguments as Event;
 
-    User fakeUser = User(
-      "User 1",
-      "user1@user.fr",
-      "azerty",
-      "1990-01-01",
-      [],
-      "Paris",
-      10000,
-      "/uploads/1679315619805-test/user01.jpeg",
-      "641852e4f92f960c8b1217a8",
-      10000,
-      4.2,
-    );
+    String userId = sp.getString('User') ?? '';
 
     int participantsNb = getEventParticipantsNb(event);
     int remainingPlaces = event.maxNb - participantsNb;
     bool isFull = remainingPlaces < 1;
-    bool isAlreadyParticipating = event.participants
-        .any((participant) => participant["_id"] == fakeUser.id);
+    bool isAlreadyParticipating = event.participants.any(
+      (participant) => participant["_id"] == userId,
+    );
 
     return Scaffold(
-      body: Column(
-        children: [
-          Thumbnail(event.location.thumbnailUrl),
-          const SizedBox(height: 30),
-          EventTitle(event.name),
-          const SizedBox(height: 40),
-          Places(event, isFull, remainingPlaces),
-          const SizedBox(height: 30),
-          Location(event),
-          const SizedBox(height: 30),
-          EventDtails(event),
-          const SizedBox(height: 30),
-          Level(levels[event.level - 1]),
-          const SizedBox(height: 20),
-          ParticipantsList(event),
-          const SizedBox(height: 50),
-          BottomButtons(
-              event, event.organizer["_id"], isFull, isAlreadyParticipating),
-        ],
+      body: FutureBuilder<User>(
+        future: getUser(userId),
+        builder: (
+          BuildContext context,
+          AsyncSnapshot<User> snapshot,
+        ) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 40),
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.grey[500]!),
+                ),
+              ),
+            );
+          }
+          if (snapshot.hasData) {
+            return Column(
+              children: [
+                Thumbnail(event.location.thumbnailUrl),
+                const SizedBox(height: 30),
+                EventTitle(event.name),
+                const SizedBox(height: 40),
+                Places(event, isFull, remainingPlaces),
+                const SizedBox(height: 30),
+                Location(event),
+                const SizedBox(height: 30),
+                EventDtails(event),
+                const SizedBox(height: 30),
+                Level(levels[event.level - 1]),
+                const SizedBox(height: 20),
+                ParticipantsList(event),
+                const SizedBox(height: 50),
+                BottomButtons(event, snapshot.data!, event.organizer["_id"],
+                    isFull, isAlreadyParticipating),
+              ],
+            );
+          } else {
+            return const Text('Une erreur est survenue');
+          }
+        },
       ),
     );
   }
@@ -300,7 +313,7 @@ class _EventPageState extends State<EventPage> {
   }
 
   // ignore: non_constant_identifier_names
-  Widget BottomButtons(Event event, String organizerId, bool isFull,
+  Widget BottomButtons(Event event, User user, String organizerId, bool isFull,
       bool isAlreadyParticipating) {
     return Padding(
       padding: const EdgeInsets.only(left: 25, right: 25),
@@ -312,6 +325,7 @@ class _EventPageState extends State<EventPage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => EventParticipationPage(
+                      user: user,
                       event: event,
                     ),
                   ),
