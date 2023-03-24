@@ -6,6 +6,7 @@ import 'package:maating/utils/eventUtils.dart';
 import 'package:maating/services/requestManager.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
 class EventParticipationPage extends StatefulWidget {
   const EventParticipationPage({
@@ -20,6 +21,7 @@ class EventParticipationPage extends StatefulWidget {
 }
 
 class _EventParticpantsPageState extends State<EventParticipationPage> {
+  final _client = http.Client();
   int _additionalPlacesNb = 0;
   User fakeUser = User(
     "User 1",
@@ -241,11 +243,12 @@ class _EventParticpantsPageState extends State<EventParticipationPage> {
         onPressed: invalidNb
             ? null
             : () => {
-                  addUserToEvent(
-                    widget.event.id,
-                    fakeUser.id,
-                    _additionalPlacesNb,
-                  )
+                  RequestManager(_client)
+                      .addUserToEvent(
+                        widget.event.id,
+                        fakeUser.id,
+                        _additionalPlacesNb,
+                      )
                       .then((statusCode) => statusCode == 200
                           ? Navigator.push(
                               context,

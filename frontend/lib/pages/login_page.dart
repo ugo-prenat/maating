@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:maating/extension/checkInput.dart';
 import 'package:maating/models/user.dart';
@@ -14,6 +14,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _client = http.Client();
   final _formKey = GlobalKey<FormState>();
 
   bool isPasswordVisible = true;
@@ -168,35 +169,39 @@ class _LoginPageState extends State<LoginPage> {
                           var userId;
 
                           if (_formKey.currentState!.validate()) {
-                            loginUser(email, password).then((res) => {
-                                  if (res.statusCode == 200)
-                                    {
-                                      bodyUser = jsonDecode(res.body),
-                                      userId = bodyUser["_id"],
-                                      sp.setString('User', userId),
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(const SnackBar(
-                                        content: Text(
-                                          "Vous êtes connecté(e). Bienvenue !",
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        backgroundColor: Colors.green,
-                                      )),
-                                      Navigator.pushNamedAndRemoveUntil(context,
-                                          '/main_page', (route) => false),
-                                    }
-                                  else
-                                    {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(const SnackBar(
-                                        content: Text(
-                                          "Une erreur est survenue.",
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        backgroundColor: Colors.redAccent,
-                                      ))
-                                    }
-                                });
+                            RequestManager(_client)
+                                .loginUser(email, password)
+                                .then((res) => {
+                                      if (res.statusCode == 200)
+                                        {
+                                          bodyUser = jsonDecode(res.body),
+                                          userId = bodyUser["_id"],
+                                          sp.setString('User', userId),
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                            content: Text(
+                                              "Vous êtes connecté(e). Bienvenue !",
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            backgroundColor: Colors.green,
+                                          )),
+                                          Navigator.pushNamedAndRemoveUntil(
+                                              context,
+                                              '/main_page',
+                                              (route) => false),
+                                        }
+                                      else
+                                        {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                            content: Text(
+                                              "Une erreur est survenue.",
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            backgroundColor: Colors.redAccent,
+                                          ))
+                                        }
+                                    });
                           }
                         },
                         style: ElevatedButton.styleFrom(

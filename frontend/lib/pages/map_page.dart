@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maating/widgets/mapAndPanel.dart';
-
+import 'package:http/http.dart' as http;
 import '../services/requestManager.dart';
 
 const LatLng defaultCityLocation = LatLng(49.035617, 2.060325);
@@ -20,6 +20,7 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
+  final _client = http.Client();
   LatLng eventsLocation = defaultCityLocation;
 
   @override
@@ -33,7 +34,8 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder<List<dynamic>>(
-        future: getMapEvents(eventsLocation, defaultUserMobilityRange),
+        future: RequestManager(_client)
+            .getMapEvents(eventsLocation, defaultUserMobilityRange),
         builder: (
           BuildContext context,
           AsyncSnapshot<List<dynamic>> snapshot,

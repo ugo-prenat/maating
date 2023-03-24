@@ -5,6 +5,7 @@ import 'package:maating/models/user.dart';
 import 'package:maating/services/requestManager.dart';
 import '../utils/backendUtils.dart';
 import '../widgets/userInformations.dart';
+import 'package:http/http.dart' as http;
 
 class UserProfilPage extends StatefulWidget {
   const UserProfilPage({super.key, required this.userId});
@@ -15,6 +16,7 @@ class UserProfilPage extends StatefulWidget {
 }
 
 class _UserProfilPage extends State<UserProfilPage> {
+  final _client = http.Client();
   String BACK_URL = getBackendUrl();
 
   @override
@@ -22,9 +24,9 @@ class _UserProfilPage extends State<UserProfilPage> {
     return Scaffold(
       body: FutureBuilder<List>(
           future: Future.wait([
-            getUser(widget.userId),
-            getEventWithParticipantId(widget.userId),
-            getEventsByOrganizerId(widget.userId)
+            RequestManager(_client).getUser(widget.userId),
+            RequestManager(_client).getEventWithParticipantId(widget.userId),
+            RequestManager(_client).getEventsByOrganizerId(widget.userId)
           ]),
           builder: (context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {

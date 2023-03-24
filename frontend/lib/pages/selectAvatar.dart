@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:maating/pages/register_sports_page.dart';
@@ -18,6 +18,7 @@ class SelectAvatar extends StatefulWidget {
 }
 
 class _SelectAvatarState extends State<SelectAvatar> {
+  final _client = http.Client();
   final _formKey = GlobalKey<FormState>();
 
   var profilImgController = TextEditingController();
@@ -144,7 +145,8 @@ class _SelectAvatarState extends State<SelectAvatar> {
                             if (_formKey.currentState!.validate()) {
                               try {
                                 // ignore: use_build_context_synchronously
-                                dynamic urlImage = await uploadImage(_image!);
+                                dynamic urlImage = await RequestManager(_client)
+                                    .uploadImage(_image!);
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
