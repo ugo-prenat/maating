@@ -4,8 +4,9 @@ const isParticipantAlreadyInEvent = (event, participantId) => {
 
 const formatEventsForMapDisplay = (events) => {
   const grouped = Object.values(
-    groupEventsByLoc(events, 'location.loc.coordinates')
+    groupEventsByLoc(events, 'location.loc.coordinates') // group events with the same coordinates
   );
+  // return an array of events with coordinates, eventsNb and id
   return grouped.map((group) => ({
     coordinates: group[0].location.loc.coordinates,
     eventsNb: group.length,
@@ -14,6 +15,7 @@ const formatEventsForMapDisplay = (events) => {
 };
 
 const groupEventsByLoc = (array, property) => {
+  // group events with the same coordinates
   var hash = {},
     props = property.split('.');
   for (var i = 0; i < array.length; i++) {
