@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:maating/pages/events_page.dart';
 import 'package:maating/pages/map_page.dart';
-import 'package:maating/pages/register_page2.dart';
-
+import 'package:maating/pages/user_profil_page.dart';
+import '../main.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  const MainPage({super.key, this.successMsg});
 
+  final String? successMsg;
   @override
   State<MainPage> createState() => _MainPageState();
 }
@@ -17,7 +18,7 @@ class _MainPageState extends State<MainPage> {
   final List<Widget> _children = [
     EventsPage(),
     MapPage(),
-    RegisterPage2()
+    UserProfilPage(userId: sp.getString('User')!)
   ];
 
   void _onItemTapped(int index) {

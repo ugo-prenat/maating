@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:maating/main.dart';
 import 'package:maating/models/user.dart';
@@ -7,14 +9,17 @@ import 'package:maating/services/requestManager.dart';
 import 'package:maating/widgets/register_sports_list.dart';
 
 class RegisterSportPage extends StatefulWidget {
-  const RegisterSportPage({super.key, required this.sports});
+  const RegisterSportPage(
+      {super.key, required this.userFirstInfo, required this.sports});
 
+  final List<dynamic> userFirstInfo;
   final List<SportSchema> sports;
   @override
   State<RegisterSportPage> createState() => _RegisterSportPage();
 }
 
 class _RegisterSportPage extends State<RegisterSportPage> {
+  final _client = http.Client();
   List<SportSchema> sportsToAdd = <SportSchema>[];
   @override
   Widget build(BuildContext context) {
@@ -117,28 +122,41 @@ class _RegisterSportPage extends State<RegisterSportPage> {
                         height: 50,
                         child: ElevatedButton(
                           onPressed: () async {
-                            if (sportsToAdd.length > 0) {
-                              await postUser(User(
-                                      "User03",
-                                      "user03@gmail.com",
-                                      "azerty",
-                                      "2002-05-22 20:18:04Z",
+                            if (sportsToAdd.isNotEmpty) {
+                              await RequestManager(_client)
+                                  .postUser(User(
+                                      widget.userFirstInfo[0],
+                                      widget.userFirstInfo[1],
+                                      widget.userFirstInfo[2],
+                                      widget.userFirstInfo[3],
                                       sportsToAdd,
-                                      "Cergy",
+                                      widget.userFirstInfo[4],
+                                      0,
+                                      widget.userFirstInfo[6],
                                       null,
-                                      null,
-                                      null,
-                                      null,
-                                      0.1))
-                                  .then((value) => Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              MapPage())))
-                                  .catchError(
-                                      (err) => displaySnackBar(
-                                          "Un problème est survenu durant la création de votre compte"),
-                                      test: (error) => error is User);
+                                      widget.userFirstInfo[5] * 1000,
+                                      0.0))
+                                  .then((res) => {
+                                        if (res.statusCode == 201)
+                                          {
+                                            sp.setString('User',
+                                                jsonDecode(res.body)['_id']),
+                                            Navigator.pushNamedAndRemoveUntil(
+                                                context,
+                                                '/main_page',
+                                                (route) => false)
+                                          }
+                                        else if (res.statusCode == 400)
+                                          {
+                                            displaySnackBar(
+                                                "Un utilisateur avec cet email existe déjà")
+                                          }
+                                        else
+                                          {
+                                            displaySnackBar(
+                                                "Erreur serveur, veuillez réessayer plus tard")
+                                          }
+                                      });
                             } else {
                               displaySnackBar(
                                   "Veuillez ajouter au moins un sport");
@@ -162,7 +180,12 @@ class _RegisterSportPage extends State<RegisterSportPage> {
   }
 
   displaySnackBar(String msg) {
-    var snackBar = SnackBar(backgroundColor: Colors.red, content: Text(msg));
+    var snackBar = SnackBar(
+        backgroundColor: Colors.red,
+        content: Text(
+          msg,
+          textAlign: TextAlign.center,
+        ));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

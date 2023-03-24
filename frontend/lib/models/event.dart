@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:maating/models/location.dart';
 import 'package:maating/models/sport.dart';
-import 'package:maating/models/user.dart';
 
 class Event {
   String? id;
@@ -16,6 +15,7 @@ class Event {
   int maxNb;
   Map<String, dynamic> organizer;
   List<dynamic> participants;
+  List<dynamic>? additionalPlaces;
   bool isPrivate;
   String? privateCode;
   Location location;
@@ -31,6 +31,7 @@ class Event {
     this.maxNb,
     this.organizer,
     this.participants,
+    this.additionalPlaces,
     this.isPrivate,
     this.location, [
     this.id,
@@ -49,6 +50,7 @@ class Event {
       "max_nb": maxNb,
       "organizer": organizer,
       "participants": participants,
+      "additional_places": additionalPlaces,
       "is_private": isPrivate,
       "private_code": privateCode,
       "location": location.toMap()
@@ -69,6 +71,7 @@ class Event {
         maxNb = map["max_nb"],
         organizer = map["organizer"] as Map<String, dynamic>,
         participants = map["participants"] as List<dynamic>,
+        additionalPlaces = map["additional_places"] as List<dynamic>,
         isPrivate = map["is_private"],
         privateCode = map["private_code"],
         location = Location.fromMap(map["location"]);
@@ -88,6 +91,12 @@ final rawEvent = Event(
   000,
   {},
   [],
+  [
+    {
+      "participantId": "000",
+      "nbPlaces": 1,
+    },
+  ],
   false,
   Location(
     'id',

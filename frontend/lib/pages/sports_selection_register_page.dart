@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:maating/main.dart';
 import 'package:maating/models/sport.dart';
@@ -24,6 +24,7 @@ class SportSelectionRegisterPage extends StatefulWidget {
 }
 
 class _SportSelectionRegisterPage extends State<SportSelectionRegisterPage> {
+  final _client = http.Client();
   String? dropdownValueSport;
   String? dropdownValueLevel;
   @override
@@ -77,7 +78,7 @@ class _SportSelectionRegisterPage extends State<SportSelectionRegisterPage> {
                             child: Padding(
                               padding: EdgeInsets.only(left: 10, right: 10),
                               child: FutureBuilder<List<Sport>>(
-                                future: getSports(),
+                                future: RequestManager(_client).getSports(),
                                 builder: (
                                   BuildContext context,
                                   AsyncSnapshot<List<Sport>> snapshot,

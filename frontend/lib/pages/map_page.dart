@@ -1,27 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maating/widgets/mapAndPanel.dart';
-
+import 'package:http/http.dart' as http;
 import '../services/requestManager.dart';
 
 const LatLng defaultCityLocation = LatLng(49.035617, 2.060325);
 const int defaultUserMobilityRange = 10000;
 
 class MapPage extends StatefulWidget {
-  const MapPage({super.key});
+  const MapPage({
+    super.key,
+    this.successMsg,
+  });
+
+  final String? successMsg;
 
   @override
   State<MapPage> createState() => _MapPageState();
 }
 
 class _MapPageState extends State<MapPage> {
+  final _client = http.Client();
   LatLng eventsLocation = defaultCityLocation;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) =>
+        {if (widget.successMsg != null) displaySnackBar(widget.successMsg!)});
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder<List<dynamic>>(
-        future: getMapEvents(eventsLocation, defaultUserMobilityRange),
+        future: RequestManager(_client)
+            .getMapEvents(eventsLocation, defaultUserMobilityRange),
         builder: (
           BuildContext context,
           AsyncSnapshot<List<dynamic>> snapshot,
@@ -73,5 +87,10 @@ class _MapPageState extends State<MapPage> {
         ),
       ],
     );
+  }
+
+  displaySnackBar(String msg) {
+    var snackBar = SnackBar(backgroundColor: Colors.green, content: Text(msg));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

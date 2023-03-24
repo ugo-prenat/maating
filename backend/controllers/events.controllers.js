@@ -8,24 +8,28 @@ const getMapEvents = (req, res) => {
   const { lat, lng, maxDistance } = req.query;
 
   if (lat && lng && maxDistance) {
-    return Events.find()
-      .populate('location', null, {
-        loc: {
-          $near: {
-            $geometry: {
-              type: 'Point',
-              coordinates: [parseFloat(lng), parseFloat(lat)]
-            },
-            $maxDistance: parseInt(maxDistance)
+    return (
+      Events.find()
+        // select events by the given coordinates
+        .populate('location', null, {
+          loc: {
+            $near: {
+              $geometry: {
+                type: 'Point',
+                coordinates: [parseFloat(lng), parseFloat(lat)]
+              },
+              $maxDistance: parseInt(maxDistance)
+            }
           }
-        }
-      })
-      .then((events) =>
-        res
-          .status(200)
-          .json(formatEventsForMapDisplay(events.filter((e) => e.location)))
-      )
-      .catch((error) => res.status(500).json({ error }));
+        })
+        .then(
+          (events) =>
+            res
+              .status(200)
+              .json(formatEventsForMapDisplay(events.filter((e) => e.location))) // format events for map display before sending them to the frontend
+        )
+        .catch((error) => res.status(500).json({ error }))
+    );
   }
   return res
     .status(400)
@@ -36,23 +40,28 @@ const getEvents = (req, res) => {
   const { lat, lng, maxDistance } = req.query;
 
   if (lat && lng) {
-    return Events.find()
-      .populate('location', null, {
-        loc: {
-          $near: {
-            $geometry: {
-              type: 'Point',
-              coordinates: [parseFloat(lng), parseFloat(lat)]
-            },
-            $maxDistance: parseInt(maxDistance ? maxDistance : '0')
+    return (
+      Events.find()
+        // select events by the given coordinates
+        .populate('location', null, {
+          loc: {
+            $near: {
+              $geometry: {
+                type: 'Point',
+                coordinates: [parseFloat(lng), parseFloat(lat)]
+              },
+              $maxDistance: parseInt(maxDistance ? maxDistance : '0')
+            }
           }
-        }
-      })
-      .populate('sport')
-      .populate('organizer')
-      .populate('participants')
-      .then((events) => res.status(200).json(events.filter((e) => e.location)))
-      .catch((error) => res.status(500).json({ error }));
+        })
+        .populate('sport')
+        .populate('organizer')
+        .populate('participants')
+        .then((events) =>
+          res.status(200).json(events.filter((e) => e.location))
+        )
+        .catch((error) => res.status(500).json({ error }))
+    );
   }
 
   return Events.find()
@@ -115,7 +124,12 @@ const addEventParticipant = async (req, res) => {
 
   return Events.findByIdAndUpdate(
     req.params.id,
-    { $push: { participants: participantId } },
+    {
+      $push: {
+        participants: participantId,
+        additional_places: req.body.additionalPlaces // add additional places linked to the participant
+      }
+    },
     { new: true }
   )
     .then((event) => res.status(200).json(event))

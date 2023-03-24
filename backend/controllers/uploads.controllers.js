@@ -17,7 +17,7 @@ const getImage = (req, res) => {
     if (!files[0] || files.length === 0)
       return res.status(404).json({ error: 'this file does not exist' });
 
-    gfs.openDownloadStreamByName(id).pipe(res);
+    gfs.openDownloadStreamByName(id).pipe(res); // pipe the file to the response
   });
 };
 const uploadImage = (req, res) => {

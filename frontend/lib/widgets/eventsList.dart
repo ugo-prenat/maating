@@ -3,7 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maating/models/event.dart';
 import 'package:maating/services/requestManager.dart';
 import 'package:maating/widgets/eventCard.dart';
-
+import 'package:http/http.dart' as http;
 import '../pages/map_page.dart';
 
 class EventsList extends StatefulWidget {
@@ -21,6 +21,8 @@ class EventsList extends StatefulWidget {
 }
 
 class _EventsListState extends State<EventsList> {
+  final _client = http.Client();
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -127,6 +129,7 @@ class _EventsListState extends State<EventsList> {
   }
 
   Future<List<Event>> getEvents(LatLng location) async {
-    return await getEventsByLocation(location, location == defaultCityLocation);
+    return await RequestManager(_client)
+        .getEventsByLocation(location, location == defaultCityLocation);
   }
 }
