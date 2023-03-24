@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/event.dart';
 import '../services/requestManager.dart';
 import 'eventCard.dart';
+import 'package:http/http.dart' as http;
 
 class JoinedEvents extends StatefulWidget {
   const JoinedEvents({super.key});
@@ -13,11 +14,12 @@ class JoinedEvents extends StatefulWidget {
 
 class _JoinedEventsState extends State<JoinedEvents> {
   late Future<List<dynamic>> eventsFuture;
+  final http.Client _client = http.Client();
 
   @override
   void initState() {
     super.initState();
-    eventsFuture = getEventsByOrganizerId("641852e4f92f960c8b1217a8");
+    eventsFuture = RequestManager(_client).getEventsByOrganizerId("641852e4f92f960c8b1217a8");
   }
 
   @override
@@ -42,7 +44,7 @@ class _JoinedEventsState extends State<JoinedEvents> {
               const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
               child: Center(
                 child: FutureBuilder<List<Event>>(
-                  future: getEventWithParticipantId("641852e4f92f960c8b1217a8"),
+                  future: RequestManager(_client).getEventWithParticipantId("641852e4f92f960c8b1217a8"),
                   builder: (
                       BuildContext context,
                       AsyncSnapshot<List<Event>> snapshot,

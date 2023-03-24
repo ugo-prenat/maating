@@ -5,7 +5,7 @@ import 'package:maating/models/sport.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:maating/services/requestManager.dart';
-
+import 'package:http/http.dart' as http;
 
 class CreateEventPage extends StatefulWidget {
   const CreateEventPage({Key? key}) : super(key: key);
@@ -15,6 +15,7 @@ class CreateEventPage extends StatefulWidget {
 }
 
 class _CreateEventPageState extends State<CreateEventPage> {
+  final http.Client _client = http.Client();
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
   late TextEditingController _dateController;
@@ -327,13 +328,14 @@ class _CreateEventPageState extends State<CreateEventPage> {
                         int.tryParse(_maxNbController.text) ?? 0,
                         {'_id': '641852e4f92f960c8b1217a8'},
                         [],
+                        [],
                         _isPrivate,
                         Location('Position Test', _locationController.text, '', LoctSchema('Point', [2.079929589643183,
                           49.045775173520546])
                         ),
                       );
                       print(event.toMap());
-                      postEvent(event);
+                      RequestManager(_client).postEvent(event);
                     }
                   },
                   child: const Text('Valider'),

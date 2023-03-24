@@ -16,6 +16,7 @@ String BACK_URL = getBackendUrl();
 
 class RequestManager {
   http.Client client;
+
   RequestManager(this.client);
 
   /// Get all the events in a given area
@@ -25,7 +26,8 @@ class RequestManager {
   Future<List<dynamic>> getMapEvents(LatLng location, int maxDistance) async {
     final response = await client.get(
       Uri.parse(
-          '$BACK_URL/events/map?lat=${location.latitude}&lng=${location.longitude}&maxDistance=$maxDistance'),
+          '$BACK_URL/events/map?lat=${location.latitude}&lng=${location
+              .longitude}&maxDistance=$maxDistance'),
     );
 
     if (response.statusCode != 200) {
@@ -35,8 +37,8 @@ class RequestManager {
     return jsonDecode(response.body);
   }
 
-Future<List<dynamic>> getEvents() async {
-    final response = await http.get(Uri.parse('http://10.0.2.2:4000/events/'));
+  Future<List<dynamic>> getEvents() async {
+    final response = await http.get(Uri.parse('$BACK_URL/events/'));
     final data = jsonDecode(response.body);
     if (response.statusCode != 200) {
       return throw Exception('Failed to load events');
@@ -44,37 +46,13 @@ Future<List<dynamic>> getEvents() async {
     return data;
   }
 
-Future<List<Event>> getEventsByOrganizerId(String id) async {
-  final response = await http.get(Uri.parse('http://10.0.2.2:4000/events/organizer/${id}'));
-  if (response.statusCode != 200) {
-    return throw Exception('Failed to load events');
-  }
-  List<dynamic> body = jsonDecode(response.body);
-  return body.map((dynamic event) => Event.fromMap(event)).toList();
-}
 
-Future<List<Event>> getEventWithParticipantId(String id) async {
-  final response = await http.get(Uri.parse('http://10.0.2.2:4000/events/participant/${id}'));
-  if (response.statusCode != 200) {
-    return throw Exception('Failed to load events');
-  }
-  List<dynamic> body = jsonDecode(response.body);
-  return body.map((dynamic event) => Event.fromMap(event)).toList();
-}
-
-Future<List<Event>> getEventsByLocation(
-    LatLng location, bool loadAllEvents) async {
-  final response = await http.get(
-    Uri.parse(
-      'http://10.0.2.2:4000/events?lat=${location.latitude}&lng=${location.longitude}${loadAllEvents ? '&maxDistance=$defaultUserMobilityRange' : ''}}',
-    ),
-  );
   /// Get all the events where the user is an organizer
   /// @param {String} id - The id of the user
   /// @returns {List<Event>} The list of events
   Future<List<Event>> getEventsByOrganizerId(String id) async {
     final response =
-        await client.get(Uri.parse('$BACK_URL/events/organizer/${id}'));
+    await client.get(Uri.parse('$BACK_URL/events/organizer/${id}'));
     if (response.statusCode != 200) {
       return throw Exception('Failed to load events');
     }
@@ -87,7 +65,7 @@ Future<List<Event>> getEventsByLocation(
   /// @returns {List<Event>} The list of events
   Future<List<Event>> getEventWithParticipantId(String id) async {
     final response =
-        await client.get(Uri.parse('$BACK_URL/events/participant/${id}'));
+    await client.get(Uri.parse('$BACK_URL/events/participant/${id}'));
     if (response.statusCode != 200) {
       return throw Exception('Failed to load events');
     }
@@ -97,11 +75,14 @@ Future<List<Event>> getEventsByLocation(
 
   /// Get all the events
   /// @returns {List<Event>} The list of events
-  Future<List<Event>> getEventsByLocation(
-      LatLng location, bool loadAllEvents) async {
+  Future<List<Event>> getEventsByLocation(LatLng location,
+      bool loadAllEvents) async {
     final response = await client.get(
       Uri.parse(
-        '$BACK_URL/events?lat=${location.latitude}&lng=${location.longitude}${loadAllEvents ? '&maxDistance=$defaultUserMobilityRange' : ''}}',
+        '$BACK_URL/events?lat=${location.latitude}&lng=${location
+            .longitude}${loadAllEvents
+            ? '&maxDistance=$defaultUserMobilityRange'
+            : ''}}',
       ),
     );
 
@@ -162,8 +143,8 @@ Future<List<Event>> getEventsByLocation(
   /// @param {String} userId - The id of the user
   /// @param {int} additionalPlaces - The number of additional places
   /// @returns {int} The status code of the response
-  Future<int> addUserToEvent(
-      String? eventId, String? userId, int additionalPlaces) async {
+  Future<int> addUserToEvent(String? eventId, String? userId,
+      int additionalPlaces) async {
     Map<String, dynamic> body = {'participantId': userId};
 
     if (additionalPlaces > 0) {
@@ -222,19 +203,20 @@ Future<List<Event>> getEventsByLocation(
       return throw Exception('Failed to upload image');
     }
   }
-}
 
-Future<Event> postEvent(Event event) async {
-  final response = await http.post(
-    Uri.parse('http://10.0.2.2:4000/events'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(event.toMap()),
-  );
-  if (response.statusCode == 201) {
-    return Event.fromMap(jsonDecode(response.body)['event']);
-  } else {
-    return throw Exception('Failed to create Event ${response.body}');
+  Future<Event> postEvent(Event event) async {
+    final response = await http.post(
+      Uri.parse('$BACK_URL/events'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(event.toMap()),
+    );
+    if (response.statusCode == 201) {
+      return Event.fromMap(jsonDecode(response.body)['event']);
+    } else {
+      return throw Exception('Failed to create Event ${response.body}');
+    }
   }
 }
+

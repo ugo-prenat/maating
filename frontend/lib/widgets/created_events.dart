@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maating/services/requestManager.dart';
 import 'package:maating/widgets/eventCard.dart';
+import 'package:http/http.dart' as http;
 
 import '../models/event.dart';
 
@@ -13,11 +14,12 @@ class CreatedEvents extends StatefulWidget {
 
 class _CreatedEventsState extends State<CreatedEvents> {
   late Future<List<dynamic>> eventsFuture;
+  final http.Client _client = http.Client();
 
   @override
   void initState() {
     super.initState();
-    eventsFuture = getEventsByOrganizerId("641852e4f92f960c8b1217a8");
+    eventsFuture = RequestManager(_client).getEventsByOrganizerId("641852e4f92f960c8b1217a8");
   }
 
   @override
@@ -45,7 +47,7 @@ class _CreatedEventsState extends State<CreatedEvents> {
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Center(
                       child: FutureBuilder<List<Event>>(
-                        future: getEventsByOrganizerId("641852e4f92f960c8b1217a8"),
+                        future: RequestManager(_client).getEventsByOrganizerId("641852e4f92f960c8b1217a8"),
                         builder: (
                             BuildContext context,
                             AsyncSnapshot<List<Event>> snapshot,
