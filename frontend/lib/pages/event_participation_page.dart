@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maating/models/event.dart';
 import 'package:maating/models/user.dart';
+import 'package:maating/pages/main_page.dart';
 import 'package:maating/pages/map_page.dart';
 import 'package:maating/utils/eventUtils.dart';
 import 'package:maating/services/requestManager.dart';
@@ -235,14 +236,14 @@ class _EventParticpantsPageState extends State<EventParticipationPage> {
                   RequestManager(_client)
                       .addUserToEvent(
                         widget.event.id,
-                        fakeUser.id,
+                        widget.user.id,
                         _additionalPlacesNb,
                       )
                       .then((statusCode) => statusCode == 200
                           ? Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const MapPage(
+                                builder: (context) => const MainPage(
                                   successMsg: 'Inscription enregistrée',
                                 ),
                               ),
