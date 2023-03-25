@@ -32,23 +32,78 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<List<dynamic>>(
-        future: getMapEvents(eventsLocation, defaultUserMobilityRange),
-        builder: (
-          BuildContext context,
-          AsyncSnapshot<List<dynamic>> snapshot,
-        ) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return LoadingContent();
-          }
-          if (snapshot.hasData) {
-            return MapAndPanel(
-              events: snapshot.data!,
-            );
-          } else {
-            return const Text('Une erreur est survenue');
-          }
-        },
+      body: Stack(
+        children: <Widget>[
+          Positioned(
+            child: FutureBuilder<List<dynamic>>(
+                future: getMapEvents(eventsLocation, defaultUserMobilityRange),
+                builder: (
+                    BuildContext context,
+                    AsyncSnapshot<List<dynamic>> snapshot,
+                    ) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return LoadingContent();
+                  }
+                  if (snapshot.hasData) {
+                    return MapAndPanel(
+                      events: snapshot.data!,
+                    );
+                  } else {
+                    return const Text('Une erreur est survenue');
+                  }
+                },
+              ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 50),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'lib/assets/logo_maating_map.png',
+                  fit: BoxFit.contain,
+                  width: 40,
+                  height: 40,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: SizedBox(
+                    width: 280,
+                    height: 40,
+                    child: TextField(
+                      readOnly: true,
+                      onTap: () {},
+                      cursorColor: const Color(0xFF2196F3),
+                      decoration: InputDecoration(
+                          prefixIcon: IconButton(
+                            icon: const Icon(Icons.search_sharp),
+                            onPressed: (){},
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 15.0),
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: 'Rechercher...',
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Color(0xFF2196F3)),
+                            borderRadius: BorderRadius.circular(10),
+                          )
+                      ),
+                    ),
+                  ),
+                ),
+                IconButton(
+                  onPressed: (){},
+                  icon: Image.asset(
+                    'lib/assets/bell_icon.png',
+                    fit: BoxFit.contain,
+                    width: 40,
+                    height: 40,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

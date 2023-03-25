@@ -70,6 +70,8 @@ flutter:
     - lib/assets/logo_maating.png
     - lib/assets/google.png
     - lib/assets/arrow_right.png
+    - lib/assets/logo_maating_map.png
+    - lib/assets/bell_icon.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
