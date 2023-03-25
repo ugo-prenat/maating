@@ -7,6 +7,7 @@ import 'package:maating/pages/event_participants_page.dart';
 import 'package:maating/pages/event_participation_page.dart';
 import 'package:maating/services/requestManager.dart';
 import 'package:maating/utils/eventUtils.dart';
+import 'package:http/http.dart' as http;
 
 class EventPage extends StatefulWidget {
   const EventPage({
@@ -21,6 +22,7 @@ class EventPage extends StatefulWidget {
 }
 
 class _EventPageState extends State<EventPage> {
+  final _client = http.Client();
   @override
   Widget build(BuildContext context) {
     const levels = <String>[
@@ -42,7 +44,7 @@ class _EventPageState extends State<EventPage> {
 
     return Scaffold(
       body: FutureBuilder<User>(
-        future: getUser(userId),
+        future: RequestManager(_client).getUser(userId),
         builder: (
           BuildContext context,
           AsyncSnapshot<User> snapshot,

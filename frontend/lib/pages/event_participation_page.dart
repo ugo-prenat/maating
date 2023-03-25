@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:maating/models/event.dart';
 import 'package:maating/models/user.dart';
+import 'package:maating/pages/main_page.dart';
 import 'package:maating/pages/map_page.dart';
 import 'package:maating/utils/eventUtils.dart';
 import 'package:maating/services/requestManager.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
 class EventParticipationPage extends StatefulWidget {
   const EventParticipationPage({
@@ -22,6 +24,7 @@ class EventParticipationPage extends StatefulWidget {
 }
 
 class _EventParticpantsPageState extends State<EventParticipationPage> {
+  final _client = http.Client();
   int _additionalPlacesNb = 0;
 
   @override
@@ -230,16 +233,17 @@ class _EventParticpantsPageState extends State<EventParticipationPage> {
         onPressed: invalidNb
             ? null
             : () => {
-                  addUserToEvent(
-                    widget.event.id,
-                    widget.user.id,
-                    _additionalPlacesNb,
-                  )
+                  RequestManager(_client)
+                      .addUserToEvent(
+                        widget.event.id,
+                        widget.user.id,
+                        _additionalPlacesNb,
+                      )
                       .then((statusCode) => statusCode == 200
                           ? Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const MapPage(
+                                builder: (context) => const MainPage(
                                   successMsg: 'Inscription enregistrée',
                                 ),
                               ),

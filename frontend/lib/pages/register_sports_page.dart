@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:maating/main.dart';
 import 'package:maating/models/user.dart';
@@ -19,6 +19,7 @@ class RegisterSportPage extends StatefulWidget {
 }
 
 class _RegisterSportPage extends State<RegisterSportPage> {
+  final _client = http.Client();
   List<SportSchema> sportsToAdd = <SportSchema>[];
   @override
   Widget build(BuildContext context) {
@@ -122,7 +123,8 @@ class _RegisterSportPage extends State<RegisterSportPage> {
                         child: ElevatedButton(
                           onPressed: () async {
                             if (sportsToAdd.isNotEmpty) {
-                              await postUser(User(
+                              await RequestManager(_client)
+                                  .postUser(User(
                                       widget.userFirstInfo[0],
                                       widget.userFirstInfo[1],
                                       widget.userFirstInfo[2],

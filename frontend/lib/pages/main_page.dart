@@ -8,8 +8,9 @@ import '../main.dart';
 import '../services/requestManager.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  const MainPage({super.key, this.successMsg});
 
+  final String? successMsg;
   @override
   State<MainPage> createState() => _MainPageState();
 }
