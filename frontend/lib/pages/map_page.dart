@@ -30,6 +30,14 @@ class _MapPageState extends State<MapPage> {
         {if (widget.successMsg != null) displaySnackBar(widget.successMsg!)});
   }
 
+  var searchController = TextEditingController();
+
+  Icon searchIcon = const Icon(Icons.search_sharp);
+
+  clickTextField() {
+    print(searchController.text.length);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +45,7 @@ class _MapPageState extends State<MapPage> {
         children: <Widget>[
           Positioned(
             child: FutureBuilder<List<dynamic>>(
-                future: getMapEvents(eventsLocation, defaultUserMobilityRange),
+                future: RequestManager(_client).getMapEvents(eventsLocation, defaultUserMobilityRange),
                 builder: (
                     BuildContext context,
                     AsyncSnapshot<List<dynamic>> snapshot,
@@ -72,13 +80,28 @@ class _MapPageState extends State<MapPage> {
                     width: 280,
                     height: 40,
                     child: TextField(
-                      readOnly: true,
-                      onTap: () {},
+                      controller: searchController,
+                      onChanged: (value) {
+                          setState(() {
+                            if(searchController.text.isNotEmpty) {
+                              searchIcon = const Icon(Icons.cancel);
+                            } else {
+                              searchIcon = const Icon(Icons.search_sharp);
+                            }
+                          });
+                        },
                       cursorColor: const Color(0xFF2196F3),
                       decoration: InputDecoration(
                           prefixIcon: IconButton(
-                            icon: const Icon(Icons.search_sharp),
-                            onPressed: (){},
+                            icon: searchIcon,
+                            onPressed: (){
+                              setState(() {
+                                if(searchController.text.isNotEmpty) {
+                                  searchController.clear();
+                                  searchIcon = const Icon(Icons.search_sharp);
+                                }
+                              });
+                            },
                           ),
                           contentPadding: const EdgeInsets.symmetric(horizontal: 15.0),
                           filled: true,
@@ -89,6 +112,7 @@ class _MapPageState extends State<MapPage> {
                             borderRadius: BorderRadius.circular(10),
                           )
                       ),
+                      onTap: () {},
                     ),
                   ),
                 ),
