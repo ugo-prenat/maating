@@ -41,6 +41,7 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: <Widget>[
           Positioned(
@@ -107,10 +108,10 @@ class _MapPageState extends State<MapPage> {
                           filled: true,
                           fillColor: Colors.white,
                           hintText: 'Rechercher...',
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(color: Color(0xFF2196F3)),
+                          border: OutlineInputBorder(
+                            borderSide:  const BorderSide(color: Color(0xFF2196F3)),
                             borderRadius: BorderRadius.circular(10),
-                          )
+    )
                       ),
                       onTap: () {},
                     ),
