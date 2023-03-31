@@ -2,14 +2,16 @@ require('dotenv').config();
 const figlet = require('figlet');
 const cors = require('cors');
 const express = require('express');
+const morgan = require('morgan');
 
 const mongoose = require('mongoose');
 const db = require('./config/db');
 const routes = require('./routes/export.routes');
-const logger = require('./logger.js');
 
 const app = express();
+app.use(morgan('dev'));
 
+mongoose.set('strictQuery', false);
 mongoose
   .connect(db.mongo.url, { retryWrites: true, w: 'majority' })
   .then(() => {
@@ -25,20 +27,6 @@ const startServer = () => {
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
   app.use(cors());
-
-  app.use((req, res, next) => {
-    res.on('finish', () => {
-      const status = res.statusCode;
-      const log = `${req.method} ${req.originalUrl} - status ${status}`;
-
-      status < 200
-        ? logger.warn(log)
-        : status < 400
-        ? logger.info(log)
-        : logger.error(log);
-    });
-    next();
-  });
 
   app.use('/users', routes.users);
   app.use('/sports', routes.sports);
