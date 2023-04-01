@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => const RegisterPage(),
         '/register2': (context) => const RegisterPage2(userFirstInfo: []),
         '/avatar': (context) => const SelectAvatar(
-              userFirstInfo: [],
+              //userFirstInfo: [],
             ),
         '/map': (context) => const MapPage(),
         '/register_sports': (context) => const RegisterSportPage(
@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           textTheme: GoogleFonts.poppinsTextTheme().copyWith(
               bodyText1: GoogleFonts.poppins(textStyle: textTheme.bodyText1))),
-      home: const HomePage(),
+      home: const SelectAvatar(),
     );
   }
 }

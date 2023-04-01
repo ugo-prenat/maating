@@ -10,9 +10,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
 
 class SelectAvatar extends StatefulWidget {
-  const SelectAvatar({super.key, required this.userFirstInfo});
+  const SelectAvatar({super.key});
 
-  final List<dynamic> userFirstInfo;
+  //, required this.userFirstInfo
+  //final List<dynamic> userFirstInfo;
   @override
   State<SelectAvatar> createState() => _SelectAvatarState();
 }
@@ -24,6 +25,7 @@ class _SelectAvatarState extends State<SelectAvatar> {
   var profilImgController = TextEditingController();
 
   XFile? _image;
+  CroppedFile? croppedImage;
 
   // Call the method in 'picker' variable
   final ImagePicker picker = ImagePicker();
@@ -45,8 +47,7 @@ class _SelectAvatarState extends State<SelectAvatar> {
 
   // Get the image's path and return an edited file
   cropImage({required XFile imageFile}) async {
-    CroppedFile? croppedImage =
-        await ImageCropper().cropImage(sourcePath: imageFile.path, uiSettings: [
+      croppedImage = await ImageCropper().cropImage(sourcePath: imageFile.path, uiSettings: [
       AndroidUiSettings(
         toolbarTitle: 'Modifier l\'image',
         toolbarColor: const Color(0xFF2196F3),
@@ -56,7 +57,14 @@ class _SelectAvatarState extends State<SelectAvatar> {
       IOSUiSettings(title: 'Modifier l\'image')
     ]);
     if (croppedImage == null) return null;
-    return XFile(croppedImage.path);
+    return XFile(croppedImage!.path);
+  }
+
+  clearImage() {
+    setState(() {
+      croppedImage = null;
+      _image = null;
+    });
   }
 
   // Create an animation when modal is display
@@ -139,6 +147,30 @@ class _SelectAvatarState extends State<SelectAvatar> {
                             ),
                             child: const Icon(Icons.add),
                           ),
+                    _image != null
+                    ? Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: IconButton(
+                        icon: Image.asset(
+                            'lib/assets/trash_icon.png',
+                            width: 50,
+                            height: 50,
+                        ),
+                          onPressed: (){
+                            clearImage();
+                          },
+                      ),
+                    ) :
+                        const Text(''),
+
+                    _image != null
+                     ? const Padding(
+                      padding: EdgeInsets.only(top: 30, bottom: 50),
+                      child: Text(
+                        'Valider cet avatar',
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                      ),
+                    ) :
                     const Padding(
                       padding: EdgeInsets.only(top: 30, bottom: 50),
                       child: Text(
@@ -155,20 +187,15 @@ class _SelectAvatarState extends State<SelectAvatar> {
                                 // ignore: use_build_context_synchronously
                                 dynamic urlImage = await RequestManager(_client)
                                     .uploadImage(_image!);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            RegisterSportPage(userFirstInfo: [
-                                              ...widget.userFirstInfo,
-                                              urlImage
-                                            ], sports: const [])));
+                                // Navigator.push
                               } catch (e) {
                                 // ignore: use_build_context_synchronously
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                         content: Text(
-                                            'Une erreur est survenue lors de l\'envoi de l\'image, essayez une autre image, peut-être moins volumineuse')));
+                                            'Une erreur est survenue lors de l\'envoi de l\'image, essayez une autre image, peut-être moins volumineuse')
+                                    )
+                                );
                               }
                             }
                           },
@@ -206,3 +233,17 @@ class _SelectAvatarState extends State<SelectAvatar> {
     );
   }
 }
+
+
+/*
+Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            RegisterSportPage(userFirstInfo: [
+                                              ...widget.userFirstInfo,
+                                              urlImage
+                                            ], sports: const [])
+                                    )
+                                );
+ */
