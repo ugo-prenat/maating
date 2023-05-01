@@ -19,8 +19,8 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 1;
 
   final List<Widget> _children = [
-    LoginPage(),
-    MapPage(),
+    const LoginPage(),
+    const MapPage(),
     UserProfilPage(userId: sp.getString('User')!)
   ];
 
