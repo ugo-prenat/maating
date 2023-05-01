@@ -10,10 +10,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
 
 class SelectAvatar extends StatefulWidget {
-  const SelectAvatar({super.key});
+  const SelectAvatar({super.key, required this.userFirstInfo});
 
-  //, required this.userFirstInfo
-  //final List<dynamic> userFirstInfo;
+
+  final List<dynamic> userFirstInfo;
   @override
   State<SelectAvatar> createState() => _SelectAvatarState();
 }
@@ -187,7 +187,17 @@ class _SelectAvatarState extends State<SelectAvatar> {
                                 // ignore: use_build_context_synchronously
                                 dynamic urlImage = await RequestManager(_client)
                                     .uploadImage(_image!);
-                                // Navigator.push
+                                // ignore: use_build_context_synchronously
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            RegisterSportPage(userFirstInfo: [
+                                              ...widget.userFirstInfo,
+                                              urlImage
+                                            ], sports: const [])
+                                    )
+                                );
                               } catch (e) {
                                 // ignore: use_build_context_synchronously
                                 ScaffoldMessenger.of(context).showSnackBar(

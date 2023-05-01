@@ -170,14 +170,14 @@ class _SportSelectionRegisterPage extends State<SportSelectionRegisterPage> {
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: Padding(
-                              padding: EdgeInsets.only(left: 10, right: 10),
+                              padding: const EdgeInsets.only(left: 10, right: 10),
                               child: DropdownButton<String>(
                                   value: dropdownValueLevel,
                                   underline: Container(),
                                   isExpanded: true,
                                   hint: Text(
                                     levels.first.name.toString(),
-                                    style: TextStyle(color: Colors.grey),
+                                    style: const TextStyle(color: Colors.grey),
                                   ),
                                   items: levels.map<DropdownMenuItem<String>>(
                                       (LevelSchema value) {
