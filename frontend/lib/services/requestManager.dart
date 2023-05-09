@@ -204,16 +204,16 @@ class RequestManager {
     }
   }
 
-  Future<Event> postEvent(Event event) async {
+  Future<http.Response> postEvent(Map<String, dynamic> event) async {
     final response = await http.post(
       Uri.parse('$BACK_URL/events'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(event.toMap()),
+      body: jsonEncode(event),
     );
     if (response.statusCode == 201) {
-      return Event.fromMap(jsonDecode(response.body)['event']);
+      return response;
     } else {
       return throw Exception('Failed to create Event ${response.body}');
     }
