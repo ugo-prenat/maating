@@ -11,8 +11,10 @@ class EventsList extends StatefulWidget {
     super.key,
     required this.eventsLocation,
     required this.updateEventsLocation,
+    required this.search,
   });
 
+  final String search;
   final LatLng eventsLocation;
   final Function updateEventsLocation;
 
@@ -30,7 +32,7 @@ class _EventsListState extends State<EventsList> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: FutureBuilder<List<Event>>(
-          future: getEvents(widget.eventsLocation),
+          future: getEvents(widget.eventsLocation, widget.search),
           builder: (
             BuildContext context,
             AsyncSnapshot<List<Event>> snapshot,
@@ -128,8 +130,8 @@ class _EventsListState extends State<EventsList> {
     );
   }
 
-  Future<List<Event>> getEvents(LatLng location) async {
+  Future<List<Event>> getEvents(LatLng location, String search) async {
     return await RequestManager(_client)
-        .getEventsByLocation(location, location == defaultCityLocation);
+        .getEventsByLocation(location, location == defaultCityLocation, search);
   }
 }

@@ -8,12 +8,14 @@ class EventsListPanel extends StatelessWidget {
   final PanelController panelController;
   final LatLng eventsLocation;
   final Function updateEventsLocation;
+  final String search;
 
   const EventsListPanel({
     Key? key,
     required this.panelController,
     required this.eventsLocation,
     required this.updateEventsLocation,
+    required this.search
   }) : super(key: key);
 
   @override
@@ -40,6 +42,7 @@ class EventsListPanel extends StatelessWidget {
             ),
           ),
           EventsList(
+            search: search,
             eventsLocation: eventsLocation,
             updateEventsLocation: (LatLng newEventsLocation) =>
                 updateEventsLocation(newEventsLocation),

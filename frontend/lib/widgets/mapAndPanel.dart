@@ -11,8 +11,10 @@ class MapAndPanel extends StatefulWidget {
   const MapAndPanel({
     super.key,
     required this.events,
+    required this.search,
   });
 
+  final String search;
   final List<dynamic> events;
 
   @override
@@ -45,6 +47,7 @@ class _MapAndPanelState extends State<MapAndPanel> {
                 updateEventsLocation(newEventsLocation),
           ),
           panel: EventsListPanel(
+            search: widget.search,
             panelController: panelController,
             eventsLocation: eventsLocation,
             updateEventsLocation: (LatLng newEventsLocation) =>

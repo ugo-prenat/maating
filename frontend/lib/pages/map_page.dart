@@ -57,7 +57,7 @@ class _MapPageState extends State<MapPage> {
                 }
                 if (snapshot.hasData) {
                   return MapAndPanel(
-                    events: snapshot.data!,
+                    events: snapshot.data!, search: searchController.text,
                   );
                 } else {
                   return const Text('Une erreur est survenue');
