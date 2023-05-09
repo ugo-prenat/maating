@@ -40,7 +40,7 @@ class _EventsListState extends State<EventsList> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 40),
+                  padding: const EdgeInsets.only(top: 100),
                   child: CircularProgressIndicator(
                     valueColor:
                         AlwaysStoppedAnimation<Color>(Colors.grey[500]!),
@@ -52,7 +52,7 @@ class _EventsListState extends State<EventsList> {
               return Center(
                   child: snapshot.data!.isEmpty
                       ? Padding(
-                          padding: const EdgeInsets.only(top: 40),
+                          padding: const EdgeInsets.only(top: 100),
                           child: Text(
                             'Aucun évènement trouvé',
                             style: TextStyle(
@@ -75,7 +75,7 @@ class _EventsListState extends State<EventsList> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 30),
+          padding: const EdgeInsets.only(top: 70),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

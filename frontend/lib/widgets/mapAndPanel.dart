@@ -33,7 +33,7 @@ class _MapAndPanelState extends State<MapAndPanel> {
 
   @override
   Widget build(BuildContext context) {
-    final panelHeightOpen = MediaQuery.of(context).size.height * 0.8;
+    final panelHeightOpen = MediaQuery.of(context).size.height * 0.75;
     final panelHeightClosed = MediaQuery.of(context).size.height * 0.11;
 
     return Stack(
@@ -54,46 +54,42 @@ class _MapAndPanelState extends State<MapAndPanel> {
                 updateEventsLocation(newEventsLocation),
           ),
           collapsed: Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-              ),
-              child: GestureDetector(
-                onTap: () => {
-                  panelController.isPanelClosed
-                      ? panelController.open()
-                      : panelController.close(),
-                },
-                child: Column(
-                  children: [
-                    const SizedBox(height: 20),
-                    dragHandle(),
-                    const SizedBox(height: 15),
-                    Center(
-                      child: Text(
-                        'Liste des évènements',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey[500],
-                          fontWeight: FontWeight.w500,
-                        ),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            child: GestureDetector(
+              onTap: () => {
+                panelController.isPanelClosed
+                    ? panelController.open()
+                    : panelController.close(),
+              },
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  dragHandle(),
+                  const SizedBox(height: 15),
+                  Center(
+                    child: Text(
+                      'Liste des évènements',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey[500],
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                  ],
-                ),
-              )),
-          /* panelBuilder: (controller) => EventsListPanel(
-            controller: controller,
-            panelController: panelController,
-            eventsLocation: eventsLocation,
-            updateEventsLocation: (LatLng newEventsLocation) =>
-                updateEventsLocation(newEventsLocation),
-          ), */
+                  ),
+                ],
+              ),
+            ),
+          ),
           controller: panelController,
           minHeight: panelHeightClosed,
           maxHeight: panelHeightOpen,
           parallaxEnabled: true,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(20),
+          ),
           parallaxOffset: .5,
         ),
       ],
