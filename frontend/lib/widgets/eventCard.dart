@@ -24,6 +24,21 @@ class _EventCardState extends State<EventCard> {
     initializeDateFormatting();
   }
 
+  IconData _getSportIcon(String sportName) {
+    switch (sportName.toLowerCase()) {
+      case 'football':
+        return Icons.sports_soccer;
+      case 'futsal':
+        return Icons.sports_soccer;
+      case 'kayak':
+        return Icons.kayaking;
+      case 'golf':
+        return Icons.golf_course;
+      default:
+        return Icons.directions_run;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -225,8 +240,8 @@ class _EventCardState extends State<EventCard> {
           ),
           Row(
             children: [
-              const Icon(
-                Icons.sports_soccer,
+              Icon(
+                _getSportIcon(widget.event.sport.name),
                 color: Colors.black,
               ),
               Padding(
