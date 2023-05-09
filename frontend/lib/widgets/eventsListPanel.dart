@@ -5,7 +5,6 @@ import 'package:maating/widgets/eventsList.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class EventsListPanel extends StatelessWidget {
-  final ScrollController controller;
   final PanelController panelController;
   final LatLng eventsLocation;
   final Function updateEventsLocation;
@@ -13,7 +12,6 @@ class EventsListPanel extends StatelessWidget {
   const EventsListPanel({
     Key? key,
     required this.panelController,
-    required this.controller,
     required this.eventsLocation,
     required this.updateEventsLocation,
   }) : super(key: key);
@@ -21,7 +19,6 @@ class EventsListPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ListView(
         padding: const EdgeInsets.only(top: 20),
-        controller: controller,
         children: <Widget>[
           GestureDetector(
             onTap: togglePanel,
