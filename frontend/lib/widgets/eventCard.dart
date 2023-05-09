@@ -55,11 +55,13 @@ class _EventCardState extends State<EventCard> {
           // Card top
           GestureDetector(
             onTap: () {
-              Navigator.pushNamed(
-                context,
-                '/event_page',
-                arguments: widget.event,
-              );
+              widget.event.isPrivate
+                  ? showEventCodeDialog(context)
+                  : Navigator.pushNamed(
+                      context,
+                      '/event_page',
+                      arguments: widget.event,
+                    );
             },
             child: Column(children: [Location(), Places(), DateAndsport()]),
           ),
@@ -320,4 +322,73 @@ class _EventCardState extends State<EventCard> {
           ],
         ),
       );
+
+  showEventCodeDialog(BuildContext context) {
+    TextEditingController codeController = TextEditingController();
+
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            "Cet événement est privé, merci de renseigner le code d'accès.",
+          ),
+          content: SizedBox(
+            width: 300,
+            height: 100,
+            child: TextFormField(
+              key: const Key('codeInput'),
+              controller: codeController,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              textInputAction: TextInputAction.next,
+              maxLength: 40,
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 15.0),
+                filled: true,
+                fillColor: Colors.white,
+                hintText: 'Code d\'accès',
+                counterText: '',
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.white),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.blue),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                errorStyle: const TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              validator: (input) {
+                if (input!.length > 3 &&
+                    input != widget.event.privateCode.toString()) {
+                  return 'Code incorrect.';
+                }
+                return null;
+              },
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: const Text("Annuler"),
+              onPressed: () => Navigator.pop(context),
+            ),
+            TextButton(
+              child: const Text("Rentrer"),
+              onPressed: () => {
+                codeController.text == widget.event.privateCode.toString()
+                    ? Navigator.pushNamed(
+                        context,
+                        '/event_page',
+                        arguments: widget.event,
+                      )
+                    : null
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

@@ -1,7 +1,8 @@
 const Events = require('../models/events.models');
 const {
   isParticipantAlreadyInEvent,
-  formatEventsForMapDisplay
+  formatEventsForMapDisplay,
+  generatePrivateCode
 } = require('../utils/events.utils');
 
 const getMapEvents = (req, res) => {
@@ -121,10 +122,16 @@ const getEventParticipants = (req, res) => {
     .catch((error) => res.status(500).json({ error }));
 };
 const createEvent = (req, res) => {
+  req.body.private_code = req.body.is_private ? generatePrivateCode() : null;
+
   const event = new Events(req.body);
   return event
     .save()
-    .then((event) => res.status(201).json(event))
+    .then((event) =>
+      res
+        .status(201)
+        .json(event.is_private ? { event, code: event.private_code } : event)
+    )
     .catch((error) => res.status(500).json(error));
 };
 const addEventParticipant = async (req, res) => {

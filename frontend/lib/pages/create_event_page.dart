@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:maating/pages/private_event_code_page.dart';
 import 'package:maating/services/requestManager.dart';
 import 'package:http/http.dart' as http;
 import 'package:maating/main.dart';
 
 class CreateEventPage extends StatefulWidget {
   const CreateEventPage({Key? key}) : super(key: key);
-
 
   @override
   State<CreateEventPage> createState() => _CreateEventPageState();
@@ -186,8 +186,8 @@ class _CreateEventPageState extends State<CreateEventPage> {
                               DatePicker.showDatePicker(
                                 context,
                                 onConfirm: (date) {
-                                  final formattedDate = DateFormat('yyyy-MM-dd')
-                                      .format(date);
+                                  final formattedDate =
+                                      DateFormat('yyyy-MM-dd').format(date);
                                   setState(() {
                                     _dateController.text = formattedDate;
                                   });
@@ -214,8 +214,8 @@ class _CreateEventPageState extends State<CreateEventPage> {
                                 context,
                                 showSecondsColumn: false,
                                 onConfirm: (time) {
-                                  final formattedTime = DateFormat('HH:mm')
-                                      .format(time);
+                                  final formattedTime =
+                                      DateFormat('HH:mm').format(time);
                                   setState(() {
                                     _timeController.text = formattedTime;
                                   });
@@ -356,7 +356,8 @@ class _CreateEventPageState extends State<CreateEventPage> {
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Ce champ est requis';
-                          } else if (int.tryParse(value) == null || int.parse(value) < 1) {
+                          } else if (int.tryParse(value) == null ||
+                              int.parse(value) < 1) {
                             return 'Le nombre de participants doit être d\'au moins 1';
                           }
                           return null;
@@ -379,7 +380,8 @@ class _CreateEventPageState extends State<CreateEventPage> {
                           });
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: _isPrivate ? Colors.grey[300] : Colors.blueAccent,
+                          backgroundColor:
+                              _isPrivate ? Colors.grey[300] : Colors.blueAccent,
                         ),
                         child: const Text('Ouvert à tous'),
                       ),
@@ -393,7 +395,8 @@ class _CreateEventPageState extends State<CreateEventPage> {
                           });
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: _isPrivate ? Colors.blueAccent : Colors.grey[300],
+                          backgroundColor:
+                              _isPrivate ? Colors.blueAccent : Colors.grey[300],
                         ),
                         child: const Text('Privé'),
                       ),
@@ -402,7 +405,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                 ),
                 const SizedBox(height: 32),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       List<String> sports = [
                         '64185277f92f960c8b1217a1', // Futsal
@@ -418,23 +421,48 @@ class _CreateEventPageState extends State<CreateEventPage> {
                       ];
                       Map<String, dynamic> event = {
                         'name': _nameController.text,
-                        'date':'${_dateController.text} ${_timeController.text}:00',
+                        'date':
+                            '${_dateController.text} ${_timeController.text}:00',
                         'duration': int.tryParse(_durationController.text) ?? 0,
-                        'price' : double.tryParse(_priceController.text)! * 100,
-                        'description' : _descriptionController.text,
-                        'sport' : sports[_selectedSport - 1],
-                        'level' : _level,
-                        'max_nb' : int.tryParse(_maxNbController.text) ?? 0,
-                        'organizer' : userId,
-                        'participants' : [userId],
-                        'is_private' : _isPrivate,
-                        'location' : locations[_selectedLocation - 1],
-                        'additional_places' : _currentParticipantsController.text == '1'
-                          ? []
-                          : [{'participantId': userId, 'nbPlaces': int.tryParse(_currentParticipantsController.text)! - 1 }]
+                        'price': double.tryParse(_priceController.text)! * 100,
+                        'description': _descriptionController.text,
+                        'sport': sports[_selectedSport - 1],
+                        'level': _level,
+                        'max_nb': int.tryParse(_maxNbController.text) ?? 0,
+                        'organizer': userId,
+                        'participants': [userId],
+                        'is_private': _isPrivate,
+                        'location': locations[_selectedLocation - 1],
+                        'additional_places':
+                            _currentParticipantsController.text == '1'
+                                ? []
+                                : [
+                                    {
+                                      'participantId': userId,
+                                      'nbPlaces': int.tryParse(
+                                              _currentParticipantsController
+                                                  .text)! -
+                                          1
+                                    }
+                                  ]
                       };
-                      RequestManager(_client).postEvent(event);
-                      Navigator.pop(context);
+                      dynamic res =
+                          await RequestManager(_client).postEvent(event);
+
+                      if (_isPrivate) {
+                        // ignore: use_build_context_synchronously
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PrivateEventCodePage(
+                              privateCode: res['code'],
+                            ),
+                          ),
+                        );
+                      } else {
+                        // ignore: use_build_context_synchronously
+                        Navigator.pop(context);
+                      }
                     }
                   },
                   child: const Text('Valider'),

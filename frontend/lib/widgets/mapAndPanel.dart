@@ -33,7 +33,7 @@ class _MapAndPanelState extends State<MapAndPanel> {
 
   @override
   Widget build(BuildContext context) {
-    final panelHeightOpen = MediaQuery.of(context).size.height * 0.75;
+    final panelHeightOpen = MediaQuery.of(context).size.height * 0.70;
     final panelHeightClosed = MediaQuery.of(context).size.height * 0.11;
 
     return Stack(

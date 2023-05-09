@@ -17,7 +17,7 @@ class Event {
   List<dynamic> participants;
   List<dynamic>? additionalPlaces;
   bool isPrivate;
-  String? privateCode;
+  int? privateCode;
   Location location;
 
   Event(
