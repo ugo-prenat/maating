@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:maating/models/event.dart';
-import 'package:maating/models/location.dart';
-import 'package:maating/models/sport.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:maating/services/requestManager.dart';
 import 'package:http/http.dart' as http;
+import 'package:maating/main.dart';
 
 class CreateEventPage extends StatefulWidget {
   const CreateEventPage({Key? key}) : super(key: key);
+
 
   @override
   State<CreateEventPage> createState() => _CreateEventPageState();
@@ -27,8 +26,50 @@ class _CreateEventPageState extends State<CreateEventPage> {
   late TextEditingController _maxNbController;
   late TextEditingController _currentParticipantsController;
 
+  String userId = sp.getString('User') ?? '';
+
   bool _isPrivate = false;
-  int _level = 0;
+  int _level = 1;
+  late int _selectedSport;
+  late int _selectedLocation;
+
+  final List<DropdownMenuItem<int>> _sportDropdownItems = [
+    const DropdownMenuItem<int>(
+      value: 1,
+      child: Text('Futsal'),
+    ),
+    const DropdownMenuItem<int>(
+      value: 2,
+      child: Text('Football'),
+    ),
+    const DropdownMenuItem<int>(
+      value: 3,
+      child: Text('Kayak'),
+    ),
+    const DropdownMenuItem<int>(
+      value: 4,
+      child: Text('Golf'),
+    ),
+  ];
+
+  final List<DropdownMenuItem<int>> _locationDropdownItems = [
+    const DropdownMenuItem<int>(
+      value: 1,
+      child: Text('Go Park'),
+    ),
+    const DropdownMenuItem<int>(
+      value: 2,
+      child: Text('Stade Salif Keita'),
+    ),
+    const DropdownMenuItem<int>(
+      value: 3,
+      child: Text('Stade des Maradas'),
+    ),
+    const DropdownMenuItem<int>(
+      value: 4,
+      child: Text('Rue des Potiers'),
+    ),
+  ];
 
   @override
   void initState() {
@@ -41,7 +82,9 @@ class _CreateEventPageState extends State<CreateEventPage> {
     _locationController = TextEditingController();
     _descriptionController = TextEditingController();
     _maxNbController = TextEditingController();
-    _currentParticipantsController = TextEditingController();
+    _currentParticipantsController = TextEditingController(text: '1');
+    _selectedSport = 1;
+    _selectedLocation = 1;
   }
 
   @override
@@ -58,6 +101,18 @@ class _CreateEventPageState extends State<CreateEventPage> {
     super.dispose();
   }
 
+  void _updateSelectedSport(int? value) {
+    setState(() {
+      _selectedSport = value!;
+    });
+  }
+
+  void _updateSelectedLocation(int? value) {
+    setState(() {
+      _selectedLocation = value!;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,12 +124,23 @@ class _CreateEventPageState extends State<CreateEventPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Text(
-                  'Créer un événement',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                  ),
+                const SizedBox(height: 32),
+                Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    const Text(
+                      'Créer un événement',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 32),
                 TextFormField(
@@ -88,6 +154,21 @@ class _CreateEventPageState extends State<CreateEventPage> {
                   decoration: const InputDecoration(
                     labelText: 'Nom',
                   ),
+                ),
+                const SizedBox(height: 16),
+                DropdownButtonFormField<int>(
+                  value: _selectedSport,
+                  onChanged: _updateSelectedSport,
+                  decoration: const InputDecoration(
+                    labelText: 'Sport',
+                  ),
+                  validator: (value) {
+                    if (value == null) {
+                      return 'Ce champ est requis';
+                    }
+                    return null;
+                  },
+                  items: _sportDropdownItems,
                 ),
                 const SizedBox(height: 16),
                 Row(
@@ -185,17 +266,19 @@ class _CreateEventPageState extends State<CreateEventPage> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                TextFormField(
-                  controller: _locationController,
+                DropdownButtonFormField<int>(
+                  value: _selectedLocation,
+                  onChanged: _updateSelectedLocation,
+                  decoration: const InputDecoration(
+                    labelText: 'Lieu',
+                  ),
                   validator: (value) {
-                    if (value!.isEmpty) {
+                    if (value == null) {
                       return 'Ce champ est requis';
                     }
                     return null;
                   },
-                  decoration: const InputDecoration(
-                    labelText: 'Lieu',
-                  ),
+                  items: _locationDropdownItems,
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
@@ -230,16 +313,16 @@ class _CreateEventPageState extends State<CreateEventPage> {
                   },
                   items: const [
                     DropdownMenuItem<int>(
-                      value: 0,
+                      value: 1,
                       child: Text('Débutant'),
                     ),
                     DropdownMenuItem<int>(
-                      value: 1,
+                      value: 2,
                       child: Text('Intermédiaire'),
                     ),
                     DropdownMenuItem<int>(
-                      value: 2,
-                      child: Text('Expert'),
+                      value: 3,
+                      child: Text('Avancé'),
                     ),
                   ],
                 ),
@@ -269,6 +352,8 @@ class _CreateEventPageState extends State<CreateEventPage> {
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Ce champ est requis';
+                          } else if (int.tryParse(value) == null || int.parse(value) < 1) {
+                            return 'Le nombre de participants doit être d\'au moins 1';
                           }
                           return null;
                         },
@@ -290,8 +375,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                           });
                         },
                         style: ElevatedButton.styleFrom(
-                          primary:
-                          _isPrivate ? Colors.grey[300] : Colors.blueAccent,
+                          backgroundColor: _isPrivate ? Colors.grey[300] : Colors.blueAccent,
                         ),
                         child: const Text('Ouvert à tous'),
                       ),
@@ -305,8 +389,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                           });
                         },
                         style: ElevatedButton.styleFrom(
-                          primary:
-                          _isPrivate ? Colors.blueAccent : Colors.grey[300],
+                          backgroundColor: _isPrivate ? Colors.blueAccent : Colors.grey[300],
                         ),
                         child: const Text('Privé'),
                       ),
@@ -317,25 +400,37 @@ class _CreateEventPageState extends State<CreateEventPage> {
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      final event = Event(
-                        _nameController.text,
-                        '${_dateController.text} ${_timeController.text}:00',
-                        int.tryParse(_durationController.text) ?? 0,
-                        double.tryParse(_priceController.text) ?? 0.0,
-                        _descriptionController.text,
-                        Sport('63bda459ce76925f19d55157','Football'),
-                        _level,
-                        int.tryParse(_maxNbController.text) ?? 0,
-                        {'_id': '641852e4f92f960c8b1217a8'},
-                        [],
-                        [],
-                        _isPrivate,
-                        Location('Position Test', _locationController.text, '', LoctSchema('Point', [2.079929589643183,
-                          49.045775173520546])
-                        ),
-                      );
-                      print(event.toMap());
+                      List<String> sports = [
+                        '64185277f92f960c8b1217a1', // Futsal
+                        '64185272f92f960c8b12179f', // Football
+                        '6418527cf92f960c8b1217a3', // Kayak
+                        '641874ffbbd41bbf75ab4575', // Golf
+                      ];
+                      List<String> locations = [
+                        '641858a6bbbca97efed7d411', // Go Park
+                        '641858e9bbbca97efed7d413', // Stade Salif Keita
+                        '6418590fbbbca97efed7d415', // Stade des Maradas
+                        '64185922bbbca97efed7d417', // Rue des Potiers
+                      ];
+                      Map<String, dynamic> event = {
+                        'name': _nameController.text,
+                        'date':'${_dateController.text} ${_timeController.text}:00',
+                        'duration': int.tryParse(_durationController.text) ?? 0,
+                        'price' : double.tryParse(_priceController.text)! * 100,
+                        'description' : _descriptionController.text,
+                        'sport' : sports[_selectedSport - 1],
+                        'level' : _level,
+                        'max_nb' : int.tryParse(_maxNbController.text) ?? 0,
+                        'organizer' : userId,
+                        'participants' : [userId],
+                        'is_private' : _isPrivate,
+                        'location' : locations[_selectedLocation - 1],
+                        'additional_places' : _currentParticipantsController.text == '1'
+                          ? []
+                          : [{'participantId': userId, 'nbPlaces': int.tryParse(_currentParticipantsController.text)! - 1 }]
+                      };
                       RequestManager(_client).postEvent(event);
+                      Navigator.pop(context);
                     }
                   },
                   child: const Text('Valider'),
