@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maating/models/event.dart';
-import 'package:maating/models/user.dart';
+import 'package:maating/pages/create_event_page.dart';
 import 'package:maating/pages/event_page.dart';
 import 'package:maating/pages/home_page.dart';
 import 'package:maating/pages/register_sports_page.dart';
@@ -12,7 +12,6 @@ import 'package:maating/pages/register_page2.dart';
 import 'package:maating/pages/sports_selection_register_page.dart';
 import 'package:maating/pages/selectAvatar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:maating/pages/user_profil_page.dart';
 
 import 'pages/map_page.dart';
 
@@ -49,6 +48,7 @@ class MyApp extends StatelessWidget {
               sports: [],
             ),
         '/event_page': (context) => EventPage(event: rawEvent),
+        '/create_event': (context) => const CreateEventPage(),
         '/main_page': (context) => const MainPage(),
       },
       theme: ThemeData(
