@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:maating/main.dart';
 import '../models/event.dart';
 import '../services/requestManager.dart';
 import 'eventCard.dart';
@@ -16,10 +16,12 @@ class _JoinedEventsState extends State<JoinedEvents> {
   late Future<List<dynamic>> eventsFuture;
   final http.Client _client = http.Client();
 
+  String userId = sp.getString('User') ?? '';
+
   @override
   void initState() {
     super.initState();
-    eventsFuture = RequestManager(_client).getEventsByOrganizerId("641852e4f92f960c8b1217a8");
+    eventsFuture = RequestManager(_client).getEventsByOrganizerId(userId);
   }
 
   @override
@@ -44,7 +46,7 @@ class _JoinedEventsState extends State<JoinedEvents> {
               const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
               child: Center(
                 child: FutureBuilder<List<Event>>(
-                  future: RequestManager(_client).getEventWithParticipantId("641852e4f92f960c8b1217a8"),
+                  future: RequestManager(_client).getEventWithParticipantId(userId),
                   builder: (
                       BuildContext context,
                       AsyncSnapshot<List<Event>> snapshot,

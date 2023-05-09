@@ -3,6 +3,7 @@ import 'package:maating/services/requestManager.dart';
 import 'package:maating/widgets/eventCard.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:maating/main.dart';
 import '../models/event.dart';
 
 class CreatedEvents extends StatefulWidget {
@@ -16,10 +17,12 @@ class _CreatedEventsState extends State<CreatedEvents> {
   late Future<List<dynamic>> eventsFuture;
   final http.Client _client = http.Client();
 
+  String userId = sp.getString('User') ?? '';
+
   @override
   void initState() {
     super.initState();
-    eventsFuture = RequestManager(_client).getEventsByOrganizerId("641852e4f92f960c8b1217a8");
+    eventsFuture = RequestManager(_client).getEventsByOrganizerId(userId);
   }
 
   @override
@@ -47,7 +50,7 @@ class _CreatedEventsState extends State<CreatedEvents> {
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Center(
                       child: FutureBuilder<List<Event>>(
-                        future: RequestManager(_client).getEventsByOrganizerId("641852e4f92f960c8b1217a8"),
+                        future: RequestManager(_client).getEventsByOrganizerId(userId),
                         builder: (
                             BuildContext context,
                             AsyncSnapshot<List<Event>> snapshot,
