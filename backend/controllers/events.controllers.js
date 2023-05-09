@@ -44,7 +44,7 @@ const getMapEvents = (req, res) => {
 };
 
 const getEvents = (req, res) => {
-  const { lat, lng, maxDistance } = req.query;
+  const { lat, lng, maxDistance, search } = req.query;
 
   if (lat && lng) {
     return (
@@ -65,7 +65,15 @@ const getEvents = (req, res) => {
         .populate('organizer')
         .populate('participants')
         .then((events) =>
-          res.status(200).json(events.filter((e) => e.location))
+          res
+            .status(200)
+            .json(
+              events.filter(
+                (e) =>
+                  e.location &&
+                  e.sport.name.toLowerCase().includes(search.toLowerCase())
+              )
+            )
         )
         .catch((error) => res.status(500).json({ error }))
     );
