@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           textTheme: GoogleFonts.poppinsTextTheme().copyWith(
               bodyText1: GoogleFonts.poppins(textStyle: textTheme.bodyText1))),
-      home: const MapPage(),
+      home: const UserProfilPage(userId: "641852e4f92f960c8b1217a8"),
     );
   }
 }

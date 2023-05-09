@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:maating/models/comment.dart';
 import 'package:maating/utils/filetype.dart';
 import 'package:maating/models/event.dart';
 import 'package:maating/models/sport.dart';
@@ -187,5 +188,36 @@ class RequestManager {
     } else {
       return throw Exception('Failed to upload image');
     }
+  }
+
+  /// Get the comments for an user
+  /// @userId The id of the user for the comments
+  /// Return the list of comments for the user
+  Future<List<Comment>> getCommentsByUserId(String userId) async {
+    final response = await client.get(
+      Uri.parse('$BACK_URL/comments/user/$userId'),
+    );
+
+    if (response.statusCode != 200) {
+      return throw Exception('Failed to load comments');
+    }
+
+    List<dynamic> body = jsonDecode(response.body);
+
+    return body.map((dynamic comment) => Comment.fromMap(comment)).toList();
+  }
+
+  /// Create a new comment
+  /// @param {Comment} comment - The comment to create
+  /// @returns {Comment} The created comment
+  Future<http.Response> postComment(Comment comment) async {
+    final response = await client.post(
+      Uri.parse('$BACK_URL/comments'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(comment.toMap()),
+    );
+    return response;
   }
 }

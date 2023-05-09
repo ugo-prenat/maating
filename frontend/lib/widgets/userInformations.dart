@@ -1,30 +1,40 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
+import 'package:maating/widgets/userCommentsList.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
+import '../main.dart';
+import '../models/comment.dart';
+import '../models/event.dart';
 import '../models/user.dart';
+import '../services/requestManager.dart';
 
 class UserInformations extends StatelessWidget {
   final User user;
   final int nbParticipationsEvent;
   final int nbOrganizationsEvent;
   final List<SportSchema> sports;
+  final PanelController panelController;
+  final client;
 
   const UserInformations(
       {Key? key,
       required this.user,
       required this.nbParticipationsEvent,
       required this.nbOrganizationsEvent,
-      required this.sports})
+      required this.panelController,
+      required this.sports,
+      required this.client})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        UserActivities(user, nbParticipationsEvent, nbOrganizationsEvent),
+        UserActivities(
+            user, nbParticipationsEvent, nbOrganizationsEvent, context),
         const SizedBox(height: 20),
         UserSports(user.sports),
-        RateButton(),
+        sp.getString('User') != user.id! ? RateButton(client) : Container(),
       ],
     );
   }
@@ -32,7 +42,7 @@ class UserInformations extends StatelessWidget {
   /// Widget to display the user activities
 // ignore: non_constant_identifier_names
   Widget UserActivities(
-      User user, int nbParticipationsEvent, int nbOrganizationsEvent) {
+      User user, int nbParticipationsEvent, int nbOrganizationsEvent, context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,14 +100,14 @@ class UserInformations extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 40),
-        UserRating(user),
+        UserRating(user, context),
       ],
     );
   }
 
   /// Widget to display the user ratings
 // ignore: non_constant_identifier_names
-  Widget UserRating(User user) {
+  Widget UserRating(User user, context) {
     if (user.ratingNumber == 0) {
       return SizedBox(
           width: 80,
@@ -138,7 +148,7 @@ class UserInformations extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 4),
                   child: Text(
-                    user.personalRating.toString(),
+                    user.personalRating!.toStringAsFixed(1),
                     style: const TextStyle(
                       fontSize: 20,
                       color: Color(0xFF0085FF),
@@ -159,7 +169,7 @@ class UserInformations extends StatelessWidget {
                         decoration: TextDecoration.underline),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        print("Affichage des avis");
+                        panelController.open();
                       },
                   ),
                 )),
@@ -187,7 +197,7 @@ class UserInformations extends StatelessWidget {
       Center(
           child: SizedBox(
         width: 320,
-        height: 220,
+        height: 180,
         child: ListView.builder(
           itemBuilder: (context, index) {
             return Padding(
@@ -218,15 +228,21 @@ class UserInformations extends StatelessWidget {
 
   /// Widget to the button to rate the user
 // ignore: non_constant_identifier_names
-  Widget RateButton() {
+  Widget RateButton(_client) {
     return Padding(
         padding: const EdgeInsets.only(top: 20),
         child: SizedBox(
           width: 280,
           height: 40,
           child: ElevatedButton(
-            onPressed: () {
-              print("Notation de l'utilisateur");
+            onPressed: () async {
+              await RequestManager(_client).postComment(Comment(
+                  sp.getString('User'),
+                  user.id,
+                  DateTime.now().toString(),
+                  "645a58dd4dc0d080bd98f98a",
+                  3.5,
+                  "Wow, quel bel utilisateur!"));
             },
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,
