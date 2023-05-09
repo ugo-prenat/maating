@@ -46,23 +46,24 @@ class _MapPageState extends State<MapPage> {
         children: <Widget>[
           Positioned(
             child: FutureBuilder<List<dynamic>>(
-                future: RequestManager(_client).getMapEvents(eventsLocation, defaultUserMobilityRange),
-                builder: (
-                    BuildContext context,
-                    AsyncSnapshot<List<dynamic>> snapshot,
-                    ) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return LoadingContent();
-                  }
-                  if (snapshot.hasData) {
-                    return MapAndPanel(
-                      events: snapshot.data!,
-                    );
-                  } else {
-                    return const Text('Une erreur est survenue');
-                  }
-                },
-              ),
+              future: RequestManager(_client).getMapEvents(eventsLocation,
+                  defaultUserMobilityRange, searchController.text),
+              builder: (
+                BuildContext context,
+                AsyncSnapshot<List<dynamic>> snapshot,
+              ) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return LoadingContent();
+                }
+                if (snapshot.hasData) {
+                  return MapAndPanel(
+                    events: snapshot.data!,
+                  );
+                } else {
+                  return const Text('Une erreur est survenue');
+                }
+              },
+            ),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 50),
@@ -83,42 +84,43 @@ class _MapPageState extends State<MapPage> {
                     child: TextField(
                       controller: searchController,
                       onChanged: (value) {
-                          setState(() {
-                            if(searchController.text.isNotEmpty) {
-                              searchIcon = const Icon(Icons.cancel);
-                            } else {
-                              searchIcon = const Icon(Icons.search_sharp);
-                            }
-                          });
-                        },
+                        setState(() {
+                          if (searchController.text.isNotEmpty) {
+                            searchIcon = const Icon(Icons.cancel);
+                          } else {
+                            searchIcon = const Icon(Icons.search_sharp);
+                          }
+                        });
+                      },
                       cursorColor: const Color(0xFF2196F3),
                       decoration: InputDecoration(
                           prefixIcon: IconButton(
                             icon: searchIcon,
-                            onPressed: (){
+                            onPressed: () {
                               setState(() {
-                                if(searchController.text.isNotEmpty) {
+                                if (searchController.text.isNotEmpty) {
                                   searchController.clear();
                                   searchIcon = const Icon(Icons.search_sharp);
                                 }
                               });
                             },
                           ),
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 15.0),
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 15.0),
                           filled: true,
                           fillColor: Colors.white,
                           hintText: 'Rechercher...',
                           border: OutlineInputBorder(
-                            borderSide:  const BorderSide(color: Color(0xFF2196F3)),
+                            borderSide:
+                                const BorderSide(color: Color(0xFF2196F3)),
                             borderRadius: BorderRadius.circular(10),
-    )
-                      ),
+                          )),
                       onTap: () {},
                     ),
                   ),
                 ),
                 IconButton(
-                  onPressed: (){},
+                  onPressed: () {},
                   icon: Image.asset(
                     'lib/assets/bell_icon.png',
                     fit: BoxFit.contain,

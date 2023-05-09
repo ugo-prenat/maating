@@ -23,11 +23,11 @@ class RequestManager {
   /// @param {LatLng} location - The location of the center of the area
   /// @param {int} maxDistance - The maximum distance from the center of the area
   /// @returns {List<Event>} The list of events
-  Future<List<dynamic>> getMapEvents(LatLng location, int maxDistance) async {
+  Future<List<dynamic>> getMapEvents(
+      LatLng location, int maxDistance, String search) async {
     final response = await client.get(
       Uri.parse(
-          '$BACK_URL/events/map?lat=${location.latitude}&lng=${location
-              .longitude}&maxDistance=$maxDistance'),
+          '$BACK_URL/events/map?lat=${location.latitude}&lng=${location.longitude}&maxDistance=$maxDistance&search=$search'),
     );
 
     if (response.statusCode != 200) {
@@ -46,13 +46,12 @@ class RequestManager {
     return data;
   }
 
-
   /// Get all the events where the user is an organizer
   /// @param {String} id - The id of the user
   /// @returns {List<Event>} The list of events
   Future<List<Event>> getEventsByOrganizerId(String id) async {
     final response =
-    await client.get(Uri.parse('$BACK_URL/events/organizer/${id}'));
+        await client.get(Uri.parse('$BACK_URL/events/organizer/${id}'));
     if (response.statusCode != 200) {
       return throw Exception('Failed to load events');
     }
@@ -65,7 +64,7 @@ class RequestManager {
   /// @returns {List<Event>} The list of events
   Future<List<Event>> getEventWithParticipantId(String id) async {
     final response =
-    await client.get(Uri.parse('$BACK_URL/events/participant/${id}'));
+        await client.get(Uri.parse('$BACK_URL/events/participant/${id}'));
     if (response.statusCode != 200) {
       return throw Exception('Failed to load events');
     }
@@ -75,14 +74,11 @@ class RequestManager {
 
   /// Get all the events
   /// @returns {List<Event>} The list of events
-  Future<List<Event>> getEventsByLocation(LatLng location,
-      bool loadAllEvents) async {
+  Future<List<Event>> getEventsByLocation(
+      LatLng location, bool loadAllEvents) async {
     final response = await client.get(
       Uri.parse(
-        '$BACK_URL/events?lat=${location.latitude}&lng=${location
-            .longitude}${loadAllEvents
-            ? '&maxDistance=$defaultUserMobilityRange'
-            : ''}}',
+        '$BACK_URL/events?lat=${location.latitude}&lng=${location.longitude}${loadAllEvents ? '&maxDistance=$defaultUserMobilityRange' : ''}}',
       ),
     );
 
@@ -143,8 +139,8 @@ class RequestManager {
   /// @param {String} userId - The id of the user
   /// @param {int} additionalPlaces - The number of additional places
   /// @returns {int} The status code of the response
-  Future<int> addUserToEvent(String? eventId, String? userId,
-      int additionalPlaces) async {
+  Future<int> addUserToEvent(
+      String? eventId, String? userId, int additionalPlaces) async {
     Map<String, dynamic> body = {'participantId': userId};
 
     if (additionalPlaces > 0) {
@@ -219,4 +215,3 @@ class RequestManager {
     }
   }
 }
-

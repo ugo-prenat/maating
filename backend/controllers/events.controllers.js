@@ -5,7 +5,7 @@ const {
 } = require('../utils/events.utils');
 
 const getMapEvents = (req, res) => {
-  const { lat, lng, maxDistance } = req.query;
+  const { lat, lng, maxDistance, search } = req.query;
 
   if (lat && lng && maxDistance) {
     return (
@@ -22,11 +22,18 @@ const getMapEvents = (req, res) => {
             }
           }
         })
-        .then(
-          (events) =>
-            res
-              .status(200)
-              .json(formatEventsForMapDisplay(events.filter((e) => e.location))) // format events for map display before sending them to the frontend
+        .populate('sport')
+        .then((events) =>
+          res.status(200).json(
+            // format events for map display before sending them to the frontend
+            formatEventsForMapDisplay(
+              events.filter(
+                (e) =>
+                  e.location &&
+                  e.sport.name.toLowerCase().includes(search.toLowerCase())
+              )
+            )
+          )
         )
         .catch((error) => res.status(500).json({ error }))
     );
