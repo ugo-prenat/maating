@@ -111,7 +111,7 @@ class _MapPageState extends State<MapPage> {
                           border: OutlineInputBorder(
                             borderSide:  const BorderSide(color: Color(0xFF2196F3)),
                             borderRadius: BorderRadius.circular(10),
-    )
+                          ),
                       ),
                       onTap: () {},
                     ),

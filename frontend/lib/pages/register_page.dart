@@ -96,7 +96,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             if (input == '') {
                               return 'Veuillez renseignez votre prénom';
                             } else if (input!.length < 3) {
-                              return 'Votre prénom doit comporter \n au moins 3 caractères.';
+                              return 'Votre prénom doit comporter \nau moins 3 caractères.';
                             }
                             return null;
                           },
@@ -166,7 +166,9 @@ class _RegisterPageState extends State<RegisterPage> {
                             suffixIcon: Padding(
                               padding: EdgeInsetsDirectional.zero,
                               child: IconButton(
-                                icon: const Icon(Icons.remove_red_eye_outlined,
+                                icon: Icon(
+                                    isPasswordVisible ?
+                                    Icons.visibility_off_outlined : Icons.visibility_outlined,
                                     color: Colors.black),
                                 onPressed: () {
                                   showPwd();
@@ -190,9 +192,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                           validator: (input) {
                             if (input == '') {
-                              return 'Veuillez renseignez un mot de\n passe.';
+                              return 'Veuillez renseignez un mot de\npasse.';
                             } else if (input!.length < 6) {
-                              return "Le mot de passe doit contenir \n plus de 5 caractères";
+                              return "Le mot de passe doit contenir \nplus de 5 caractères";
                             }
                             return null;
                           },

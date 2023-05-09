@@ -243,17 +243,3 @@ class _RegisterPage2State extends State<RegisterPage2> {
     );
   }
 }
-
-/*
-Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => SelectAvatar(
-                                        userFirstInfo: [
-                                          ...widget.userFirstInfo,
-                                          birthDate,
-                                          city,
-                                          _currentSliderValue.round()
-                                        ]),
-                                  ));
- */
