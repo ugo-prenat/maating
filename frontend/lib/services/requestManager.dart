@@ -75,10 +75,10 @@ class RequestManager {
   /// Get all the events
   /// @returns {List<Event>} The list of events
   Future<List<Event>> getEventsByLocation(
-      LatLng location, bool loadAllEvents) async {
+      LatLng location, bool loadAllEvents, String search) async {
     final response = await client.get(
       Uri.parse(
-        '$BACK_URL/events?lat=${location.latitude}&lng=${location.longitude}${loadAllEvents ? '&maxDistance=$defaultUserMobilityRange' : ''}}',
+        '$BACK_URL/events?lat=${location.latitude}&lng=${location.longitude}${loadAllEvents ? '&maxDistance=$defaultUserMobilityRange' : ''}&search=$search',
       ),
     );
 
