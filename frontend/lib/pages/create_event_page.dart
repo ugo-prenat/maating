@@ -324,6 +324,10 @@ class _CreateEventPageState extends State<CreateEventPage> {
                       value: 3,
                       child: Text('Avancé'),
                     ),
+                    DropdownMenuItem<int>(
+                      value: 4,
+                      child: Text('Expert'),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 16),
