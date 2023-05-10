@@ -12,10 +12,12 @@ class MapAndPanel extends StatefulWidget {
     super.key,
     required this.events,
     required this.search,
+    required this.openPanel,
   });
 
   final String search;
   final List<dynamic> events;
+  final bool openPanel;
 
   @override
   State<MapAndPanel> createState() => _MapAndPanelState();
@@ -29,6 +31,16 @@ class _MapAndPanelState extends State<MapAndPanel> {
     setState(() {
       eventsLocation = newEventsLocation;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => {
+        if (widget.openPanel) panelController.open(),
+      },
+    );
   }
 
   @override

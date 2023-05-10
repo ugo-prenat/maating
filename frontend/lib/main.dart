@@ -9,6 +9,7 @@ import 'package:maating/pages/login_page.dart';
 import 'package:maating/pages/main_page.dart';
 import 'package:maating/pages/register_page.dart';
 import 'package:maating/pages/register_page2.dart';
+import 'package:maating/pages/reset_pwd_page.dart';
 import 'package:maating/pages/sports_selection_register_page.dart';
 import 'package:maating/pages/selectAvatar.dart';
 import 'package:maating/pages/user_profil_page.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         '/login': (context) => const LoginPage(),
+        '/reset': (context) => const ResetPwdPage(),
         '/register': (context) => const RegisterPage(),
         '/register2': (context) => const RegisterPage2(userFirstInfo: []),
         '/avatar': (context) => const SelectAvatar(

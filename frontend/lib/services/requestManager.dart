@@ -194,6 +194,24 @@ class RequestManager {
     return response;
   }
 
+
+  /// Reset the user's password
+  /// @param {String} email - The email of the user
+  /// @param {String} password - The new user's password
+  /// @param {String} pwdConfirm - The confirmation of the new user's password
+  /// @returns {Response} The response
+  Future<http.Response> resetUserPwd(int id, String password) async {
+    final response = await client.patch(
+      Uri.parse('$BACK_URL/user/id'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({'id': id, 'password': password}),
+    );
+    print('user: ${response.body}');
+    return response;
+  }
+
   /// Upload an image
   /// @param {XFile} uploadImage - The image to upload
   /// @returns {String} The url of the uploaded image
