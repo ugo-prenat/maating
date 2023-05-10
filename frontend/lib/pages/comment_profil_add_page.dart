@@ -26,6 +26,7 @@ class _CommentProfilAddPage extends State<CommentProfilAddPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           Container(
@@ -213,9 +214,7 @@ class _CommentProfilAddPage extends State<CommentProfilAddPage> {
                                         .postComment(newCommment);
                                     displaySnackBar(
                                         "Commentaire posté avec succès", false);
-                                    Navigator.pop(context, () {
-                                      setState(() {});
-                                    });
+                                    Navigator.pop(context);
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(

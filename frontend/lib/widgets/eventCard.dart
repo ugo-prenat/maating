@@ -315,7 +315,8 @@ class _EventCardState extends State<EventCard> {
                         ),
                       ),
                       Text(
-                        widget.event.organizer["personal_rating"].toString(),
+                        widget.event.organizer["personal_rating"]
+                            .toStringAsFixed(1),
                         style: const TextStyle(
                           color: Color(0xFF0085FF),
                           fontWeight: FontWeight.bold,

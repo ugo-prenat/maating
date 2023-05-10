@@ -15,14 +15,15 @@ class UserAndPanel extends StatefulWidget {
       required this.user,
       required this.nbParticipationsEvent,
       required this.nbOrganizationsEvent,
-      required this.onPop,
-      required this.goBack});
+      required this.goBack,
+      required this.onPop});
 
   final bool goBack;
-  final FutureOr onPop;
   final User user;
   final int nbParticipationsEvent;
   final int nbOrganizationsEvent;
+  final VoidCallback onPop;
+
   @override
   State<UserAndPanel> createState() => _UserAndPanelState();
 }
@@ -140,7 +141,7 @@ class _UserAndPanelState extends State<UserAndPanel> {
               panelController: panelController,
               sports: user.sports,
               client: http.Client(),
-              onPop: widget.onPop,
+              onPop: () => widget.onPop(),
             )
           ],
         ),

@@ -60,10 +60,15 @@ class _CommentCardState extends State<CommentCard> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
-                          child: Text(
-                            widget.comment.author['name'],
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 12),
+                          child: SizedBox(
+                            width: 120,
+                            child: Text(
+                              widget.comment.author['name'],
+                              style: const TextStyle(
+                                  overflow: TextOverflow.ellipsis,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14),
+                            ),
                           ),
                         ),
                         Padding(
@@ -74,7 +79,7 @@ class _CommentCardState extends State<CommentCard> {
                                 DateTime.parse(widget.comment.date).timeAgo(),
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 6,
+                                fontSize: 9,
                                 color: Colors.grey,
                                 decoration: TextDecoration.none),
                           ),
@@ -88,11 +93,15 @@ class _CommentCardState extends State<CommentCard> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(right: 10),
-                      child: Text(
-                        widget.comment.event['name'],
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 12,
+                      child: SizedBox(
+                        width: 120,
+                        child: Text(
+                          widget.comment.event['name'],
+                          textAlign: TextAlign.end,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                              overflow: TextOverflow.ellipsis),
                         ),
                       ),
                     ),
@@ -103,9 +112,10 @@ class _CommentCardState extends State<CommentCard> {
                             " - " +
                             DateTime.parse(widget.comment.event['date'])
                                 .timeAgo(),
+                        textAlign: TextAlign.end,
                         style: const TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 6,
+                            fontSize: 9,
                             color: Colors.grey,
                             decoration: TextDecoration.none),
                       ),
