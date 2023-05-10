@@ -3,6 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maating/widgets/mapAndPanel.dart';
 import 'package:http/http.dart' as http;
 import '../services/requestManager.dart';
+import 'dart:async';
 
 const LatLng defaultCityLocation = LatLng(49.035617, 2.060325);
 const int defaultUserMobilityRange = 10000;
@@ -22,6 +23,13 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   final _client = http.Client();
   LatLng eventsLocation = defaultCityLocation;
+  Timer? _debounce;
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -85,12 +93,16 @@ class _MapPageState extends State<MapPage> {
                     child: TextField(
                       controller: searchController,
                       onChanged: (value) {
-                        setState(() {
-                          if (searchController.text.isNotEmpty) {
-                            searchIcon = const Icon(Icons.cancel);
-                          } else {
-                            searchIcon = const Icon(Icons.search_sharp);
-                          }
+                        if (_debounce?.isActive ?? false) _debounce?.cancel();
+                        _debounce =
+                            Timer(const Duration(milliseconds: 500), () {
+                          setState(() {
+                            if (searchController.text.isNotEmpty) {
+                              searchIcon = const Icon(Icons.cancel);
+                            } else {
+                              searchIcon = const Icon(Icons.search_sharp);
+                            }
+                          });
                         });
                       },
                       cursorColor: const Color(0xFF2196F3),
