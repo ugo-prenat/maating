@@ -11,8 +11,10 @@ class MapAndPanel extends StatefulWidget {
   const MapAndPanel({
     super.key,
     required this.events,
+    required this.search,
   });
 
+  final String search;
   final List<dynamic> events;
 
   @override
@@ -31,7 +33,7 @@ class _MapAndPanelState extends State<MapAndPanel> {
 
   @override
   Widget build(BuildContext context) {
-    final panelHeightOpen = MediaQuery.of(context).size.height * 0.8;
+    final panelHeightOpen = MediaQuery.of(context).size.height * 0.70;
     final panelHeightClosed = MediaQuery.of(context).size.height * 0.11;
 
     return Stack(
@@ -44,23 +46,64 @@ class _MapAndPanelState extends State<MapAndPanel> {
             updateEventsLocation: (LatLng newEventsLocation) =>
                 updateEventsLocation(newEventsLocation),
           ),
-          panelBuilder: (controller) => EventsListPanel(
-            controller: controller,
+          panel: EventsListPanel(
+            search: widget.search,
             panelController: panelController,
             eventsLocation: eventsLocation,
             updateEventsLocation: (LatLng newEventsLocation) =>
                 updateEventsLocation(newEventsLocation),
           ),
+          collapsed: Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            child: GestureDetector(
+              onTap: () => {
+                panelController.isPanelClosed
+                    ? panelController.open()
+                    : panelController.close(),
+              },
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  dragHandle(),
+                  const SizedBox(height: 15),
+                  Center(
+                    child: Text(
+                      'Liste des évènements',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey[500],
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
           controller: panelController,
           minHeight: panelHeightClosed,
           maxHeight: panelHeightOpen,
-          borderRadius: const BorderRadius.vertical(
-            top: Radius.circular(13),
-          ),
           parallaxEnabled: true,
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(20),
+          ),
           parallaxOffset: .5,
         ),
       ],
     );
   }
+
+  Widget dragHandle() => Center(
+        child: Container(
+          height: 5,
+          width: 40,
+          decoration: BoxDecoration(
+            color: Colors.grey[300],
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+      );
 }

@@ -28,8 +28,11 @@ const groupEventsByLoc = (array, property) => {
   return hash;
 };
 
+const generatePrivateCode = () => Math.floor(1000 + Math.random() * 9000);
+
 module.exports = {
   isParticipantAlreadyInEvent,
   formatEventsForMapDisplay,
-  groupEventsByLoc
+  groupEventsByLoc,
+  generatePrivateCode
 };

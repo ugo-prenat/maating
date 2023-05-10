@@ -11,8 +11,10 @@ class EventsList extends StatefulWidget {
     super.key,
     required this.eventsLocation,
     required this.updateEventsLocation,
+    required this.search,
   });
 
+  final String search;
   final LatLng eventsLocation;
   final Function updateEventsLocation;
 
@@ -30,7 +32,7 @@ class _EventsListState extends State<EventsList> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: FutureBuilder<List<Event>>(
-          future: getEvents(widget.eventsLocation),
+          future: getEvents(widget.eventsLocation, widget.search),
           builder: (
             BuildContext context,
             AsyncSnapshot<List<Event>> snapshot,
@@ -38,7 +40,7 @@ class _EventsListState extends State<EventsList> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 40),
+                  padding: const EdgeInsets.only(top: 100),
                   child: CircularProgressIndicator(
                     valueColor:
                         AlwaysStoppedAnimation<Color>(Colors.grey[500]!),
@@ -50,7 +52,7 @@ class _EventsListState extends State<EventsList> {
               return Center(
                   child: snapshot.data!.isEmpty
                       ? Padding(
-                          padding: const EdgeInsets.only(top: 40),
+                          padding: const EdgeInsets.only(top: 100),
                           child: Text(
                             'Aucun évènement trouvé',
                             style: TextStyle(
@@ -73,7 +75,7 @@ class _EventsListState extends State<EventsList> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 30),
+          padding: const EdgeInsets.only(top: 70),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -128,8 +130,8 @@ class _EventsListState extends State<EventsList> {
     );
   }
 
-  Future<List<Event>> getEvents(LatLng location) async {
+  Future<List<Event>> getEvents(LatLng location, String search) async {
     return await RequestManager(_client)
-        .getEventsByLocation(location, location == defaultCityLocation);
+        .getEventsByLocation(location, location == defaultCityLocation, search);
   }
 }

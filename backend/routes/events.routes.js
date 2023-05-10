@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get('/', controller.getEvents);
 router.get('/map', controller.getMapEvents);
+router.get('/shared', controller.getSharedEvents);
 router.get('/:id', controller.getEvent);
 router.get('/organizer/:id', controller.getEventByOrganizerId);
 router.get('/participant/:id', controller.getEventWithParticipantId);

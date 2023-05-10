@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:maating/models/location.dart';
 import 'package:maating/models/sport.dart';
 
@@ -15,7 +17,7 @@ class Event {
   List<dynamic> participants;
   List<dynamic>? additionalPlaces;
   bool isPrivate;
-  String? privateCode;
+  int? privateCode;
   Location location;
 
   Event(
@@ -43,7 +45,7 @@ class Event {
       "duration": duration,
       "price": price,
       "description": description,
-      "sport": sport,
+      "sport": sport.toMap(),
       "level": level,
       "max_nb": maxNb,
       "organizer": organizer,
@@ -51,9 +53,11 @@ class Event {
       "additional_places": additionalPlaces,
       "is_private": isPrivate,
       "private_code": privateCode,
-      "location": location
+      "location": location.toMap()
     };
   }
+
+  String toJson() => json.encode(toMap());
 
   Event.fromMap(Map<String, dynamic> map)
       : id = map["_id"],

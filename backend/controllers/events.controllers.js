@@ -1,11 +1,14 @@
 const Events = require('../models/events.models');
+const Comments = require('../models/comments.models');
+
 const {
   isParticipantAlreadyInEvent,
-  formatEventsForMapDisplay
+  formatEventsForMapDisplay,
+  generatePrivateCode
 } = require('../utils/events.utils');
 
 const getMapEvents = (req, res) => {
-  const { lat, lng, maxDistance } = req.query;
+  const { lat, lng, maxDistance, search } = req.query;
 
   if (lat && lng && maxDistance) {
     return (
@@ -22,11 +25,18 @@ const getMapEvents = (req, res) => {
             }
           }
         })
-        .then(
-          (events) =>
-            res
-              .status(200)
-              .json(formatEventsForMapDisplay(events.filter((e) => e.location))) // format events for map display before sending them to the frontend
+        .populate('sport')
+        .then((events) =>
+          res.status(200).json(
+            // format events for map display before sending them to the frontend
+            formatEventsForMapDisplay(
+              events.filter(
+                (e) =>
+                  e.location &&
+                  e.sport.name.toLowerCase().includes(search.toLowerCase())
+              )
+            )
+          )
         )
         .catch((error) => res.status(500).json({ error }))
     );
@@ -37,7 +47,7 @@ const getMapEvents = (req, res) => {
 };
 
 const getEvents = (req, res) => {
-  const { lat, lng, maxDistance } = req.query;
+  const { lat, lng, maxDistance, search } = req.query;
 
   if (lat && lng) {
     return (
@@ -58,7 +68,15 @@ const getEvents = (req, res) => {
         .populate('organizer')
         .populate('participants')
         .then((events) =>
-          res.status(200).json(events.filter((e) => e.location))
+          res
+            .status(200)
+            .json(
+              events.filter(
+                (e) =>
+                  e.location &&
+                  e.sport.name.toLowerCase().includes(search.toLowerCase())
+              )
+            )
         )
         .catch((error) => res.status(500).json({ error }))
     );
@@ -106,10 +124,16 @@ const getEventParticipants = (req, res) => {
     .catch((error) => res.status(500).json({ error }));
 };
 const createEvent = (req, res) => {
+  req.body.private_code = req.body.is_private ? generatePrivateCode() : null;
+
   const event = new Events(req.body);
   return event
     .save()
-    .then((event) => res.status(201).json(event))
+    .then((event) =>
+      res
+        .status(201)
+        .json(event.is_private ? { event, code: event.private_code } : event)
+    )
     .catch((error) => res.status(500).json(error));
 };
 const addEventParticipant = async (req, res) => {
@@ -145,6 +169,25 @@ const deleteEvent = (req, res) => {
     .then((event) => res.status(200).json(event))
     .catch((error) => res.status(500).json({ error }));
 };
+const getSharedEvents = async (req, res) => {
+  const { user, author } = req.query;
+
+  const alreadyRatedEvents = await Comments.find({ author, user }).then(
+    (comments) => comments.map((c) => c.event)
+  );
+
+  return Events.find({ participants: { $all: [user, author] } })
+    .populate('sport')
+    .populate('organizer')
+    .populate('participants')
+    .populate('location')
+    .then((events) =>
+      res
+        .status(200)
+        .json(events.filter((event) => !alreadyRatedEvents.includes(event._id)))
+    )
+    .catch((error) => res.status(500).json({ error }));
+};
 
 module.exports = {
   getEvents,
@@ -156,5 +199,6 @@ module.exports = {
   createEvent,
   addEventParticipant,
   updateEvent,
-  deleteEvent
+  deleteEvent,
+  getSharedEvents
 };
