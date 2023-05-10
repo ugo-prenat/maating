@@ -170,7 +170,6 @@ const deleteEvent = (req, res) => {
 const getSharedEvents = (req, res) => {
   const { ids } = req.query;
   const [user1, user2] = ids.split(',');
-  console.log({ user1, user2 });
 
   return Events.find({ participants: { $all: [user1, user2] } })
     .populate('sport')
