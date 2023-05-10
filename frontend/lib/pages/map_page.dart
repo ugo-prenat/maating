@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maating/widgets/mapAndPanel.dart';
 import 'package:http/http.dart' as http;
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../services/requestManager.dart';
 import 'dart:async';
 
@@ -34,8 +35,11 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) =>
-        {if (widget.successMsg != null) displaySnackBar(widget.successMsg!)});
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => {
+        if (widget.successMsg != null) displaySnackBar(widget.successMsg!),
+      },
+    );
   }
 
   var searchController = TextEditingController();
@@ -67,6 +71,7 @@ class _MapPageState extends State<MapPage> {
                   return MapAndPanel(
                     events: snapshot.data!,
                     search: searchController.text,
+                    openPanel: searchController.text.isNotEmpty,
                   );
                 } else {
                   return const Text('Une erreur est survenue');
