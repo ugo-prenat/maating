@@ -16,16 +16,18 @@ String BACK_URL = getBackendUrl();
 
 class RequestManager {
   http.Client client;
+
   RequestManager(this.client);
 
   /// Get all the events in a given area
   /// @param {LatLng} location - The location of the center of the area
   /// @param {int} maxDistance - The maximum distance from the center of the area
   /// @returns {List<Event>} The list of events
-  Future<List<dynamic>> getMapEvents(LatLng location, int maxDistance) async {
+  Future<List<dynamic>> getMapEvents(
+      LatLng location, int maxDistance, String search) async {
     final response = await client.get(
       Uri.parse(
-          '$BACK_URL/events/map?lat=${location.latitude}&lng=${location.longitude}&maxDistance=$maxDistance'),
+          '$BACK_URL/events/map?lat=${location.latitude}&lng=${location.longitude}&maxDistance=$maxDistance&search=$search'),
     );
 
     if (response.statusCode != 200) {
@@ -33,6 +35,15 @@ class RequestManager {
     }
 
     return jsonDecode(response.body);
+  }
+
+  Future<List<dynamic>> getEvents() async {
+    final response = await http.get(Uri.parse('$BACK_URL/events/'));
+    final data = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      return throw Exception('Failed to load events');
+    }
+    return data;
   }
 
   /// Get all the events where the user is an organizer
@@ -64,10 +75,10 @@ class RequestManager {
   /// Get all the events
   /// @returns {List<Event>} The list of events
   Future<List<Event>> getEventsByLocation(
-      LatLng location, bool loadAllEvents) async {
+      LatLng location, bool loadAllEvents, String search) async {
     final response = await client.get(
       Uri.parse(
-        '$BACK_URL/events?lat=${location.latitude}&lng=${location.longitude}${loadAllEvents ? '&maxDistance=$defaultUserMobilityRange' : ''}}',
+        '$BACK_URL/events?lat=${location.latitude}&lng=${location.longitude}${loadAllEvents ? '&maxDistance=$defaultUserMobilityRange' : ''}&search=$search',
       ),
     );
 
@@ -204,6 +215,21 @@ class RequestManager {
       return jsonDecode(await res.stream.bytesToString())["url"];
     } else {
       return throw Exception('Failed to upload image');
+    }
+  }
+
+  Future<dynamic> postEvent(Map<String, dynamic> event) async {
+    final response = await http.post(
+      Uri.parse('$BACK_URL/events'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(event),
+    );
+    if (response.statusCode == 201) {
+      return jsonDecode(response.body);
+    } else {
+      return throw Exception('Failed to create Event ${response.body}');
     }
   }
 }

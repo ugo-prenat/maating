@@ -22,7 +22,7 @@ const schema = new mongoose.Schema(
     participants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     additional_places: [AdditionalPlacesSchema],
     is_private: { type: Boolean, required: true },
-    private_code: { type: String },
+    private_code: { type: Number },
     location: { type: mongoose.Schema.Types.ObjectId, ref: 'Location' }
   },
   { versionKey: false }
