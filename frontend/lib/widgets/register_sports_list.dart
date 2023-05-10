@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:maating/models/user.dart';
-import 'package:maating/pages/register_sports_page.dart';
 
 List<LevelSchema> levels = <LevelSchema>[
   LevelSchema("Débutant", 0),

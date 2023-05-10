@@ -12,6 +12,7 @@ import 'package:maating/pages/register_page2.dart';
 import 'package:maating/pages/reset_pwd_page.dart';
 import 'package:maating/pages/sports_selection_register_page.dart';
 import 'package:maating/pages/selectAvatar.dart';
+import 'package:maating/pages/user_profil_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'pages/map_page.dart';

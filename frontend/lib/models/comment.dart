@@ -1,20 +1,22 @@
+import 'package:maating/models/event.dart';
+import 'package:maating/models/user.dart';
+
 class Comment {
   String? id;
-  String authorId;
-  String userId;
+  dynamic author;
+  dynamic user;
   String date;
-  String event;
-  int note;
+  dynamic event;
+  double note;
   String body;
 
-  Comment(
-      this.authorId, this.userId, this.date, this.event, this.note, this.body,
+  Comment(this.author, this.user, this.date, this.event, this.note, this.body,
       [this.id]);
 
   Map<String, dynamic> toMap() {
     return {
-      "author": authorId,
-      "user": userId,
+      "author": author,
+      "user": user,
       "date": date,
       "event": event,
       "note": note,
@@ -23,11 +25,11 @@ class Comment {
   }
 
   Comment.fromMap(Map<String, dynamic> map)
-      : id = map["_id"],
-        authorId = map["author"],
-        userId = map["user"],
+      : id = map["_id"].toString(),
+        author = map["author"],
+        user = map["user"],
         date = map["date"],
         event = map["event"],
-        note = map["note"],
+        note = map["note"].toDouble(),
         body = map["body"];
 }

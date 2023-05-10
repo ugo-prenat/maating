@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:maating/models/event.dart';
+import 'package:maating/pages/user_profil_page.dart';
 import 'package:maating/utils/eventUtils.dart';
 import 'package:maating/services/requestManager.dart';
 
@@ -266,7 +267,13 @@ class _EventCardState extends State<EventCard> {
   Widget Organizer() => GestureDetector(
         onTap: () {
           String? userId = widget.event.organizer["_id"];
-          print('go to user page $userId');
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => UserProfilPage(
+                        userId: userId!,
+                        goBack: true,
+                      )));
         },
         child: Row(
           children: [
