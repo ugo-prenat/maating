@@ -1,4 +1,6 @@
 const Events = require('../models/events.models');
+const Comments = require('../models/comments.models');
+
 const {
   isParticipantAlreadyInEvent,
   formatEventsForMapDisplay,
@@ -167,16 +169,23 @@ const deleteEvent = (req, res) => {
     .then((event) => res.status(200).json(event))
     .catch((error) => res.status(500).json({ error }));
 };
-const getSharedEvents = (req, res) => {
-  const { ids } = req.query;
-  const [user1, user2] = ids.split(',');
+const getSharedEvents = async (req, res) => {
+  const { user, author } = req.query;
 
-  return Events.find({ participants: { $all: [user1, user2] } })
+  const alreadyRatedEvents = await Comments.find({ author, user }).then(
+    (comments) => comments.map((c) => c.event)
+  );
+
+  return Events.find({ participants: { $all: [user, author] } })
     .populate('sport')
     .populate('organizer')
     .populate('participants')
     .populate('location')
-    .then((events) => res.status(200).json(events))
+    .then((events) =>
+      res
+        .status(200)
+        .json(events.filter((event) => !alreadyRatedEvents.includes(event._id)))
+    )
     .catch((error) => res.status(500).json({ error }));
 };
 
