@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:maating/pages/comment_profil_add_page.dart';
 import 'package:maating/widgets/userCommentsList.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:test/test.dart';
 import '../main.dart';
 import '../models/comment.dart';
 import '../models/event.dart';
@@ -18,7 +19,7 @@ class UserInformations extends StatelessWidget {
   final List<SportSchema> sports;
   final PanelController panelController;
   final client;
-  final FutureOr onPop;
+  final VoidCallback onPop;
 
   const UserInformations(
       {Key? key,
@@ -247,9 +248,7 @@ class UserInformations extends StatelessWidget {
                 return CommentProfilAddPage(
                   user: user,
                 );
-              })).then((value) {
-                onPop!;
-              });
+              })).then((_) => onPop());
             },
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,

@@ -20,10 +20,6 @@ class _UserProfilPage extends State<UserProfilPage> {
   final _client = http.Client();
   String BACK_URL = getBackendUrl();
 
-  FutureOr onPop(dynamic value) {
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,11 +35,13 @@ class _UserProfilPage extends State<UserProfilPage> {
             }
             if (snapshot.hasData) {
               return UserAndPanel(
-                  onPop: onPop,
                   user: snapshot.data![0],
                   nbParticipationsEvent: snapshot.data![1].length,
                   nbOrganizationsEvent: snapshot.data![2].length,
-                  goBack: widget.goBack);
+                  goBack: widget.goBack,
+                  onPop: () {
+                    setState(() {});
+                  });
             } else {
               return const Text('Une erreur est survenue');
             }
