@@ -335,7 +335,7 @@ class _EventCardState extends State<EventCard> {
           ),
           content: SizedBox(
             width: 300,
-            height: 100,
+            height: 50,
             child: TextFormField(
               key: const Key('codeInput'),
               controller: codeController,
