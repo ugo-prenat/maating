@@ -116,8 +116,14 @@ npm test
 ```
 
 ## Rapport d'incident
-...
+Pour nous signaler un bug ou un comportement anormal sur l'application, rendez-vous sur le Trello Maating disponible [ici](https://trello.com/b/nG3SHypc/maating) et créez une nouvelle carte dans la colonne ":beetle: Bugs".
 
+Pour une meilleur compréhension du problème, il est important de préciser le contexte de votre bug ainsi que fournir des captures d'écrans ou des vidéos.
+
+> **Note**
+>Chaque bug créé sera assigné à un développeur de l'équipe Maating et corrigé dans un délai le plus court possible.
+
+<br>
 <br>
 <br>
 <br>
