@@ -167,6 +167,19 @@ const deleteEvent = (req, res) => {
     .then((event) => res.status(200).json(event))
     .catch((error) => res.status(500).json({ error }));
 };
+const getSharedEvents = (req, res) => {
+  const { ids } = req.query;
+  const [user1, user2] = ids.split(',');
+  console.log({ user1, user2 });
+
+  return Events.find({ participants: { $all: [user1, user2] } })
+    .populate('sport')
+    .populate('organizer')
+    .populate('participants')
+    .populate('location')
+    .then((events) => res.status(200).json(events))
+    .catch((error) => res.status(500).json({ error }));
+};
 
 module.exports = {
   getEvents,
@@ -178,5 +191,6 @@ module.exports = {
   createEvent,
   addEventParticipant,
   updateEvent,
-  deleteEvent
+  deleteEvent,
+  getSharedEvents
 };
