@@ -10,11 +10,9 @@ class UserCommentsList extends StatefulWidget {
     super.key,
     required this.userId,
     required this.panelController,
-    required this.controller,
   });
 
   final String userId;
-  final ScrollController controller;
   final PanelController panelController;
 
   @override
@@ -23,13 +21,9 @@ class UserCommentsList extends StatefulWidget {
 
 class _UserCommentsListState extends State<UserCommentsList> {
   final _client = http.Client();
-  final panelController = PanelController();
 
   @override
   Widget build(BuildContext context) {
-    final panelHeightOpen = MediaQuery.of(context).size.height * 0.8;
-    final panelHeightClosed = MediaQuery.of(context).size.height * 0.0;
-
     return Container(
       color: Colors.white,
       width: double.infinity,
@@ -107,14 +101,15 @@ class _UserCommentsListState extends State<UserCommentsList> {
   Widget ListViewBuilder(List<Comment> comments) {
     return Column(
       children: [
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) => CommentCard(
-            comment: comments[index],
-          ),
-          itemCount: comments.length,
-        ),
+        SizedBox(
+            height: MediaQuery.of(context).size.height * 0.75,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemBuilder: (context, index) => CommentCard(
+                comment: comments[index],
+              ),
+              itemCount: comments.length,
+            )),
       ],
     );
   }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:maating/widgets/userCommentsList.dart';
 import 'package:maating/widgets/userInformations.dart';
@@ -13,8 +15,10 @@ class UserAndPanel extends StatefulWidget {
     required this.user,
     required this.nbParticipationsEvent,
     required this.nbOrganizationsEvent,
+    required this.onPop,
   });
 
+  final FutureOr onPop;
   final User user;
   final int nbParticipationsEvent;
   final int nbOrganizationsEvent;
@@ -39,10 +43,39 @@ class _UserAndPanelState extends State<UserAndPanel> {
             widget.nbParticipationsEvent,
             widget.nbOrganizationsEvent,
           ),
-          panelBuilder: (controller) => UserCommentsList(
+          panel: UserCommentsList(
             userId: widget.user.id!,
-            controller: controller,
             panelController: panelController,
+          ),
+          collapsed: Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            child: GestureDetector(
+              onTap: () => {
+                panelController.isPanelClosed
+                    ? panelController.open()
+                    : panelController.close(),
+              },
+              child: Column(
+                children: [
+                  const SizedBox(height: 30),
+                  dragHandle(),
+                  const SizedBox(height: 15),
+                  Center(
+                    child: Text(
+                      'Liste des avis',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey[500],
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
           controller: panelController,
           minHeight: panelHeightClosed,
@@ -56,6 +89,17 @@ class _UserAndPanelState extends State<UserAndPanel> {
       ],
     );
   }
+
+  Widget dragHandle() => Center(
+        child: Container(
+          height: 5,
+          width: 40,
+          decoration: BoxDecoration(
+            color: Colors.grey[300],
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+      );
 
   /// Widget to display when the user is loaded
   // ignore: non_constant_identifier_names
@@ -95,6 +139,7 @@ class _UserAndPanelState extends State<UserAndPanel> {
               panelController: panelController,
               sports: user.sports,
               client: http.Client(),
+              onPop: widget.onPop,
             )
           ],
         ),

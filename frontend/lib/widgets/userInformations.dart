@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:maating/pages/comment_profil_add_page.dart';
 import 'package:maating/widgets/userCommentsList.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../main.dart';
@@ -15,9 +18,11 @@ class UserInformations extends StatelessWidget {
   final List<SportSchema> sports;
   final PanelController panelController;
   final client;
+  final FutureOr onPop;
 
   const UserInformations(
       {Key? key,
+      required this.onPop,
       required this.user,
       required this.nbParticipationsEvent,
       required this.nbOrganizationsEvent,
@@ -34,7 +39,9 @@ class UserInformations extends StatelessWidget {
             user, nbParticipationsEvent, nbOrganizationsEvent, context),
         const SizedBox(height: 20),
         UserSports(user.sports),
-        sp.getString('User') != user.id! ? RateButton(client) : Container(),
+        sp.getString('User') != user.id!
+            ? RateButton(client, context, user)
+            : Container(),
       ],
     );
   }
@@ -228,7 +235,7 @@ class UserInformations extends StatelessWidget {
 
   /// Widget to the button to rate the user
 // ignore: non_constant_identifier_names
-  Widget RateButton(_client) {
+  Widget RateButton(_client, context, user) {
     return Padding(
         padding: const EdgeInsets.only(top: 20),
         child: SizedBox(
@@ -236,13 +243,13 @@ class UserInformations extends StatelessWidget {
           height: 40,
           child: ElevatedButton(
             onPressed: () async {
-              await RequestManager(_client).postComment(Comment(
-                  sp.getString('User'),
-                  user.id,
-                  DateTime.now().toString(),
-                  "645a58dd4dc0d080bd98f98a",
-                  3.5,
-                  "Wow, quel bel utilisateur!"));
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return CommentProfilAddPage(
+                  user: user,
+                );
+              })).then((value) {
+                onPop!;
+              });
             },
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,

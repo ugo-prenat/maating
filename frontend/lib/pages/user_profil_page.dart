@@ -1,11 +1,10 @@
-import 'package:flutter/gestures.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:maating/main.dart';
-import 'package:maating/models/user.dart';
 import 'package:maating/services/requestManager.dart';
 import 'package:maating/widgets/userAndPanel.dart';
 import '../utils/backendUtils.dart';
-import '../widgets/userInformations.dart';
 import 'package:http/http.dart' as http;
 
 class UserProfilPage extends StatefulWidget {
@@ -19,6 +18,10 @@ class UserProfilPage extends StatefulWidget {
 class _UserProfilPage extends State<UserProfilPage> {
   final _client = http.Client();
   String BACK_URL = getBackendUrl();
+
+  FutureOr onPop(dynamic value) {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +38,7 @@ class _UserProfilPage extends State<UserProfilPage> {
             }
             if (snapshot.hasData) {
               return UserAndPanel(
+                  onPop: onPop,
                   user: snapshot.data![0],
                   nbParticipationsEvent: snapshot.data![1].length,
                   nbOrganizationsEvent: snapshot.data![2].length);

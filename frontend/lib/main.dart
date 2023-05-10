@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:maating/models/event.dart';
-import 'package:maating/models/user.dart';
 import 'package:maating/pages/event_page.dart';
 import 'package:maating/pages/home_page.dart';
 import 'package:maating/pages/register_sports_page.dart';

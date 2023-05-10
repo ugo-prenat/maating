@@ -80,6 +80,24 @@ class RequestManager {
     return body.map((dynamic event) => Event.fromMap(event)).toList();
   }
 
+  /// Get all the events
+  /// @returns {List<Event>} The list of events
+  Future<List<Event>> getEventsPassedInCommon(
+      String userId, String authorId) async {
+    final response = await client.get(
+      Uri.parse(
+        '$BACK_URL/events/shared?user=$userId&author=$authorId',
+      ),
+    );
+
+    if (response.statusCode != 200) {
+      return throw Exception('Failed to load events');
+    }
+    List<dynamic> body = jsonDecode(response.body);
+    print(body);
+    return body.map((dynamic event) => Event.fromMap(event)).toList();
+  }
+
   /// Get all the sports
   /// @returns {List<Sport>} The list of sports
   Future<List<Sport>> getSports() async {
