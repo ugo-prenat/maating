@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:maating/pages/events_page.dart';
 import 'package:maating/pages/map_page.dart';
@@ -36,15 +37,15 @@ class _MainPageState extends State<MainPage> {
         showUnselectedLabels: false,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.event_note),
+            icon: Icon(CupertinoIcons.calendar),
             label: 'Create',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(CupertinoIcons.home),
             label: 'Map',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
+            icon: Icon(CupertinoIcons.profile_circled),
             label: 'Profil',
           ),
         ],
