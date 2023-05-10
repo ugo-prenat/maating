@@ -8,8 +8,9 @@ import '../utils/backendUtils.dart';
 import 'package:http/http.dart' as http;
 
 class UserProfilPage extends StatefulWidget {
-  const UserProfilPage({super.key, required this.userId});
+  const UserProfilPage({super.key, required this.userId, required this.goBack});
 
+  final bool goBack;
   final String userId;
   @override
   State<UserProfilPage> createState() => _UserProfilPage();
@@ -41,7 +42,8 @@ class _UserProfilPage extends State<UserProfilPage> {
                   onPop: onPop,
                   user: snapshot.data![0],
                   nbParticipationsEvent: snapshot.data![1].length,
-                  nbOrganizationsEvent: snapshot.data![2].length);
+                  nbOrganizationsEvent: snapshot.data![2].length,
+                  goBack: widget.goBack);
             } else {
               return const Text('Une erreur est survenue');
             }

@@ -18,7 +18,10 @@ class _MainPageState extends State<MainPage> {
   final List<Widget> _children = [
     EventsPage(),
     MapPage(),
-    UserProfilPage(userId: sp.getString('User')!)
+    UserProfilPage(
+      userId: sp.getString('User')!,
+      goBack: false,
+    )
   ];
 
   void _onItemTapped(int index) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maating/models/event.dart';
+import 'package:maating/pages/user_profil_page.dart';
 import 'package:maating/utils/eventUtils.dart';
 import 'package:maating/utils/backendUtils.dart';
 
@@ -91,7 +92,13 @@ class _EventParticpantsPageState extends State<EventParticipantsPage> {
   Widget ParticipantRow(dynamic participant) {
     return GestureDetector(
       onTap: () => {
-        print('go to profile ${participant["_id"]}'),
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => UserProfilPage(
+                      userId: participant['_id']!,
+                      goBack: true,
+                    )))
       },
       child: Row(children: [
         Padding(

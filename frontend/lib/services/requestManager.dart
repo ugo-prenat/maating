@@ -105,7 +105,6 @@ class RequestManager {
       return throw Exception('Failed to load events');
     }
     List<dynamic> body = jsonDecode(response.body);
-    print(body);
     return body.map((dynamic event) => Event.fromMap(event)).toList();
   }
 

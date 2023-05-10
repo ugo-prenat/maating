@@ -10,14 +10,15 @@ import '../services/requestManager.dart';
 import 'package:http/http.dart' as http;
 
 class UserAndPanel extends StatefulWidget {
-  const UserAndPanel({
-    super.key,
-    required this.user,
-    required this.nbParticipationsEvent,
-    required this.nbOrganizationsEvent,
-    required this.onPop,
-  });
+  const UserAndPanel(
+      {super.key,
+      required this.user,
+      required this.nbParticipationsEvent,
+      required this.nbOrganizationsEvent,
+      required this.onPop,
+      required this.goBack});
 
+  final bool goBack;
   final FutureOr onPop;
   final User user;
   final int nbParticipationsEvent;
@@ -159,7 +160,22 @@ class _UserAndPanelState extends State<UserAndPanel> {
                     size: 40,
                   ),
                 ))
-            : Container()
+            : Container(),
+        widget.goBack == true
+            ? Positioned(
+                left: 5,
+                top: 30,
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.black26,
+                  ),
+                ),
+              )
+            : Container(),
       ]),
     );
   }
