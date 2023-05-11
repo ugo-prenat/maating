@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:maating/main.dart';
 import 'package:maating/models/event.dart';
 import 'package:maating/pages/user_profil_page.dart';
 import 'package:maating/utils/eventUtils.dart';
@@ -56,7 +57,8 @@ class _EventCardState extends State<EventCard> {
           // Card top
           GestureDetector(
             onTap: () {
-              widget.event.isPrivate
+              widget.event.isPrivate &&
+                      widget.event.organizer['_id'] != sp.getString('User')
                   ? showEventCodeDialog(context)
                   : Navigator.pushNamed(
                       context,

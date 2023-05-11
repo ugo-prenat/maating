@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:maating/main.dart';
 import 'package:maating/models/event.dart';
@@ -65,7 +66,41 @@ class _EventPageState extends State<EventPage> {
                 Thumbnail(event.location.thumbnailUrl),
                 const SizedBox(height: 30),
                 EventTitle(event.name),
-                const SizedBox(height: 40),
+                const SizedBox(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      event.privateCode.toString(),
+                      style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF0085FF)),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: GestureDetector(
+                        onTap: () => {
+                          Clipboard.setData(ClipboardData(
+                              text: event.privateCode.toString())),
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              backgroundColor: Colors.green,
+                              content: Text(
+                                'Code copié !',
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          )
+                        },
+                        child: Icon(
+                          Icons.copy,
+                          color: Colors.grey[400],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
                 Places(event, isFull, remainingPlaces),
                 const SizedBox(height: 30),
                 Location(event),
