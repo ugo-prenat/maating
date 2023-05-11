@@ -12,9 +12,13 @@ List<LevelSchema> levels = <LevelSchema>[
 
 class CustomListViewSportsRegister extends StatefulWidget {
   const CustomListViewSportsRegister(
-      {super.key, required this.list, required this.onDeletePressed});
+      {super.key,
+      required this.list,
+      required this.onDeletePressed,
+      required this.onRegister});
 
   final List<SportSchema> list;
+  final bool onRegister;
   final Function(List<SportSchema>) onDeletePressed;
 
   @override
@@ -36,28 +40,36 @@ class _CustomListViewSportsRegister
       return ListView.builder(
         itemBuilder: (context, index) {
           return Padding(
-              padding: const EdgeInsets.only(bottom: 5, left: 77, right: 60),
+              padding: const EdgeInsets.only(bottom: 5, left: 50, right: 50),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "${widget.list[index].sport.name} - ${levels.firstWhere((level) => level.level == widget.list[index].level).name}",
-                    style: const TextStyle(color: Colors.white, fontSize: 18),
+                    style: widget.onRegister
+                        ? const TextStyle(color: Colors.white, fontSize: 18)
+                        : const TextStyle(
+                            color: Color(0xFF0085FF), fontSize: 18),
                   ),
                   SizedBox(
-                    height: 18,
-                    child: IconButton(
+                      height: 18,
+                      child: IconButton(
                         padding: EdgeInsets.zero,
                         iconSize: 18,
                         onPressed: () {
                           widget.list.removeAt(index);
                           widget.onDeletePressed(widget.list);
                         },
-                        icon: Icon(
-                          Icons.close,
-                          color: Colors.white,
-                        )),
-                  )
+                        icon: widget.onRegister
+                            ? Icon(
+                                Icons.close,
+                                color: Colors.white,
+                              )
+                            : Icon(
+                                Icons.close,
+                                color: Color(0xFF0085FF),
+                              ),
+                      ))
                 ],
               ));
         },
