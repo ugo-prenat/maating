@@ -36,7 +36,7 @@ class _EventsPageState extends State<EventsPage> {
                     text: 'Créés',
                   ),
                   Tab(
-                    text: 'Rejoints',
+                    text: 'Rejoins',
                   ),
                 ],
               ),
