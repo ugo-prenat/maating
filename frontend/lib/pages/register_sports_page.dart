@@ -109,6 +109,7 @@ class _RegisterSportPage extends State<RegisterSportPage> {
                       height: 110,
                       width: MediaQuery.of(context).size.width,
                       child: CustomListViewSportsRegister(
+                          onRegister: true,
                           onDeletePressed: (List<SportSchema> newSports) {
                             setState(() {
                               sportsToAdd = newSports;

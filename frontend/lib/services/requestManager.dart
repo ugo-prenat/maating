@@ -137,6 +137,23 @@ class RequestManager {
     return response;
   }
 
+  /// Update an user
+  /// @param {User} user - The user to update
+  /// @returns {User} The user updated
+  Future<http.Response> updateUser(User user, String userId) async {
+    final response = await client.patch(
+      Uri.parse('$BACK_URL/users/$userId'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(user.toMap()),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to load user');
+    }
+    return response;
+  }
+
   /// Get a user by id
   /// @param {String} userId - The id of the user to get
   /// @returns {User} The user
@@ -193,7 +210,6 @@ class RequestManager {
     print('user: ${response.body}');
     return response;
   }
-
 
   /// Reset the user's password
   /// @param {String} email - The email of the user

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:maating/pages/update_profil_page.dart';
 import 'package:maating/widgets/userCommentsList.dart';
 import 'package:maating/widgets/userInformations.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -153,7 +154,12 @@ class _UserAndPanelState extends State<UserAndPanel> {
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   onPressed: () {
-                    print("Update profile");
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => UpdateProfilPage(
+                                  user: user,
+                                ))).then((value) => widget.onPop());
                   },
                   icon: const Icon(
                     Icons.edit_outlined,
