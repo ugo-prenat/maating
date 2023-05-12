@@ -239,6 +239,8 @@ class _CreateEventPageState extends State<CreateEventPage> {
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Ce champ est requis';
+                          } else if (int.parse(value) <= 0) {
+                            return 'Le durée doit être d\'au moins 1';
                           }
                           return null;
                         },
@@ -255,6 +257,8 @@ class _CreateEventPageState extends State<CreateEventPage> {
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Ce champ est requis';
+                          } else if (int.parse(value) < 0){
+                          return 'Le prix ne peut pas être nul.';
                           }
                           return null;
                         },
@@ -340,6 +344,8 @@ class _CreateEventPageState extends State<CreateEventPage> {
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Ce champ est requis';
+                          } else if (int.parse(value) < 1){
+                            return 'Le nombre de participants doit être d\'au moins 1';
                           }
                           return null;
                         },
@@ -357,8 +363,10 @@ class _CreateEventPageState extends State<CreateEventPage> {
                           if (value!.isEmpty) {
                             return 'Ce champ est requis';
                           } else if (int.tryParse(value) == null ||
-                              int.parse(value) < 1) {
+                              int.parse(value) < 1)  {
                             return 'Le nombre de participants doit être d\'au moins 1';
+                          } else if (int.parse(value) > int.parse(_maxNbController.text)) {
+                            return 'Le nombre de participants ne peux pas éxéder le nombre de places.';
                           }
                           return null;
                         },
