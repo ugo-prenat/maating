@@ -34,7 +34,7 @@ class _JoinedEventsState extends State<JoinedEvents> {
             const Padding(
               padding: EdgeInsets.all(12.0),
               child: Text(
-                'Évènements rejoints',
+                'Évènements rejoins',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 24.0,
